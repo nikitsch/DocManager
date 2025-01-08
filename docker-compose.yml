@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: ${PG_CONT_NAME}
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DB}
+    ports:
+      - ${PG_PORT}:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio
+    container_name: ${MINIO_CONT_NAME}
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    ports:
+      - ${MINIO_PORT_ONE}:9000
+      - ${MINIO_PORT_TWO}:9001
+    volumes:
+      - minio_data:/data
+
+volumes:
+  postgres_data:
+  minio_data:
