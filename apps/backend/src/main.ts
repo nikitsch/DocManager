@@ -9,7 +9,7 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
+  const globalPrefix = 'api'; //TODO Для чего он
   // app.enableCors(); //TODO Включить CORS
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.API_PORT || 3333;

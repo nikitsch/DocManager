@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { RecordModule } from '../record/record.module';
+import { UserModule } from '../user/user.module';
+
 
 @Module({
   imports: [
@@ -13,12 +14,14 @@ import { AppService } from './app.service';
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DB,
       autoLoadEntities: true,
-      synchronize: true, //TODO swith off in production
+      synchronize: true, //TODO switch off in production
       dropSchema: false,
-      logging: true
+      // logging: true
     }),
+    UserModule,
+    RecordModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
