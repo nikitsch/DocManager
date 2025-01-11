@@ -41,6 +41,21 @@ export class Record {
   @Column()
   record_comment: string;
 
+  @Column({ nullable: true })
+  reason_for_rejection: string | null;
+
   @CreateDateColumn()
   created_at: Date;
+
+  @Column('text', { array: true, nullable: true })
+  updated_at: string[] | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  in_process_at: Date | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  finished_at: Date | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  rejected_at: Date | null;
 }
