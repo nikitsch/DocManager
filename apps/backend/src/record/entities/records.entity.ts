@@ -26,11 +26,19 @@ export class Record {
   @Column()
   record_number: string;
 
-  @Column({ default: RecordDirection.IN })
-  record_direction: string;
+  @Column({
+    type: 'enum',
+    enum: RecordDirection,
+    default: RecordDirection.IN
+  })
+  record_direction: RecordDirection;
 
-  @Column({ default: RecordStatus.NEW })
-  record_status: string;
+  @Column({
+    type: 'enum',
+    enum: RecordStatus,
+    default: RecordStatus.NEW
+  })
+  record_status: RecordStatus;
 
   @Column()
   record_type: string;

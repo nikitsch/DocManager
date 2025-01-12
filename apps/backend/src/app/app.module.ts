@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecordModule } from '../record/record.module';
 import { UserModule } from '../user/user.module';
+import { StatusModule } from '../status/status.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { UserModule } from '../user/user.module';
     }),
     UserModule,
     RecordModule,
+    StatusModule,
   ],
   controllers: [],
   providers: [],

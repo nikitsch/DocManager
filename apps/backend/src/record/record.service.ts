@@ -5,8 +5,6 @@ import { Record } from './entities/records.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { UserService } from '../user/user.service';
 import { UpdateRecordDto } from './dto/update-record.dto';
-import { UpdateRecordStatusDto } from './dto/update-record-status.dto copy';
-import { RecordStatus } from '../types';
 
 @Injectable()
 export class RecordService {
@@ -74,41 +72,6 @@ export class RecordService {
 
     return this.recordRepository.save(record);
   }
-  
-    //TODO: after adding roles redo
-    async updateRecordStatus(id: number, updateRecordStatus: UpdateRecordStatusDto): Promise<Record> {
-      const record = await this.recordRepository.findOne({ where: { record_id: id } });
-  
-      if (!record) {
-        throw new NotFoundException(`Record with ID ${id} not found`);
-      }
-
-      const {record_status: status, reason_for_rejection: reasonForRejection} = updateRecordStatus;
-
-      if (record.record_status === status) {
-        throw new BadRequestException('The status values have not changed');
-      }
-  
-      const now = new Date();
-
-      if (status === RecordStatus.IN_PROCESS) {
-        record.in_process_at = now;
-      } else if (status === RecordStatus.FINISHED) {
-        record.finished_at = now;
-      } else if (status === RecordStatus.REJECTED) {
-        if (!reasonForRejection?.length) {
-          throw new BadRequestException('No reason for rejection was given');
-        }
-        record.rejected_at = now;
-        record.reason_for_rejection = reasonForRejection;
-      } else {
-        throw new BadRequestException('Invalid status');
-      }
-
-      record.record_status = status;
-      
-      return this.recordRepository.save(record);
-    }
 }
 
 

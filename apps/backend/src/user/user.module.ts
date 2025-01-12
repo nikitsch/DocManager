@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User } from './entities/user.entity';
 
-
+//TODO: добавить возможность делать запросы только с бэка или только от админа
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   providers: [UserService],
