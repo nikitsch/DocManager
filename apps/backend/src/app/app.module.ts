@@ -4,7 +4,6 @@ import { RecordModule } from '../record/record.module';
 import { UserModule } from '../user/user.module';
 import { StatusModule } from '../status/status.module';
 
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({

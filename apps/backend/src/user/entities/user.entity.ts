@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { UserRole } from '../../types';
 
-
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()

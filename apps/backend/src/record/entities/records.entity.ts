@@ -1,8 +1,8 @@
-import { 
-  Entity, 
-  PrimaryGeneratedColumn, 
-  Column, 
-  CreateDateColumn
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
 } from 'typeorm';
 import { RecordDirection, RecordStatus, TaxPeriod } from '../../types';
 
@@ -29,14 +29,14 @@ export class Record {
   @Column({
     type: 'enum',
     enum: RecordDirection,
-    default: RecordDirection.IN
+    default: RecordDirection.IN,
   })
   record_direction: RecordDirection;
 
   @Column({
     type: 'enum',
     enum: RecordStatus,
-    default: RecordStatus.NEW
+    default: RecordStatus.NEW,
   })
   record_status: RecordStatus;
 

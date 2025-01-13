@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint apps/**/*.{js,ts,tsx} --fix",
+    "format": "prettier --write .",
     "front:start": "nx serve frontend",
     "back:start": "nx serve backend",
     "db:start": "docker-compose up -d",

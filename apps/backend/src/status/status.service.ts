@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecordStatus } from '../types';
@@ -10,21 +14,32 @@ import { statusTransitions } from './constants';
 export class StatusService {
   constructor(
     @InjectRepository(Record)
-    private readonly recordRepository: Repository<Record>,
+    private readonly recordRepository: Repository<Record>
   ) {}
 
-  private canTransition(currentStatus: RecordStatus, nextStatus: RecordStatus): boolean {
+  private canTransition(
+    currentStatus: RecordStatus,
+    nextStatus: RecordStatus
+  ): boolean {
     const allowedTransitions = statusTransitions[currentStatus];
     return allowedTransitions.includes(nextStatus);
   }
 
-  async updateRecordStatus(id: number, recordStatusDto: UpdateRecordStatusDto): Promise<Record> {
-    const record = await this.recordRepository.findOne({ where: { record_id: id } });
+  async updateRecordStatus(
+    id: number,
+    recordStatusDto: UpdateRecordStatusDto
+  ): Promise<Record> {
+    const record = await this.recordRepository.findOne({
+      where: { record_id: id },
+    });
     if (!record) {
       throw new NotFoundException(`Record with ID ${id} not found`);
     }
 
-    const {record_status: newStatus, reason_for_rejection: reasonForRejection} = recordStatusDto;
+    const {
+      record_status: newStatus,
+      reason_for_rejection: reasonForRejection,
+    } = recordStatusDto;
 
     if (!this.canTransition(record.record_status, newStatus)) {
       throw new BadRequestException('Update is not allowed');
@@ -53,5 +68,3 @@ export class StatusService {
     return await this.recordRepository.save(record);
   }
 }
-
-

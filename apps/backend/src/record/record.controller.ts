@@ -24,7 +24,10 @@ export class RecordController {
   }
 
   @Patch(':id')
-  async updateRecord(@Param('id') id: number, @Body() updateRecordDto: UpdateRecordDto) {
+  async updateRecord(
+    @Param('id') id: number,
+    @Body() updateRecordDto: UpdateRecordDto
+  ) {
     return this.recordService.updateRecord(id, updateRecordDto);
   }
 }

@@ -6,8 +6,11 @@ import { UpdateRecordStatusDto } from './dto/update-record-status.dto';
 export class StatusController {
   constructor(private readonly statusService: StatusService) {}
 
-  @Patch(':id') 
-  async updateRecordStatus(@Param('id') id: number, @Body() updateRecordStatusDto: UpdateRecordStatusDto) {
+  @Patch(':id')
+  async updateRecordStatus(
+    @Param('id') id: number,
+    @Body() updateRecordStatusDto: UpdateRecordStatusDto
+  ) {
     return this.statusService.updateRecordStatus(id, updateRecordStatusDto); //TODO: Возвращать 200-ый код вместо всего объекта
   }
 }

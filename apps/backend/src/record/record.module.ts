@@ -6,10 +6,7 @@ import { RecordController } from './record.controller';
 import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Record]),
-    UserModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Record]), UserModule],
   providers: [RecordService],
   controllers: [RecordController],
 })

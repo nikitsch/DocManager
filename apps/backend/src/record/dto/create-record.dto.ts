@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, IsNumber, IsEnum, Length, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsEnum,
+  Length,
+  IsOptional,
+} from 'class-validator';
 import { TaxPeriod } from '../../types';
 
 export class CreateRecordDto {
