@@ -1,8 +1,17 @@
-import { Controller, Post, Body, Get, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { RecordService } from './record.service';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { Record } from './entities/records.entity';
 import { UpdateRecordDto } from './dto/update-record.dto';
+import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Controller('records')
 export class RecordController {
@@ -13,6 +22,7 @@ export class RecordController {
     return this.recordService.createRecord(createRecordDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAllUsers(): Promise<Record[]> {
     return this.recordService.getAllRecords();

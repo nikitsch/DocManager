@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
@@ -21,14 +21,17 @@ export class AuthService {
   }
 
   async login(user: any, response: any) {
-    const payload = { username: user.username, sub: user.user_id, role: user.role };
+    const payload = {
+      username: user.username,
+      sub: user.user_id,
+      role: user.role,
+    };
     const token = this.jwtService.sign(payload);
     response.cookie('jwt', token, {
       httpOnly: true,
       secure: false, // Включите secure: true в продакшене
       maxAge: 3600000, // 1 час
     });
-    // console.log({cookies: response});
 
     return { message: 'Login successful' };
   }
