@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecordModule } from '../record/record.module';
 import { UserModule } from '../user/user.module';
 import { StatusModule } from '../status/status.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { StatusModule } from '../status/status.module';
       dropSchema: false,
       // logging: true
     }),
+    AuthModule,
     UserModule,
     RecordModule,
     StatusModule,
