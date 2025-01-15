@@ -1,6 +1,8 @@
-import { Controller, Post, Request, Res, UseGuards } from '@nestjs/common';
+import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guard/local-auth.guard';
+import { Request, Response } from 'express';
+import { UserWithoutPassword } from '../types';
 
 @Controller('auth')
 export class AuthController {
@@ -8,12 +10,12 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  async login(@Request() req, @Res({ passthrough: true }) res) {
-    return this.authService.login(req.user, res);
+  async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this.authService.login(req.user as UserWithoutPassword, res);
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res) {
+  async logout(@Res({ passthrough: true }) res: Response) {
     return this.authService.logout(res);
   }
 }

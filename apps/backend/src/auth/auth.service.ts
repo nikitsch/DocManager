@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
+import { UserWithoutPassword } from '../types';
+import { Response } from 'express';
+
 
 @Injectable()
 export class AuthService {
@@ -10,9 +13,10 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<UserWithoutPassword | null> {
     const user = await this.userService.findByUsername(username);
     if (user && (await bcrypt.compare(pass, user.password))) {
+      // eslint-disable-next-line
       const { password, ...result } = user;
       return result;
     }
@@ -20,7 +24,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any, response: any) {
+  async login(user: UserWithoutPassword, response: Response) {
     const payload = {
       username: user.username,
       sub: user.user_id,
@@ -36,7 +40,7 @@ export class AuthService {
     return { message: 'Login successful' };
   }
 
-  async logout(response: any) {
+  async logout(response: Response) {
     response.clearCookie('jwt');
     return { message: 'Logout successful' };
   }

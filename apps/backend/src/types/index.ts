@@ -1,3 +1,5 @@
+import { User } from "../user/entity/user.entity";
+
 export enum UserRole {
   ADMIN = 'ADMIN',
   USER = 'USER',
@@ -23,3 +25,5 @@ export enum RecordStatus {
   FINISHED = 'FINISHED',
   REJECTED = 'REJECTED',
 }
+
+export type UserWithoutPassword = Omit<User, 'password'>;
