@@ -4,6 +4,9 @@ import { RecordModule } from '../record/record.module';
 import { UserModule } from '../user/user.module';
 import { StatusModule } from '../status/status.module';
 import { AuthModule } from '../auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtStrategy } from '../strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -25,6 +28,12 @@ import { AuthModule } from '../auth/auth.module';
     StatusModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}

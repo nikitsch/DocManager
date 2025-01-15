@@ -5,7 +5,6 @@ import * as bcrypt from 'bcrypt';
 import { UserWithoutPassword } from '../types';
 import { Response } from 'express';
 
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -13,7 +12,10 @@ export class AuthService {
     private readonly jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<UserWithoutPassword | null> {
+  async validateUser(
+    username: string,
+    pass: string
+  ): Promise<UserWithoutPassword | null> {
     const user = await this.userService.findByUsername(username);
     if (user && (await bcrypt.compare(pass, user.password))) {
       // eslint-disable-next-line
@@ -34,7 +36,7 @@ export class AuthService {
     response.cookie('jwt', token, {
       httpOnly: true,
       secure: false, // Включите secure: true в продакшене
-      maxAge: 3600000, // 1 час
+      maxAge: Number(`${process.env.JWT_LIFESPAN}000`), //milliseconds
     });
 
     return { message: 'Login successful' };
