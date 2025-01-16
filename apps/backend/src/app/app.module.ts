@@ -6,7 +6,6 @@ import { RecordModule } from '../modules/record/record.module';
 import { AuthModule } from '../modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { JwtStrategy } from '../strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -29,7 +28,7 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
   ],
   controllers: [],
   providers: [
-    JwtStrategy,
+    // JwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

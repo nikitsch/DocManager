@@ -10,6 +10,7 @@ type JwtPayload = {
   role: UserRole;
 };
 
+//TODO: doesn't work
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
