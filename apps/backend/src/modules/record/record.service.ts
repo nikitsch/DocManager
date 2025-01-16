@@ -7,8 +7,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Record } from './entities/records.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
-import { UserService } from '../user/user.service';
 import { UpdateRecordDto } from './dto/update-record.dto';
+import { UserService } from '../user/user.service';
+import { RecordStatus } from '../../common/enums';
 
 @Injectable()
 export class RecordService {
@@ -78,6 +79,10 @@ export class RecordService {
 
     if (!record) {
       throw new NotFoundException(`Record with ID ${id} not found`);
+    }
+
+    if (record.record_status !== RecordStatus.NEW) {
+      throw new BadRequestException('Update is not allowed'); //TODO: create a RecordStatusGuard and move the check there
     }
 
     if (

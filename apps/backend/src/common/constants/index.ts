@@ -1,4 +1,4 @@
-import { RecordStatus } from '../../types';
+import { RecordStatus } from '../enums';
 
 export const statusTransitions: Record<RecordStatus, RecordStatus[]> = {
   [RecordStatus.NEW]: [

@@ -1,9 +1,11 @@
+import { Response } from 'express';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
+
 import * as bcrypt from 'bcrypt';
-import { UserWithoutPassword } from '../types';
-import { Response } from 'express';
+
+import { UserService } from '../user/user.service';
+import { UserWithoutPassword } from '../../common/types';
 
 @Injectable()
 export class AuthService {

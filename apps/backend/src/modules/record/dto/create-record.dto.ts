@@ -6,7 +6,7 @@ import {
   Length,
   IsOptional,
 } from 'class-validator';
-import { TaxPeriod } from '../../types';
+import { TaxPeriod } from '../../../common/enums';
 
 export class CreateRecordDto {
   @IsNumber()

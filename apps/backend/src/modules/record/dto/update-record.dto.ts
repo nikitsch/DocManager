@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
-import { TaxPeriod } from '../../types';
+import { TaxPeriod } from '../../../common/enums';
 
 export class UpdateRecordDto {
   @IsEnum(TaxPeriod)
