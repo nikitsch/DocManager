@@ -10,3 +10,5 @@ export const statusTransitions: Record<RecordStatus, RecordStatus[]> = {
   [RecordStatus.FINISHED]: [],
   [RecordStatus.REJECTED]: [],
 };
+
+export const UNRECOGNIZED_FILE_EXTESION = 'unrecognized'; //TODO: move out to global
