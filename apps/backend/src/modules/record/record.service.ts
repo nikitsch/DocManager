@@ -10,13 +10,19 @@ import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { UserService } from '../user/user.service';
 import { RecordStatus } from '../../common/enums';
+import { MinioService } from './minio.service';
+import { v4 as uuidv4 } from 'uuid';
+import * as mime from 'mime-types';
+import 'multer';
+import { UNRECOGNIZED_FILE_EXTESION } from '../../common/constants';
 
 @Injectable()
 export class RecordService {
   constructor(
     @InjectRepository(Record)
     private readonly recordRepository: Repository<Record>,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly minioService: MinioService
   ) {}
 
   async getAllRecords(): Promise<Record[]> {
@@ -34,10 +40,38 @@ export class RecordService {
     return record;
   }
 
-  async createRecord(createRecordDto: CreateRecordDto): Promise<Record> {
+  private async uploadFiles(files: Express.Multer.File[]) {
+    if (!files) {
+      return [];
+    }
+
+    const fileData = await Promise.all(
+      files.map(async ({ buffer, mimetype, originalname }) => {
+        const fileId = uuidv4();
+        const fileExtension =
+          mime.extension(mimetype) || UNRECOGNIZED_FILE_EXTESION;
+        const objectName = `${fileId}.${fileExtension}`;
+
+        // Загрузка файла в MinIO //TODO: place next to creation of recordRepository collection item
+        await this.minioService.uploadFile(objectName, buffer, mimetype);
+
+        return {
+          id: fileId,
+          name: originalname,
+          extension: fileExtension,
+        };
+      })
+    );
+
+    return fileData;
+  }
+
+  async createRecord(
+    createRecordDto: CreateRecordDto,
+    files: Express.Multer.File[]
+  ): Promise<Record> {
     const { user_id, tax_period, record_type, record_subtype, record_comment } =
       createRecordDto;
-
     const user = await this.userService.getUserById(user_id);
     if (!user) {
       throw new NotFoundException(`User with ID ${user_id} not found`);
@@ -55,6 +89,8 @@ export class RecordService {
       recordCount + 1,
     ]);
 
+    const record_files = await this.uploadFiles(files);
+
     const newRecord = this.recordRepository.create({
       user_id,
       tax_period,
@@ -63,6 +99,7 @@ export class RecordService {
       record_comment,
       record_number,
       organization_name,
+      record_files,
     });
 
     return this.recordRepository.save(newRecord);

@@ -70,4 +70,11 @@ export class Record {
 
   @Column({ type: 'timestamp', nullable: true })
   rejected_at: Date | null;
+
+  @Column('jsonb')
+  record_files: {
+    id: string;
+    name: string;
+    extension: string;
+  }[];
 }
