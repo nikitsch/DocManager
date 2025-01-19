@@ -37,7 +37,7 @@ export class RecordService {
       throw new NotFoundException(`Record with ID ${id} not found`);
     }
 
-    return record;
+    return record; //TODO: get files links
   }
 
   private async uploadFiles(files: Express.Multer.File[]) {
@@ -110,17 +110,7 @@ export class RecordService {
     id: number,
     updateRecordDto: UpdateRecordDto
   ): Promise<Record> {
-    const record = await this.recordRepository.findOne({
-      where: { record_id: id },
-    });
-
-    if (!record) {
-      throw new NotFoundException(`Record with ID ${id} not found`);
-    }
-
-    if (record.record_status !== RecordStatus.NEW) {
-      throw new BadRequestException('Update is not allowed'); //TODO: create a RecordStatusGuard and move the check there
-    }
+    const record = await this.getRecordById(id);
 
     if (
       Object.keys(updateRecordDto).every(

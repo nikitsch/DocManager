@@ -6,7 +6,6 @@ import { RecordModule } from '../modules/record/record.module';
 import { AuthModule } from '../modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { FileModule } from '../modules/file/file.module';
 
 @Module({
   imports: [
@@ -26,7 +25,6 @@ import { FileModule } from '../modules/file/file.module';
     UserModule,
     RecordModule,
     StatusModule,
-    FileModule,
   ],
   controllers: [],
   providers: [
