@@ -11,7 +11,7 @@ import { Record } from './entities/records.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { UserService } from '../user/user.service';
-import { RecordStatus } from '../../common/enums';
+import { Order, RecordStatus } from '../../common/enums';
 import { MinioService } from './minio.service';
 import { v4 as uuidv4 } from 'uuid';
 import * as mime from 'mime-types';
@@ -21,7 +21,7 @@ import {
   UNRECOGNIZED_FILE_EXTESION,
 } from '../../common/constants';
 import { verify } from 'jsonwebtoken';
-import { CustomJwtPayload, RecordWithUrls } from '../../common/types';
+import { CustomJwtPayload, FieldsForFilterRecords, FieldsForSortRecords, RecordWithUrls } from '../../common/types';
 
 @Injectable()
 export class RecordService {
@@ -32,9 +32,76 @@ export class RecordService {
     private readonly minioService: MinioService
   ) {}
 
-  async getAllRecords(): Promise<Record[]> {
-    return this.recordRepository.find();
+  async getAllRecords(options: {
+    search?: string;
+    filters?: FieldsForFilterRecords;
+    sort: FieldsForSortRecords;
+    order: Order;
+    page: number;
+    pageSize: number;
+  }): Promise<{ data: Record[]; total: number }> {
+    const { search, filters, sort, order, page, pageSize } = options;
+  
+    const queryBuilder = this.recordRepository.createQueryBuilder('record');
+  
+    //* Search
+    if (search) {
+      queryBuilder.andWhere('record.record_number ILIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+  
+    //* Filtration
+    if (filters) {
+      if (filters.user_id) {
+        queryBuilder.andWhere('record.user_id = :user_id', { user_id: filters.user_id });
+      }
+  
+      if (filters.tax_period) {
+        queryBuilder.andWhere('record.tax_period = :tax_period', { tax_period: filters.tax_period });
+      }
+  
+      if (filters.record_status) {
+        queryBuilder.andWhere('record.record_status = :record_status', { record_status: filters.record_status });
+      }
+  
+      // if (filters.record_type) {
+      //   queryBuilder.andWhere('record.record_type = :record_type', { record_type: filters.record_type });
+      // }
+  
+      if (filters.from) {
+        queryBuilder.andWhere('record.created_at >= :from', { from: filters.from });
+      }
+
+      if (filters.to) {
+        queryBuilder.andWhere('record.created_at <= :to', { to: filters.to });
+      }
+    }
+  
+    //* Sorting
+    if (sort) {
+      if (sort === 'created_at') {
+        queryBuilder.orderBy('record.created_at', order);
+      }
+
+      if (sort === 'record_number') {
+        queryBuilder.orderBy('record.record_number', order);
+      }
+
+      if (sort === 'record_type') {
+        queryBuilder.orderBy('record.record_type', order);
+      }
+    }
+  
+    //* Pagination
+    queryBuilder.skip((page - 1) * pageSize).take(pageSize);
+  
+    //* Executing a request
+    const [data, total] = await queryBuilder.getManyAndCount();
+  
+    return { data, total };
   }
+  
 
   async getRecordByIdWithUrls(id: number): Promise<RecordWithUrls> {
     const record = await this.getRecordById(id);
@@ -140,7 +207,6 @@ export class RecordService {
     return this.recordRepository.save(newRecord);
   }
 
-  //TODO: after adding roles redo
   async updateRecord(
     id: number,
     updateRecordDto: UpdateRecordDto

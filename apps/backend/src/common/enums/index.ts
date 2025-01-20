@@ -23,3 +23,8 @@ export enum RecordStatus {
   FINISHED = 'FINISHED',
   REJECTED = 'REJECTED',
 }
+
+export enum Order {
+  ASC = 'ASC',
+  DESC = 'DESC',
+} //TODO: move out to global

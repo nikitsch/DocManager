@@ -3,7 +3,7 @@ import { CreateRecordDto } from '../modules/record/dto/create-record.dto';
 import { ERROR_MESSAGES } from '../common/constants';
 
 @Injectable()
-export class ParseJsonPipe implements PipeTransform {
+export class ParseRecordDataPipe implements PipeTransform {
   transform(value: string): CreateRecordDto {
     let parsedValue: Partial<CreateRecordDto>;
 
