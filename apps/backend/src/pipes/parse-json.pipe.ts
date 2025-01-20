@@ -1,5 +1,6 @@
 import { Injectable, PipeTransform, BadRequestException } from '@nestjs/common';
 import { CreateRecordDto } from '../modules/record/dto/create-record.dto';
+import { ERROR_MESSAGES } from '../common/constants';
 
 @Injectable()
 export class ParseJsonPipe implements PipeTransform {
@@ -11,14 +12,14 @@ export class ParseJsonPipe implements PipeTransform {
     try {
       parsedValue = JSON.parse(value);
     } catch {
-      throw new BadRequestException('Invalid JSON string');
+      throw new BadRequestException(ERROR_MESSAGES.INVALID_JSON);
     }
 
     const { user_id, tax_period, record_type, record_subtype, record_comment } =
       parsedValue;
 
     if (!user_id || !tax_period || !record_type || !record_comment) {
-      throw new BadRequestException('Missing required fields');
+      throw new BadRequestException(ERROR_MESSAGES.MISSING_FIELD);
     }
 
     if (
@@ -26,9 +27,7 @@ export class ParseJsonPipe implements PipeTransform {
       record_comment.length < 5 ||
       record_comment.length > 255
     ) {
-      throw new BadRequestException(
-        'Comment must be a string between 5 and 255 characters'
-      );
+      throw new BadRequestException(ERROR_MESSAGES.RECORD_COMMENT_LENGTH);
     }
 
     return {

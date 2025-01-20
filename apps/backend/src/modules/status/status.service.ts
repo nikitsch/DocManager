@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { RecordStatus } from '../../common/enums';
 import { Record } from '../record/entities/records.entity';
 import { UpdateRecordStatusDto } from './dto/update-record-status.dto';
-import { statusTransitions } from '../../common/constants';
+import { ERROR_MESSAGES, statusTransitions } from '../../common/constants';
 
 @Injectable()
 export class StatusService {
@@ -42,7 +42,7 @@ export class StatusService {
     } = recordStatusDto;
 
     if (!this.canTransition(record.record_status, newStatus)) {
-      throw new BadRequestException('Update is not allowed');
+      throw new BadRequestException(ERROR_MESSAGES.UPDATE_NOT_ALLOWED);
     }
 
     const now = new Date();
@@ -56,7 +56,7 @@ export class StatusService {
 
     if (newStatus === RecordStatus.REJECTED) {
       if (!reasonForRejection?.length) {
-        throw new BadRequestException('No reason for rejection was given');
+        throw new BadRequestException(ERROR_MESSAGES.REASON_FOR_REFUSAL_NOT_SPECIFIED);
       }
 
       record.rejected_at = now;

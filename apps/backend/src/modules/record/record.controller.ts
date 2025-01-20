@@ -15,8 +15,8 @@ import { Record } from './entities/records.entity';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ParseJsonPipe } from '../../pipes/parse-json.pipe';
-import { UpdateRecordGuard } from '../../guards/update-record.guard';
-import { GetRecordGuard } from '../../guards/get-record.guard';
+import { AdminOrAuthorGuard } from '../../guards/record/admin-or-author.guard';
+import { AuthorshipGuard } from '../../guards/record/authorship.guard';
 
 @Controller('records')
 export class RecordController {
@@ -36,13 +36,13 @@ export class RecordController {
     return this.recordService.getAllRecords();
   }
   
-  @UseGuards(GetRecordGuard)
+  @UseGuards(AdminOrAuthorGuard)
   @Get(':id')
   async getRecordById(@Param('id') id: string): Promise<Record> {
     return this.recordService.getRecordById(+id);
   }
 
-  @UseGuards(UpdateRecordGuard)
+  @UseGuards(AuthorshipGuard)
   @Patch(':id')
   async updateRecord(
     @Param('id') id: number,

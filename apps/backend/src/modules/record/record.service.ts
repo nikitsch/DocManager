@@ -14,7 +14,7 @@ import { MinioService } from './minio.service';
 import { v4 as uuidv4 } from 'uuid';
 import * as mime from 'mime-types';
 import 'multer';
-import { UNRECOGNIZED_FILE_EXTESION } from '../../common/constants';
+import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '../../common/constants';
 
 @Injectable()
 export class RecordService {
@@ -112,12 +112,16 @@ export class RecordService {
   ): Promise<Record> {
     const record = await this.getRecordById(id);
 
+    if (record.record_status !== RecordStatus.NEW) {
+      throw new BadRequestException(ERROR_MESSAGES.STATUS_DOESNT_ALLOW_CHANGES);
+    }
+
     if (
       Object.keys(updateRecordDto).every(
         (key) => updateRecordDto[key] === record[key]
       )
     ) {
-      throw new BadRequestException('Nothing to update');
+      throw new BadRequestException(ERROR_MESSAGES.NOTHING_TO_UPDATE);
     }
 
     const now = new Date();
