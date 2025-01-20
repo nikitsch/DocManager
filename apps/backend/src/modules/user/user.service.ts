@@ -45,7 +45,7 @@ export class UserService {
       // eslint-disable-next-line
       const { password, ...rest } = user;
 
-      return {...rest}
+      return { ...rest };
     });
   }
 
@@ -62,7 +62,7 @@ export class UserService {
 
   /**
    * Be careful, this function gives out your user password.
-  */
+   */
   async findByUsername(username: string): Promise<User | undefined> {
     return this.userRepository.findOne({ where: { username } });
   }

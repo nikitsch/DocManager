@@ -20,6 +20,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ParseJsonPipe } from '../../pipes/parse-json.pipe';
 import { AdminOrAuthorGuard } from '../../guards/record/admin-or-author.guard';
 import { AuthorshipGuard } from '../../guards/record/authorship.guard';
+import { RecordWithUrls } from '../../common/types';
 
 @Controller('records')
 export class RecordController {
@@ -39,11 +40,13 @@ export class RecordController {
   async getAllRecords(): Promise<Record[]> {
     return this.recordService.getAllRecords();
   }
-  
+
   @UseGuards(AdminOrAuthorGuard)
   @Get(':id')
-  async getRecordById(@Param('id', ParseIntPipe) id: number): Promise<Record> {   
-    return this.recordService.getRecordById(id);
+  async getRecordById(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<RecordWithUrls> {
+    return this.recordService.getRecordByIdWithUrls(id);
   }
 
   @UseGuards(AuthorshipGuard)

@@ -24,6 +24,7 @@ export const ERROR_MESSAGES = {
   USERNAME_TAKEN: 'Username is already taken',
   INVALID_JSON: 'Invalid JSON string',
   MISSING_FIELD: 'Missing required field',
-  RECORD_COMMENT_LENGTH: 'Comment must be a string between 5 and 255 characters',
-  INVALID_CREDENTIALS: 'Invalid credentials'
+  RECORD_COMMENT_LENGTH:
+    'Comment must be a string between 5 and 255 characters',
+  INVALID_CREDENTIALS: 'Invalid credentials',
 };

@@ -16,9 +16,12 @@ import { MinioService } from './minio.service';
 import { v4 as uuidv4 } from 'uuid';
 import * as mime from 'mime-types';
 import 'multer';
-import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '../../common/constants';
+import {
+  ERROR_MESSAGES,
+  UNRECOGNIZED_FILE_EXTESION,
+} from '../../common/constants';
 import { verify } from 'jsonwebtoken';
-import { CustomJwtPayload } from '../../common/types';
+import { CustomJwtPayload, RecordWithUrls } from '../../common/types';
 
 @Injectable()
 export class RecordService {
@@ -33,6 +36,25 @@ export class RecordService {
     return this.recordRepository.find();
   }
 
+  async getRecordByIdWithUrls(id: number): Promise<RecordWithUrls> {
+    const record = await this.getRecordById(id);
+    const { record_files, ...rest } = record;
+
+    const recordWithUrls = await Promise.all(
+      record_files.map(async ({ id, extension, name }) => {
+        const objectName = `${id}.${extension}`;
+        const url = await this.minioService.generatePresignedUrl(
+          objectName,
+          name
+        );
+
+        return { url, name, extension };
+      })
+    );
+
+    return { ...rest, record_files: recordWithUrls };
+  }
+
   async getRecordById(id: number): Promise<Record> {
     const record = await this.recordRepository.findOne({
       where: { record_id: id },
@@ -41,7 +63,7 @@ export class RecordService {
       throw new NotFoundException(`Record with ID ${id} not found`);
     }
 
-    return record; //TODO: get files links
+    return record;
   }
 
   private async uploadFiles(files: Express.Multer.File[]) {
@@ -81,7 +103,10 @@ export class RecordService {
       throw new ForbiddenException(ERROR_MESSAGES.NO_TOKEN_PROVIDED);
     }
 
-    const { userid: user_id } = verify(token, process.env.JWT_SECRET) as CustomJwtPayload;
+    const { userid: user_id } = verify(
+      token,
+      process.env.JWT_SECRET
+    ) as CustomJwtPayload;
     const user = await this.userService.getUserById(user_id);
     const { organization_name } = user;
 

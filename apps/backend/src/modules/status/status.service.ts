@@ -56,7 +56,9 @@ export class StatusService {
 
     if (newStatus === RecordStatus.REJECTED) {
       if (!reasonForRejection?.length) {
-        throw new BadRequestException(ERROR_MESSAGES.REASON_FOR_REFUSAL_NOT_SPECIFIED);
+        throw new BadRequestException(
+          ERROR_MESSAGES.REASON_FOR_REFUSAL_NOT_SPECIFIED
+        );
       }
 
       record.rejected_at = now;

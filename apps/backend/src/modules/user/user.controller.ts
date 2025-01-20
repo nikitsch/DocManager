@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Public } from '../../decorators/public.decorator';
@@ -13,7 +21,9 @@ export class UserController {
 
   @Post('register')
   @Public()
-  async register(@Body() createUserDto: CreateUserDto): Promise<UserWithoutPassword> {
+  async register(
+    @Body() createUserDto: CreateUserDto
+  ): Promise<UserWithoutPassword> {
     const user = await this.userService.create(createUserDto);
     // eslint-disable-next-line
     const { password, ...rest } = user;
@@ -31,7 +41,9 @@ export class UserController {
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
   @Get(':id')
-  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<UserWithoutPassword> {   
+  async getUserById(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<UserWithoutPassword> {
     return this.userService.getUserById(id);
   }
 }
