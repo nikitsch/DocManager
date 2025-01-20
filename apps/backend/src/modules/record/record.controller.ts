@@ -9,7 +9,9 @@ import {
   UploadedFiles,
   UseGuards,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { RecordService } from './record.service';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { Record } from './entities/records.entity';
@@ -26,10 +28,11 @@ export class RecordController {
   @Post()
   @UseInterceptors(FilesInterceptor('files'))
   async createRecord(
+    @Req() req: Request,
     @Body('data', ParseJsonPipe) createRecordDto: CreateRecordDto,
     @UploadedFiles() files: Express.Multer.File[]
   ) {
-    return this.recordService.createRecord(createRecordDto, files);
+    return this.recordService.createRecord(req, createRecordDto, files);
   }
 
   @Get() //TODO: getRecords +filter params

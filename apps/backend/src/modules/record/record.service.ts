@@ -1,10 +1,12 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Request } from 'express';
 import { Record } from './entities/records.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
@@ -15,6 +17,8 @@ import { v4 as uuidv4 } from 'uuid';
 import * as mime from 'mime-types';
 import 'multer';
 import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '../../common/constants';
+import { verify } from 'jsonwebtoken';
+import { CustomJwtPayload } from '../../common/types';
 
 @Injectable()
 export class RecordService {
@@ -67,16 +71,22 @@ export class RecordService {
   }
 
   async createRecord(
+    req: Request,
     createRecordDto: CreateRecordDto,
     files: Express.Multer.File[]
   ): Promise<Record> {
-    const { user_id, tax_period, record_type, record_subtype, record_comment } =
-      createRecordDto;
-    const user = await this.userService.getUserById(user_id);
-    if (!user) {
-      throw new NotFoundException(`User with ID ${user_id} not found`);
+    //TODO: check JwtStrategy
+    const token = req.cookies?.jwt;
+    if (!token) {
+      throw new ForbiddenException(ERROR_MESSAGES.NO_TOKEN_PROVIDED);
     }
+
+    const { userid: user_id } = verify(token, process.env.JWT_SECRET) as CustomJwtPayload;
+    const user = await this.userService.getUserById(user_id);
     const { organization_name } = user;
+
+    const { tax_period, record_type, record_subtype, record_comment } =
+      createRecordDto;
 
     const generateRecordNumber = (arr: number[]) =>
       arr.map((el) => String(el).padStart(2, '0')).join('');

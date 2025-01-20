@@ -1,7 +1,6 @@
 import {
   IsNotEmpty,
   IsString,
-  IsNumber,
   IsEnum,
   Length,
   IsOptional,
@@ -9,10 +8,6 @@ import {
 import { TaxPeriod } from '../../../common/enums';
 
 export class CreateRecordDto {
-  @IsNumber()
-  @IsNotEmpty()
-  user_id: number;
-
   @IsEnum(TaxPeriod)
   tax_period: TaxPeriod;
 

@@ -5,9 +5,7 @@ import { ERROR_MESSAGES } from '../common/constants';
 @Injectable()
 export class ParseJsonPipe implements PipeTransform {
   transform(value: string): CreateRecordDto {
-    let parsedValue: Partial<Omit<CreateRecordDto, 'user_id'>> & {
-      user_id?: number | string;
-    };
+    let parsedValue: Partial<CreateRecordDto>;
 
     try {
       parsedValue = JSON.parse(value);
@@ -15,10 +13,10 @@ export class ParseJsonPipe implements PipeTransform {
       throw new BadRequestException(ERROR_MESSAGES.INVALID_JSON);
     }
 
-    const { user_id, tax_period, record_type, record_subtype, record_comment } =
+    const { tax_period, record_type, record_subtype, record_comment } =
       parsedValue;
 
-    if (!user_id || !tax_period || !record_type || !record_comment) {
+    if (!tax_period || !record_type || !record_comment) {
       throw new BadRequestException(ERROR_MESSAGES.MISSING_FIELD);
     }
 
@@ -31,7 +29,6 @@ export class ParseJsonPipe implements PipeTransform {
     }
 
     return {
-      user_id: Number(user_id),
       tax_period,
       record_type,
       record_subtype,
