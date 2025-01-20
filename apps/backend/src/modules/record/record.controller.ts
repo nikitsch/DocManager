@@ -8,6 +8,7 @@ import {
   UseInterceptors,
   UploadedFiles,
   UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { RecordService } from './record.service';
 import { CreateRecordDto } from './dto/create-record.dto';
@@ -38,8 +39,8 @@ export class RecordController {
   
   @UseGuards(AdminOrAuthorGuard)
   @Get(':id')
-  async getRecordById(@Param('id') id: string): Promise<Record> {
-    return this.recordService.getRecordById(+id);
+  async getRecordById(@Param('id', ParseIntPipe) id: number): Promise<Record> {   
+    return this.recordService.getRecordById(id);
   }
 
   @UseGuards(AuthorshipGuard)

@@ -1,4 +1,3 @@
-import { FORBIDDEN_MESSAGE } from '@nestjs/core/guards';
 import { RecordStatus } from '../enums';
 
 export const statusTransitions: Record<RecordStatus, RecordStatus[]> = {
