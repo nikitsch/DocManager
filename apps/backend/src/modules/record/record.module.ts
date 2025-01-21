@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Record } from './entities/records.entity';
 import { RecordService } from './record.service';
 import { RecordController } from './record.controller';
-import { UserModule } from '../user/user.module';
 import { MinioService } from './minio.service';
+import { UserModule } from '~modules/user/user.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Record]), UserModule],

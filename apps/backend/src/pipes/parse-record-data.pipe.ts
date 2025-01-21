@@ -1,6 +1,6 @@
 import { Injectable, PipeTransform, BadRequestException } from '@nestjs/common';
-import { CreateRecordDto } from '../modules/record/dto/create-record.dto';
-import { ERROR_MESSAGES } from '../common/constants';
+import { CreateRecordDto } from '~modules/record/dto/create-record.dto';
+import { ERROR_MESSAGES } from '~common/constants';
 
 @Injectable()
 export class ParseRecordDataPipe implements PipeTransform {

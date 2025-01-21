@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from '../modules/user/user.module';
-import { StatusModule } from '../modules/status/status.module';
-import { RecordModule } from '../modules/record/record.module';
-import { AuthModule } from '../modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from '~modules/user/user.module';
+import { StatusModule } from '~modules/status/status.module';
+import { RecordModule } from '~modules/record/record.module';
+import { AuthModule } from '~modules/auth/auth.module';
+import { JwtAuthGuard } from '~guards/jwt-auth.guard';
 
 @Module({
   imports: [

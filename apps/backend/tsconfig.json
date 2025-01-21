@@ -8,6 +8,17 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "~app/*": ["./src/app/*"],
+      "~assets/*": ["./src/assets/*"],
+      "~common/*": ["./src/common/*"],
+      "~decorators/*": ["./src/decorators/*"],
+      "~guards/*": ["./src/guards/*"],
+      "~modules/*": ["./src/modules/*"],
+      "~pipes/*": ["./src/pipes/*"],
+      "~strategies/*": ["./src/strategies/*"]
+    }
   }
 }

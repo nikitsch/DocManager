@@ -18,16 +18,16 @@ import { CreateRecordDto } from './dto/create-record.dto';
 import { Record } from './entities/records.entity';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { AdminOrAuthorGuard } from '../../guards/record/admin-or-author.guard';
-import { AuthorshipGuard } from '../../guards/record/authorship.guard';
+import { AdminOrAuthorGuard } from '~guards/record/admin-or-author.guard';
+import { AuthorshipGuard } from '~guards/record/authorship.guard';
 import {
   FieldsForFilterRecords,
   FieldsForSortRecords,
   RecordWithUrls,
-} from '../../common/types';
-import { Order } from '../../common/enums';
-import { ParseRecordDataPipe } from '../../pipes/parse-record-data.pipe';
-import { ParseRecordFilterPipe } from '../../pipes/parse-record-filter.pipe';
+} from '~common/types';
+import { Order } from '~common/enums';
+import { ParseRecordDataPipe } from '~pipes/parse-record-data.pipe';
+import { ParseRecordFilterPipe } from '~pipes/parse-record-filter.pipe';
 
 @Controller('records')
 export class RecordController {

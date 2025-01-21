@@ -10,23 +10,20 @@ import { Request } from 'express';
 import { Record } from './entities/records.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
-import { UserService } from '../user/user.service';
-import { Order, RecordStatus } from '../../common/enums';
 import { MinioService } from './minio.service';
 import { v4 as uuidv4 } from 'uuid';
 import * as mime from 'mime-types';
 import 'multer';
-import {
-  ERROR_MESSAGES,
-  UNRECOGNIZED_FILE_EXTESION,
-} from '../../common/constants';
+import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
 import { verify } from 'jsonwebtoken';
 import {
   CustomJwtPayload,
   FieldsForFilterRecords,
   FieldsForSortRecords,
   RecordWithUrls,
-} from '../../common/types';
+} from '~common/types';
+import { Order, RecordStatus } from '~common/enums';
+import { UserService } from '~modules/user/user.service';
 
 @Injectable()
 export class RecordService {

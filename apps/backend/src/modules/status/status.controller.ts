@@ -1,9 +1,9 @@
 import { Controller, Body, Param, Patch, UseGuards } from '@nestjs/common';
 import { StatusService } from './status.service';
 import { UpdateRecordStatusDto } from './dto/update-record-status.dto';
-import { Roles } from '../../decorators/roles.decorator';
-import { UserRole } from '../../common/enums';
-import { RolesGuard } from '../../guards/roles.guard';
+import { Roles } from '~decorators/roles.decorator';
+import { UserRole } from '~common/enums';
+import { RolesGuard } from '~guards/roles.guard';
 
 @Controller('status')
 export class StatusController {

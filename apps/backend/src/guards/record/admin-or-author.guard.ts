@@ -5,10 +5,10 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { verify } from 'jsonwebtoken';
-import { CustomJwtPayload } from '../../common/types';
-import { RecordService } from '../../modules/record/record.service';
-import { UserRole } from '../../common/enums';
-import { ERROR_MESSAGES } from '../../common/constants';
+import { CustomJwtPayload } from '~common/types';
+import { RecordService } from '~modules/record/record.service';
+import { UserRole } from '~common/enums';
+import { ERROR_MESSAGES } from '~common/constants';
 
 @Injectable()
 export class AdminOrAuthorGuard implements CanActivate {

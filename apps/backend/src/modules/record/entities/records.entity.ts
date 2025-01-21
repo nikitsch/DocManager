@@ -4,11 +4,7 @@ import {
   Column,
   CreateDateColumn,
 } from 'typeorm';
-import {
-  RecordDirection,
-  RecordStatus,
-  TaxPeriod,
-} from '../../../common/enums';
+import { RecordDirection, RecordStatus, TaxPeriod } from '~common/enums';
 
 @Entity('records')
 export class Record {

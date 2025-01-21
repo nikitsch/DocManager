@@ -9,11 +9,11 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Public } from '../../decorators/public.decorator';
-import { RolesGuard } from '../../guards/roles.guard';
-import { Roles } from '../../decorators/roles.decorator';
-import { UserRole } from '../../common/enums';
-import { UserWithoutPassword } from '../../common/types';
+import { Public } from '~decorators/public.decorator';
+import { RolesGuard } from '~guards/roles.guard';
+import { Roles } from '~decorators/roles.decorator';
+import { UserRole } from '~common/enums';
+import { UserWithoutPassword } from '~common/types';
 
 @Controller('users')
 export class UserController {

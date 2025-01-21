@@ -1,7 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { User } from '../../modules/user/entity/user.entity';
+import { User } from '~modules/user/entity/user.entity';
 import { UserRole } from '../enums';
-import { Record } from '../../modules/record/entities/records.entity';
+import { Record } from '~modules/record/entities/records.entity';
 
 export type UserWithoutPassword = Omit<User, 'password'>;
 

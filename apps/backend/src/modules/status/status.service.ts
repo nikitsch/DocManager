@@ -5,10 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RecordStatus } from '../../common/enums';
-import { Record } from '../record/entities/records.entity';
+import { RecordStatus } from '~common/enums';
+
 import { UpdateRecordStatusDto } from './dto/update-record-status.dto';
-import { ERROR_MESSAGES, statusTransitions } from '../../common/constants';
+import { ERROR_MESSAGES, statusTransitions } from '~common/constants';
+import { Record } from '~modules/record/entities/records.entity';
 
 @Injectable()
 export class StatusService {

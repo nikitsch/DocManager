@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
-import { RecordStatus } from '../../../common/enums';
+import { RecordStatus } from '~common/enums';
 
 export class UpdateRecordStatusDto {
   @IsEnum(RecordStatus)

@@ -1,6 +1,6 @@
 import { Injectable, PipeTransform, BadRequestException } from '@nestjs/common';
-import { ERROR_MESSAGES } from '../common/constants';
-import { FieldsForFilterRecords } from '../common/types';
+import { ERROR_MESSAGES } from '~common/constants';
+import { FieldsForFilterRecords } from '~common/types';
 
 @Injectable()
 export class ParseRecordFilterPipe implements PipeTransform {

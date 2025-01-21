@@ -8,8 +8,8 @@ import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { ERROR_MESSAGES } from '../../common/constants';
-import { UserWithoutPassword } from '../../common/types';
+import { ERROR_MESSAGES } from '~common/constants';
+import { UserWithoutPassword } from '~common/types';
 
 //TODO: Нужно будет сделать эндпоинт '/users' скрытым
 @Injectable()

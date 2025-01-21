@@ -5,10 +5,10 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from '../decorators/roles.decorator';
+import { ROLES_KEY } from '~decorators/roles.decorator';
 import { verify } from 'jsonwebtoken';
-import { CustomJwtPayload } from '../common/types';
-import { ERROR_MESSAGES } from '../common/constants';
+import { CustomJwtPayload } from '~common/types';
+import { ERROR_MESSAGES } from '~common/constants';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
