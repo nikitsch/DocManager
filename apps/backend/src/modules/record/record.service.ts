@@ -21,7 +21,12 @@ import {
   UNRECOGNIZED_FILE_EXTESION,
 } from '../../common/constants';
 import { verify } from 'jsonwebtoken';
-import { CustomJwtPayload, FieldsForFilterRecords, FieldsForSortRecords, RecordWithUrls } from '../../common/types';
+import {
+  CustomJwtPayload,
+  FieldsForFilterRecords,
+  FieldsForSortRecords,
+  RecordWithUrls,
+} from '../../common/types';
 
 @Injectable()
 export class RecordService {
@@ -41,43 +46,51 @@ export class RecordService {
     pageSize: number;
   }): Promise<{ data: Record[]; total: number }> {
     const { search, filters, sort, order, page, pageSize } = options;
-  
+
     const queryBuilder = this.recordRepository.createQueryBuilder('record');
-  
+
     //* Search
     if (search) {
       queryBuilder.andWhere('record.record_number ILIKE :search', {
         search: `%${search}%`,
       });
     }
-  
+
     //* Filtration
     if (filters) {
       if (filters.user_id) {
-        queryBuilder.andWhere('record.user_id = :user_id', { user_id: filters.user_id });
+        queryBuilder.andWhere('record.user_id = :user_id', {
+          user_id: filters.user_id,
+        });
       }
-  
+
       if (filters.tax_period) {
-        queryBuilder.andWhere('record.tax_period = :tax_period', { tax_period: filters.tax_period });
+        queryBuilder.andWhere('record.tax_period = :tax_period', {
+          tax_period: filters.tax_period,
+        });
       }
-  
+
       if (filters.record_status) {
-        queryBuilder.andWhere('record.record_status = :record_status', { record_status: filters.record_status });
+        queryBuilder.andWhere('record.record_status = :record_status', {
+          record_status: filters.record_status,
+        });
       }
-  
+
       // if (filters.record_type) {
       //   queryBuilder.andWhere('record.record_type = :record_type', { record_type: filters.record_type });
       // }
-  
+
       if (filters.from) {
-        queryBuilder.andWhere('record.created_at >= :from', { from: filters.from });
+        queryBuilder.andWhere('record.created_at >= :from', {
+          from: filters.from,
+        });
       }
 
       if (filters.to) {
         queryBuilder.andWhere('record.created_at <= :to', { to: filters.to });
       }
     }
-  
+
     //* Sorting
     if (sort) {
       if (sort === 'created_at') {
@@ -92,16 +105,15 @@ export class RecordService {
         queryBuilder.orderBy('record.record_type', order);
       }
     }
-  
+
     //* Pagination
     queryBuilder.skip((page - 1) * pageSize).take(pageSize);
-  
+
     //* Executing a request
     const [data, total] = await queryBuilder.getManyAndCount();
-  
+
     return { data, total };
   }
-  
 
   async getRecordByIdWithUrls(id: number): Promise<RecordWithUrls> {
     const record = await this.getRecordById(id);

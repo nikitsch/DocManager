@@ -19,9 +19,14 @@ export interface CustomJwtPayload extends JwtPayload {
   role: UserRole;
 }
 
-export type FieldsForFilterRecords = Partial<Pick<Record, 'record_status' | 'tax_period' | 'user_id'> & {
-  from: string;
-  to: string;
-}>; //TODO: 'record_type'
+export type FieldsForFilterRecords = Partial<
+  Pick<Record, 'record_status' | 'tax_period' | 'user_id'> & {
+    from: string;
+    to: string;
+  }
+>; //TODO: 'record_type'
 
-export type FieldsForSortRecords = 'created_at' | 'record_number' | 'record_type'; //TODO: свой порядок для tax_period, record_status
+export type FieldsForSortRecords =
+  | 'created_at'
+  | 'record_number'
+  | 'record_type'; //TODO: свой порядок для tax_period, record_status

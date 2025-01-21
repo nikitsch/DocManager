@@ -20,7 +20,11 @@ import { UpdateRecordDto } from './dto/update-record.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AdminOrAuthorGuard } from '../../guards/record/admin-or-author.guard';
 import { AuthorshipGuard } from '../../guards/record/authorship.guard';
-import { FieldsForFilterRecords, FieldsForSortRecords, RecordWithUrls } from '../../common/types';
+import {
+  FieldsForFilterRecords,
+  FieldsForSortRecords,
+  RecordWithUrls,
+} from '../../common/types';
 import { Order } from '../../common/enums';
 import { ParseRecordDataPipe } from '../../pipes/parse-record-data.pipe';
 import { ParseRecordFilterPipe } from '../../pipes/parse-record-filter.pipe';
@@ -46,9 +50,8 @@ export class RecordController {
     @Query('sort') sort: FieldsForSortRecords = 'created_at',
     @Query('order') order = Order.ASC,
     @Query('page') page = 1,
-    @Query('pageSize') pageSize = 10,
+    @Query('pageSize') pageSize = 10
   ): Promise<{ data: Record[]; total: number }> {
-    // console.log({search, filters, sort, order, page, pageSize});
     return this.recordService.getAllRecords({
       search,
       filters,
