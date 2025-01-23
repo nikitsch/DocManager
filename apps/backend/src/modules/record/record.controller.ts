@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import {
   Controller,
   Post,
@@ -12,20 +13,16 @@ import {
   Req,
   Query,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { RecordService } from './record.service';
-import { CreateRecordDto } from './dto/create-record.dto';
-import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
-import { UpdateRecordDto } from './dto/update-record.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { AdminOrAuthorGuard } from '~guards/record/admin-or-author.guard';
-import { AuthorshipGuard } from '~guards/record/authorship.guard';
-import {
-  FieldsForFilterRecords,
-  FieldsForSortRecords,
-} from '~common/types';
-import { Order } from '~common/enums';
+import { Order, UserRole } from '~common/enums';
+import { FieldsForFilterRecords, FieldsForSortRecords } from '~common/types';
+import { Roles } from '~decorators/roles.decorator';
+import { AuthorshipGuard } from '~guards/authorship.guard';
 import { ParseRecordFilterPipe } from '~pipes/parse-record-filter.pipe';
+import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
+import { CreateRecordDto } from './dto/create-record.dto';
+import { UpdateRecordDto } from './dto/update-record.dto';
+import { RecordService } from './record.service';
 
 type IRecordResponse = IRecord;
 
@@ -62,7 +59,8 @@ export class RecordController {
     });
   }
 
-  @UseGuards(AdminOrAuthorGuard)
+  @UseGuards(AuthorshipGuard)
+  @Roles(UserRole.ADMIN)
   @Get(':id')
   async getRecordById(
     @Param('id', ParseIntPipe) id: number

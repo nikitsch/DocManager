@@ -7,7 +7,11 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
-import { IRecord, IRecordWithFileUrlResponse, Record } from './entities/records.entity';
+import {
+  IRecord,
+  IRecordWithFileUrlResponse,
+  Record,
+} from './entities/records.entity';
 import { ICreateRecordDto } from './dto/create-record.dto';
 import { IUpdateRecordDto } from './dto/update-record.dto';
 import { MinioService } from './minio.service';
@@ -141,9 +145,9 @@ export class RecordService {
     return record;
   }
 
-  private async uploadFiles(files: Express.Multer.File[]) {    
+  private async uploadFiles(files: Express.Multer.File[]) {
     if (!files?.length) {
-      throw new BadRequestException('files should not be empty')
+      throw new BadRequestException('files should not be empty');
     }
 
     const fileData = await Promise.all(

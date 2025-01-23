@@ -4,28 +4,29 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { verify } from 'jsonwebtoken';
-import { CustomJwtPayload } from '~common/types';
-import { RecordService } from '~modules/record/record.service';
+import { Reflector } from '@nestjs/core';
 import { ERROR_MESSAGES } from '~common/constants';
+import { ROLES_KEY } from '~decorators/roles.decorator';
+import { RecordService } from '~modules/record/record.service';
 
 @Injectable()
 export class AuthorshipGuard implements CanActivate {
-  constructor(private readonly recordService: RecordService) {}
+  constructor(
+    private readonly recordService: RecordService,
+    private readonly reflector: Reflector
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const roles = this.reflector.get<string[]>(ROLES_KEY, context.getHandler());
     const request = context.switchToHttp().getRequest();
     const recordId = Number(request.params.id);
     const record = await this.recordService.getRecordById(recordId);
 
-    //TODO: check JwtStrategy
-    const token = request.cookies?.jwt;
-    if (!token) {
-      throw new ForbiddenException(ERROR_MESSAGES.NO_TOKEN_PROVIDED);
+    if (roles?.includes(request?.user?.role)) {
+      return true;
     }
 
-    const decoded = verify(token, process.env.JWT_SECRET) as CustomJwtPayload;
-    if (record.user_id !== decoded.userid) {
+    if (record.user_id !== request?.user?.user_id) {
       throw new ForbiddenException(ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR);
     }
 

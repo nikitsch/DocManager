@@ -35,8 +35,8 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
     response.cookie('jwt', token, {
       httpOnly: true,
-      secure: false, // Включите secure: true в продакшене
-      maxAge: Number(`${process.env.JWT_LIFESPAN}000`), //milliseconds
+      secure: false, // Включить secure: true в продакшене
+      maxAge: Number(process.env.JWT_MAX_AGE_IN_COOKIE), //* in milliseconds
     });
 
     return { message: 'Login successful' };

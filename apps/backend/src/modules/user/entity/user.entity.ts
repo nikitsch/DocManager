@@ -9,7 +9,10 @@ export interface IUser {
   organization_name: string;
 }
 
-export type IUserWithoutPassword = Pick<IUser, 'user_id' | 'username' | 'role' | 'organization_name'>;
+export type IUserWithoutPassword = Pick<
+  IUser,
+  'user_id' | 'username' | 'role' | 'organization_name'
+>;
 
 @Entity('users')
 export class User implements IUser {

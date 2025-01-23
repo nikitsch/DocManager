@@ -30,7 +30,8 @@ export interface IRecord {
   }[];
 }
 
-export interface IRecordWithFileUrlResponse extends Omit<IRecord, "record_files"> {
+export interface IRecordWithFileUrlResponse
+  extends Omit<IRecord, 'record_files'> {
   record_files: {
     url: string;
     name: string;
@@ -39,7 +40,7 @@ export interface IRecordWithFileUrlResponse extends Omit<IRecord, "record_files"
 }
 
 @Entity('records')
-export class Record implements IRecord{
+export class Record implements IRecord {
   @PrimaryGeneratedColumn()
   record_id: number;
 

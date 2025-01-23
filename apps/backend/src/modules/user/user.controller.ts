@@ -23,9 +23,7 @@ export class UserController {
 
   @Post('register')
   @Public()
-  async register(
-    @Body() createUserDto: CreateUserDto
-  ): Promise<IUserResponse> {
+  async register(@Body() createUserDto: CreateUserDto): Promise<IUserResponse> {
     const user = await this.userService.create(createUserDto);
     // eslint-disable-next-line
     const { password, ...rest } = user; //TODO: ref

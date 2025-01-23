@@ -6,6 +6,7 @@ import { StatusModule } from '~modules/status/status.module';
 import { RecordModule } from '~modules/record/record.module';
 import { AuthModule } from '~modules/auth/auth.module';
 import { JwtAuthGuard } from '~guards/jwt-auth.guard';
+import { JwtStrategy } from '~strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { JwtAuthGuard } from '~guards/jwt-auth.guard';
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DB,
       autoLoadEntities: true,
-      synchronize: true, //TODO switch off in production
       dropSchema: false,
+      // synchronize: true, //* Synchronization of the DB with entities and automatic migration to the DB when the entity changes
       // logging: true
     }),
     AuthModule,
@@ -28,7 +29,7 @@ import { JwtAuthGuard } from '~guards/jwt-auth.guard';
   ],
   controllers: [],
   providers: [
-    // JwtStrategy,
+    JwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

@@ -25,7 +25,7 @@ export class UserService {
       throw new BadRequestException(ERROR_MESSAGES.USERNAME_TAKEN);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, process.env.BCRYPT_SALT);
 
     const newUser = this.userRepository.create({
       username,
