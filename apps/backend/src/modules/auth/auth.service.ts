@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '~modules/user/user.service';
@@ -9,7 +10,8 @@ import { IUserWithoutPassword } from '~modules/user/entity/user.entity';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
   ) {}
 
   async validateUser(
@@ -36,7 +38,7 @@ export class AuthService {
     response.cookie('jwt', token, {
       httpOnly: true,
       secure: false, // Включить secure: true в продакшене
-      maxAge: Number(process.env.JWT_MAX_AGE_IN_COOKIE), //* in milliseconds
+      maxAge: this.configService.get<number>('JWT_MAX_AGE_IN_COOKIE'), //* in milliseconds
     });
 
     return { message: 'Login successful' };

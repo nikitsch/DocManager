@@ -27,6 +27,7 @@ import {
 } from '~common/types';
 import { Order, RecordStatus } from '~common/enums';
 import { UserService } from '~modules/user/user.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RecordService {
@@ -34,7 +35,8 @@ export class RecordService {
     @InjectRepository(Record)
     private readonly recordRepository: Repository<Record>,
     private readonly userService: UserService,
-    private readonly minioService: MinioService
+    private readonly minioService: MinioService,
+    private readonly configService: ConfigService
   ) {}
 
   async getAllRecords(options: {
@@ -184,7 +186,7 @@ export class RecordService {
 
     const { userid: user_id } = verify(
       token,
-      process.env.JWT_SECRET
+      this.configService.get<string>('JWT_SECRET')
     ) as CustomJwtPayload;
     const user = await this.userService.getUserById(user_id);
     const { organization_name } = user;

@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -14,7 +15,8 @@ import { IUser, IUserWithoutPassword, User } from './entity/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly configService: ConfigService
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<IUser> {
@@ -25,7 +27,8 @@ export class UserService {
       throw new BadRequestException(ERROR_MESSAGES.USERNAME_TAKEN);
     }
 
-    const hashedPassword = await bcrypt.hash(password, process.env.BCRYPT_SALT);
+    const salt = this.configService.get<string>('BCRYPT_SALT');
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = this.userRepository.create({
       username,
