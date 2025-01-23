@@ -7,9 +7,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RecordStatus } from '~common/enums';
 
-import { UpdateRecordStatusDto } from './dto/update-record-status.dto';
+import { IUpdateRecordStatusDto } from './dto/update-record-status.dto';
 import { ERROR_MESSAGES, statusTransitions } from '~common/constants';
-import { Record } from '~modules/record/entities/records.entity';
+import { IRecord, Record } from '~modules/record/entities/records.entity';
 
 @Injectable()
 export class StatusService {
@@ -28,8 +28,8 @@ export class StatusService {
 
   async updateRecordStatus(
     id: number,
-    recordStatusDto: UpdateRecordStatusDto
-  ): Promise<Record> {
+    recordStatusDto: IUpdateRecordStatusDto
+  ): Promise<IRecord> {
     const record = await this.recordRepository.findOne({
       where: { record_id: id },
     });

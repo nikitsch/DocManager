@@ -7,7 +7,14 @@ import {
 } from 'class-validator';
 import { TaxPeriod } from '~common/enums';
 
-export class CreateRecordDto {
+export interface ICreateRecordDto {
+  tax_period: TaxPeriod;
+  record_type: string;
+  record_subtype?: string;
+  record_comment: string;
+}
+
+export class CreateRecordDto implements ICreateRecordDto {
   @IsEnum(TaxPeriod)
   tax_period: TaxPeriod;
 
@@ -20,8 +27,7 @@ export class CreateRecordDto {
   record_subtype?: string;
 
   @IsString()
-  @Length(5, 255, {
-    message: 'Comment must be between 5 and 255 characters',
-  }) //TODO: Doesn't work
+  @IsNotEmpty()
+  @Length(5, 255)
   record_comment: string;
 }

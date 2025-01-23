@@ -7,9 +7,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
-import { Record } from './entities/records.entity';
-import { CreateRecordDto } from './dto/create-record.dto';
-import { UpdateRecordDto } from './dto/update-record.dto';
+import { IRecord, IRecordWithFileUrlResponse, Record } from './entities/records.entity';
+import { ICreateRecordDto } from './dto/create-record.dto';
+import { IUpdateRecordDto } from './dto/update-record.dto';
 import { MinioService } from './minio.service';
 import { v4 as uuidv4 } from 'uuid';
 import * as mime from 'mime-types';
@@ -20,7 +20,6 @@ import {
   CustomJwtPayload,
   FieldsForFilterRecords,
   FieldsForSortRecords,
-  RecordWithUrls,
 } from '~common/types';
 import { Order, RecordStatus } from '~common/enums';
 import { UserService } from '~modules/user/user.service';
@@ -41,7 +40,7 @@ export class RecordService {
     order: Order;
     page: number;
     pageSize: number;
-  }): Promise<{ data: Record[]; total: number }> {
+  }): Promise<{ data: IRecord[]; total: number }> {
     const { search, filters, sort, order, page, pageSize } = options;
 
     const queryBuilder = this.recordRepository.createQueryBuilder('record');
@@ -112,7 +111,7 @@ export class RecordService {
     return { data, total };
   }
 
-  async getRecordByIdWithUrls(id: number): Promise<RecordWithUrls> {
+  async getRecordByIdWithUrls(id: number): Promise<IRecordWithFileUrlResponse> {
     const record = await this.getRecordById(id);
     const { record_files, ...rest } = record;
 
@@ -131,7 +130,7 @@ export class RecordService {
     return { ...rest, record_files: recordWithUrls };
   }
 
-  async getRecordById(id: number): Promise<Record> {
+  async getRecordById(id: number): Promise<IRecord> {
     const record = await this.recordRepository.findOne({
       where: { record_id: id },
     });
@@ -142,9 +141,9 @@ export class RecordService {
     return record;
   }
 
-  private async uploadFiles(files: Express.Multer.File[]) {
-    if (!files) {
-      return [];
+  private async uploadFiles(files: Express.Multer.File[]) {    
+    if (!files?.length) {
+      throw new BadRequestException('files should not be empty')
     }
 
     const fileData = await Promise.all(
@@ -170,9 +169,9 @@ export class RecordService {
 
   async createRecord(
     req: Request,
-    createRecordDto: CreateRecordDto,
+    createRecordDto: ICreateRecordDto,
     files: Express.Multer.File[]
-  ): Promise<Record> {
+  ): Promise<IRecord> {
     //TODO: check JwtStrategy
     const token = req.cookies?.jwt;
     if (!token) {
@@ -218,8 +217,8 @@ export class RecordService {
 
   async updateRecord(
     id: number,
-    updateRecordDto: UpdateRecordDto
-  ): Promise<Record> {
+    updateRecordDto: IUpdateRecordDto
+  ): Promise<IRecord> {
     const record = await this.getRecordById(id);
 
     if (record.record_status !== RecordStatus.NEW) {

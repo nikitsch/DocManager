@@ -1,7 +1,13 @@
 import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
 import { TaxPeriod } from '~common/enums';
 
-export class UpdateRecordDto {
+export interface IUpdateRecordDto {
+  tax_period?: TaxPeriod;
+  record_subtype?: string;
+  record_comment?: string;
+}
+
+export class UpdateRecordDto implements IUpdateRecordDto {
   @IsEnum(TaxPeriod)
   @IsOptional()
   tax_period: TaxPeriod;
@@ -12,8 +18,6 @@ export class UpdateRecordDto {
 
   @IsString()
   @IsOptional()
-  @Length(5, 255, {
-    message: 'Comment must be between 5 and 255 characters',
-  }) //TODO: Doesn't work
+  @Length(5, 255)
   record_comment?: string;
 }

@@ -15,7 +15,7 @@ import {
 import { Request } from 'express';
 import { RecordService } from './record.service';
 import { CreateRecordDto } from './dto/create-record.dto';
-import { Record } from './entities/records.entity';
+import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AdminOrAuthorGuard } from '~guards/record/admin-or-author.guard';
@@ -23,11 +23,11 @@ import { AuthorshipGuard } from '~guards/record/authorship.guard';
 import {
   FieldsForFilterRecords,
   FieldsForSortRecords,
-  RecordWithUrls,
 } from '~common/types';
 import { Order } from '~common/enums';
-import { ParseRecordDataPipe } from '~pipes/parse-record-data.pipe';
 import { ParseRecordFilterPipe } from '~pipes/parse-record-filter.pipe';
+
+type IRecordResponse = IRecord;
 
 @Controller('records')
 export class RecordController {
@@ -37,9 +37,9 @@ export class RecordController {
   @UseInterceptors(FilesInterceptor('files'))
   async createRecord(
     @Req() req: Request,
-    @Body('data', ParseRecordDataPipe) createRecordDto: CreateRecordDto,
+    @Body() createRecordDto: CreateRecordDto,
     @UploadedFiles() files: Express.Multer.File[]
-  ) {
+  ): Promise<IRecordResponse> {
     return this.recordService.createRecord(req, createRecordDto, files);
   }
 
@@ -51,7 +51,7 @@ export class RecordController {
     @Query('order') order = Order.ASC,
     @Query('page') page = 1,
     @Query('pageSize') pageSize = 10
-  ): Promise<{ data: Record[]; total: number }> {
+  ): Promise<{ data: IRecordResponse[]; total: number }> {
     return this.recordService.getAllRecords({
       search,
       filters,
@@ -66,16 +66,16 @@ export class RecordController {
   @Get(':id')
   async getRecordById(
     @Param('id', ParseIntPipe) id: number
-  ): Promise<RecordWithUrls> {
+  ): Promise<IRecordWithFileUrlResponse> {
     return this.recordService.getRecordByIdWithUrls(id);
   }
 
   @UseGuards(AuthorshipGuard)
   @Patch(':id')
   async updateRecord(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateRecordDto: UpdateRecordDto
-  ) {
+  ): Promise<IRecordResponse> {
     return this.recordService.updateRecord(id, updateRecordDto);
   }
 }

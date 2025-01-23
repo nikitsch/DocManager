@@ -5,13 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entity/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { ERROR_MESSAGES } from '~common/constants';
-import { UserWithoutPassword } from '~common/types';
+import { CreateUserDto } from './dto/create-user.dto';
+import { IUser, IUserWithoutPassword, User } from './entity/user.entity';
 
-//TODO: Нужно будет сделать эндпоинт '/users' скрытым
 @Injectable()
 export class UserService {
   constructor(
@@ -19,7 +17,7 @@ export class UserService {
     private readonly userRepository: Repository<User>
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<IUser> {
     const { username, password, organization_name } = createUserDto;
 
     const existingUser = await this.findByUsername(username);
@@ -38,7 +36,7 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
-  async getAllUsers(): Promise<UserWithoutPassword[]> {
+  async getAllUsers(): Promise<IUserWithoutPassword[]> {
     const users = await this.userRepository.find();
 
     return users.map((user) => {
@@ -49,7 +47,7 @@ export class UserService {
     });
   }
 
-  async getUserById(id: number): Promise<UserWithoutPassword> {
+  async getUserById(id: number): Promise<IUserWithoutPassword> {
     const user = await this.userRepository.findOne({ where: { user_id: id } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -63,7 +61,7 @@ export class UserService {
   /**
    * Be careful, this function gives out your user password.
    */
-  async findByUsername(username: string): Promise<User | undefined> {
+  async findByUsername(username: string): Promise<IUser | undefined> {
     return this.userRepository.findOne({ where: { username } });
   }
 }

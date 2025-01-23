@@ -1,14 +1,18 @@
-import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 import { RecordStatus } from '~common/enums';
 
-export class UpdateRecordStatusDto {
+export interface IUpdateRecordStatusDto {
+  record_status: RecordStatus;
+  reason_for_rejection?: string;
+}
+
+export class UpdateRecordStatusDto implements IUpdateRecordStatusDto {
   @IsEnum(RecordStatus)
-  @IsOptional()
+  @IsNotEmpty()
   record_status: RecordStatus;
 
   @IsString()
-  @Length(5, 255, {
-    message: 'Comment must be between 5 and 255 characters',
-  }) //TODO: Doesn't work
+  @IsOptional()
+  @Length(5, 255)
   reason_for_rejection?: string;
 }
