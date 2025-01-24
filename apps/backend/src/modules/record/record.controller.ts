@@ -14,13 +14,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { Order, UserRole } from '~common/enums';
-import { FieldsForFilterRecords, FieldsForSortRecords } from '~common/types';
+import { UserRole } from '~common/enums';
 import { Roles } from '~decorators/roles.decorator';
 import { AuthorshipGuard } from '~guards/authorship.guard';
-import { ParseRecordFilterPipe } from '~pipes/parse-record-filter.pipe';
 import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
+import { GetRecordsDto } from './dto/get-all-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { RecordService } from './record.service';
 
@@ -41,22 +40,11 @@ export class RecordController {
   }
 
   @Get()
-  async getAllRecords(
-    @Query('search') search?: string,
-    @Query('filters', ParseRecordFilterPipe) filters?: FieldsForFilterRecords,
-    @Query('sort') sort: FieldsForSortRecords = 'created_at',
-    @Query('order') order = Order.ASC,
-    @Query('page') page = 1,
-    @Query('pageSize') pageSize = 10
+  async getRecords(
+    @Req() req: Request,
+    @Query() query: GetRecordsDto
   ): Promise<{ data: IRecordResponse[]; total: number }> {
-    return this.recordService.getAllRecords({
-      search,
-      filters,
-      sort,
-      order,
-      page: Number(page),
-      pageSize: Number(pageSize),
-    });
+    return this.recordService.getAllRecords(req, query);
   }
 
   @UseGuards(AuthorshipGuard)

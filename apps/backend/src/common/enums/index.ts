@@ -28,3 +28,11 @@ export enum Order {
   ASC = 'ASC',
   DESC = 'DESC',
 } //TODO: move out to global
+
+export enum FieldsForSortRecords {
+  created_at = 'created_at',
+  record_number = 'record_number',
+  record_type = 'record_type',
+  tax_period = 'tax_period',
+  record_status = 'record_status',
+}

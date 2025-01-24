@@ -1,118 +1,101 @@
+import { Request } from 'express';
+import { ILike, Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Request } from 'express';
+import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
+import { RecordStatus, UserRole } from '~common/enums';
+import { IJwtStrategyValidate } from '~common/types';
+import { UserService } from '~modules/user/user.service';
+import { ICreateRecordDto } from './dto/create-record.dto';
+import { IGetRecordsDto } from './dto/get-all-record.dto';
+import { IUpdateRecordDto } from './dto/update-record.dto';
 import {
   IRecord,
   IRecordWithFileUrlResponse,
-  Record,
+  Record as RecordEntity,
 } from './entities/records.entity';
-import { ICreateRecordDto } from './dto/create-record.dto';
-import { IUpdateRecordDto } from './dto/update-record.dto';
 import { MinioService } from './minio.service';
-import { v4 as uuidv4 } from 'uuid';
+
 import * as mime from 'mime-types';
 import 'multer';
-import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
-import { verify } from 'jsonwebtoken';
-import {
-  CustomJwtPayload,
-  FieldsForFilterRecords,
-  FieldsForSortRecords,
-} from '~common/types';
-import { Order, RecordStatus } from '~common/enums';
-import { UserService } from '~modules/user/user.service';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RecordService {
   constructor(
-    @InjectRepository(Record)
-    private readonly recordRepository: Repository<Record>,
+    @InjectRepository(RecordEntity)
+    private readonly recordRepository: Repository<RecordEntity>,
     private readonly userService: UserService,
     private readonly minioService: MinioService,
     private readonly configService: ConfigService
   ) {}
 
-  async getAllRecords(options: {
-    search?: string;
-    filters?: FieldsForFilterRecords;
-    sort: FieldsForSortRecords;
-    order: Order;
-    page: number;
-    pageSize: number;
-  }): Promise<{ data: IRecord[]; total: number }> {
-    const { search, filters, sort, order, page, pageSize } = options;
+  async getAllRecords(
+    req: Request,
+    query: IGetRecordsDto
+  ): Promise<{ data: IRecord[]; total: number }> {
+    const { user_id, role } = req?.user as IJwtStrategyValidate;
+    const { search, filters, sort, order, page, pageSize } = query;
 
-    const queryBuilder = this.recordRepository.createQueryBuilder('record');
+    const where: Record<string, string | number | object> = {};
 
     //* Search
     if (search) {
-      queryBuilder.andWhere('record.record_number ILIKE :search', {
-        search: `%${search}%`,
-      });
+      where.record_number = ILike(`%${search}%`);
     }
 
     //* Filtration
+    if (role !== UserRole.ADMIN) {
+      where.user_id = user_id;
+    }
+
     if (filters) {
-      if (filters.user_id) {
-        queryBuilder.andWhere('record.user_id = :user_id', {
-          user_id: filters.user_id,
-        });
+      if (role !== UserRole.ADMIN && filters.user_id !== user_id) {
+        throw new BadRequestException(
+          ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR
+        );
+      }
+
+      if (filters.user_id && role === UserRole.ADMIN) {
+        where.user_id = filters.user_id;
       }
 
       if (filters.tax_period) {
-        queryBuilder.andWhere('record.tax_period = :tax_period', {
-          tax_period: filters.tax_period,
-        });
+        where.tax_period = filters.tax_period;
       }
 
       if (filters.record_status) {
-        queryBuilder.andWhere('record.record_status = :record_status', {
-          record_status: filters.record_status,
-        });
+        where.record_status = filters.record_status;
       }
 
       // if (filters.record_type) {
-      //   queryBuilder.andWhere('record.record_type = :record_type', { record_type: filters.record_type });
+      //   where.record_type = filters.record_type;
       // }
 
-      if (filters.from) {
-        queryBuilder.andWhere('record.created_at >= :from', {
-          from: filters.from,
-        });
-      }
+      if (filters.from || filters.to) {
+        where.created_at = {};
 
-      if (filters.to) {
-        queryBuilder.andWhere('record.created_at <= :to', { to: filters.to });
-      }
-    }
+        if (filters.from) {
+          where.created_at['$gte'] = filters.from;
+        }
 
-    //* Sorting
-    if (sort) {
-      if (sort === 'created_at') {
-        queryBuilder.orderBy('record.created_at', order);
-      }
-
-      if (sort === 'record_number') {
-        queryBuilder.orderBy('record.record_number', order);
-      }
-
-      if (sort === 'record_type') {
-        queryBuilder.orderBy('record.record_type', order);
+        if (filters.to) {
+          where.created_at['$lte'] = filters.to;
+        }
       }
     }
 
-    //* Pagination
-    queryBuilder.skip((page - 1) * pageSize).take(pageSize);
-
-    //* Executing a request
-    const [data, total] = await queryBuilder.getManyAndCount();
+    const [data, total] = await this.recordRepository.findAndCount({
+      where,
+      order: { [sort]: order }, //TODO: custom order for record_status
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
 
     return { data, total };
   }
@@ -178,16 +161,7 @@ export class RecordService {
     createRecordDto: ICreateRecordDto,
     files: Express.Multer.File[]
   ): Promise<IRecord> {
-    //TODO: check JwtStrategy
-    const token = req.cookies?.jwt;
-    if (!token) {
-      throw new ForbiddenException(ERROR_MESSAGES.NO_TOKEN_PROVIDED);
-    }
-
-    const { userid: user_id } = verify(
-      token,
-      this.configService.get<string>('JWT_SECRET')
-    ) as CustomJwtPayload;
+    const { user_id } = req?.user as IJwtStrategyValidate;
     const user = await this.userService.getUserById(user_id);
     const { organization_name } = user;
 

@@ -8,7 +8,7 @@ import { StatusModule } from '~modules/status/status.module';
 import { RecordModule } from '~modules/record/record.module';
 import { AuthModule } from '~modules/auth/auth.module';
 import { JwtStrategy } from '~strategies/jwt.strategy';
-import * as Joi from 'joi';
+import * as Joi from 'joi'; //TODO: ref
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ import * as Joi from 'joi';
       }),
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule], // Подключаем ConfigModule для доступа к ConfigService
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
