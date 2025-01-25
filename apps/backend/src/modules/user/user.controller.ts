@@ -21,14 +21,10 @@ type IUserResponse = IUserWithoutPassword;
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register')
   @Public()
+  @Post('register')
   async register(@Body() createUserDto: CreateUserDto): Promise<IUserResponse> {
-    const user = await this.userService.create(createUserDto);
-    // eslint-disable-next-line
-    const { password, ...rest } = user; //TODO: ref
-
-    return rest;
+    return this.userService.create(createUserDto);
   }
 
   @UseGuards(RolesGuard)

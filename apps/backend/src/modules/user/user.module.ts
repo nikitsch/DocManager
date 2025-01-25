@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { UserRepository } from '~repositories/user.repository';
 import { User } from './entity/user.entity';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 
-//TODO: добавить возможность делать запросы только с бэка или только от админа
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  providers: [UserService],
+  providers: [UserService, UserRepository],
   controllers: [UserController],
   exports: [UserService],
 })

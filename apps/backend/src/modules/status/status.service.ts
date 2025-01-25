@@ -1,22 +1,13 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { RecordStatus } from '~common/enums';
-
-import { IUpdateRecordStatusDto } from './dto/update-record-status.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ERROR_MESSAGES, statusTransitions } from '~common/constants';
-import { IRecord, Record } from '~modules/record/entities/records.entity';
+import { RecordStatus } from '~common/enums';
+import { IRecord } from '~modules/record/entities/records.entity';
+import { RecordRepository } from '~repositories/record.repository';
+import { IUpdateRecordStatusDto } from './dto/update-record-status.dto';
 
 @Injectable()
 export class StatusService {
-  constructor(
-    @InjectRepository(Record)
-    private readonly recordRepository: Repository<Record>
-  ) {}
+  constructor(private readonly recordRepository: RecordRepository) {}
 
   private canTransition(
     currentStatus: RecordStatus,
@@ -30,17 +21,12 @@ export class StatusService {
     id: number,
     recordStatusDto: IUpdateRecordStatusDto
   ): Promise<IRecord> {
-    const record = await this.recordRepository.findOne({
-      where: { record_id: id },
-    });
-    if (!record) {
-      throw new NotFoundException(`Record with ID ${id} not found`);
-    }
-
     const {
       record_status: newStatus,
       reason_for_rejection: reasonForRejection,
     } = recordStatusDto;
+
+    const record = await this.recordRepository.findById(id);
 
     if (!this.canTransition(record.record_status, newStatus)) {
       throw new BadRequestException(ERROR_MESSAGES.UPDATE_NOT_ALLOWED);
@@ -68,6 +54,6 @@ export class StatusService {
 
     record.record_status = newStatus;
 
-    return await this.recordRepository.save(record);
+    return this.recordRepository.updateRecord(record);
   }
 }

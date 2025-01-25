@@ -16,8 +16,10 @@
       "~common/*": ["./src/common/*"],
       "~decorators/*": ["./src/decorators/*"],
       "~guards/*": ["./src/guards/*"],
+      "~minio/*": ["./src/minio/*"],
       "~modules/*": ["./src/modules/*"],
       "~pipes/*": ["./src/pipes/*"],
+      "~repositories/*": ["./src/repositories/*"],
       "~strategies/*": ["./src/strategies/*"]
     }
   }

@@ -1,25 +1,25 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { ERROR_MESSAGES } from '~common/constants';
+import { UserRepository } from '~repositories/user.repository';
 import { CreateUserDto } from './dto/create-user.dto';
-import { IUser, IUserWithoutPassword, User } from './entity/user.entity';
+import { IUser, IUserWithoutPassword } from './entity/user.entity';
+
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
     private readonly configService: ConfigService
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<IUser> {
+  private passwordExtractor(user: IUser[]): IUserWithoutPassword[] {
+    // eslint-disable-next-line
+    return user.map(({ password, ...rest }) => rest);
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<IUserWithoutPassword> {
     const { username, password, organization_name } = createUserDto;
 
     const existingUser = await this.findByUsername(username);
@@ -30,41 +30,41 @@ export class UserService {
     const salt = this.configService.get<string>('BCRYPT_SALT');
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = this.userRepository.create({
+    const newUser = await this.userRepository.createUser({
       username,
       password: hashedPassword,
       organization_name,
     });
 
-    return this.userRepository.save(newUser);
+    const [res] = this.passwordExtractor([newUser]); //TODO: ref
+    return res;
   }
 
   async getAllUsers(): Promise<IUserWithoutPassword[]> {
-    const users = await this.userRepository.find();
-
-    return users.map((user) => {
-      // eslint-disable-next-line
-      const { password, ...rest } = user;
-
-      return { ...rest };
-    });
+    const users = await this.userRepository.findAll();
+    return this.passwordExtractor(users);
   }
 
-  async getUserById(id: number): Promise<IUserWithoutPassword> {
-    const user = await this.userRepository.findOne({ where: { user_id: id } });
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-    // eslint-disable-next-line
-    const { password, ...rest } = user;
-
-    return rest;
+  async getUserById(id: number): Promise<IUserWithoutPassword | undefined> {
+    const user = await this.userRepository.findById(id);
+    const [res] = this.passwordExtractor([user]); //TODO: ref
+    return res;
   }
 
   /**
-   * Be careful, this function gives out your user password.
+   * Be careful, this function may reveal the user's password!
    */
-  async findByUsername(username: string): Promise<IUser | undefined> {
-    return this.userRepository.findOne({ where: { username } });
+  async findByUsername(
+    username: string,
+    withPassword = false
+  ): Promise<IUser | IUserWithoutPassword | undefined> {
+    //TODO: ref IUser | IUserWithoutPassword
+    const user = await this.userRepository.findByUsername(username);
+    if (withPassword) {
+      return user;
+    }
+
+    const [res] = this.passwordExtractor([user]); //TODO: ref
+    return res;
   }
 }

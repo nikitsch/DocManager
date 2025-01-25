@@ -1,26 +1,17 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { ILike, Repository } from 'typeorm';
+import { ILike } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
 import { RecordStatus, UserRole } from '~common/enums';
 import { IJwtStrategyValidate } from '~common/types';
+import { MinioService } from '~minio/minio.service';
 import { UserService } from '~modules/user/user.service';
+import { RecordRepository } from '~repositories/record.repository';
 import { ICreateRecordDto } from './dto/create-record.dto';
 import { IGetRecordsDto } from './dto/get-all-record.dto';
 import { IUpdateRecordDto } from './dto/update-record.dto';
-import {
-  IRecord,
-  IRecordWithFileUrlResponse,
-  Record as RecordEntity,
-} from './entities/records.entity';
-import { MinioService } from './minio.service';
+import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
 
 import * as mime from 'mime-types';
 import 'multer';
@@ -28,11 +19,9 @@ import 'multer';
 @Injectable()
 export class RecordService {
   constructor(
-    @InjectRepository(RecordEntity)
-    private readonly recordRepository: Repository<RecordEntity>,
+    private readonly recordRepository: RecordRepository,
     private readonly userService: UserService,
-    private readonly minioService: MinioService,
-    private readonly configService: ConfigService
+    private readonly minioService: MinioService
   ) {}
 
   async getAllRecords(
@@ -90,7 +79,7 @@ export class RecordService {
       }
     }
 
-    const [data, total] = await this.recordRepository.findAndCount({
+    const [data, total] = await this.recordRepository.findForTable({
       where,
       order: { [sort]: order }, //TODO: custom order for record_status
       skip: (page - 1) * pageSize,
@@ -120,14 +109,7 @@ export class RecordService {
   }
 
   async getRecordById(id: number): Promise<IRecord> {
-    const record = await this.recordRepository.findOne({
-      where: { record_id: id },
-    });
-    if (!record) {
-      throw new NotFoundException(`Record with ID ${id} not found`);
-    }
-
-    return record;
+    return this.recordRepository.findById(id);
   }
 
   private async uploadFiles(files: Express.Multer.File[]) {
@@ -142,7 +124,7 @@ export class RecordService {
           mime.extension(mimetype) || UNRECOGNIZED_FILE_EXTESION;
         const objectName = `${fileId}.${fileExtension}`;
 
-        // Загрузка файла в MinIO //TODO: place next to creation of recordRepository collection item
+        // Загрузка файла в MinIO //TODO: https://docs.nestjs.com/techniques/file-upload#file-validation
         await this.minioService.uploadFile(objectName, buffer, mimetype);
 
         return {
@@ -170,7 +152,7 @@ export class RecordService {
 
     const generateRecordNumber = (arr: number[]) =>
       arr.map((el) => String(el).padStart(2, '0')).join('');
-    const recordCount = await this.recordRepository.count();
+    const recordCount = await this.recordRepository.getCount();
     const today = new Date();
     const record_number = generateRecordNumber([
       user_id,
@@ -181,7 +163,7 @@ export class RecordService {
 
     const record_files = await this.uploadFiles(files);
 
-    const newRecord = this.recordRepository.create({
+    return this.recordRepository.createRecord({
       user_id,
       tax_period,
       record_type,
@@ -191,8 +173,6 @@ export class RecordService {
       organization_name,
       record_files,
     });
-
-    return this.recordRepository.save(newRecord);
   }
 
   async updateRecord(
@@ -219,6 +199,6 @@ export class RecordService {
       : [now.toISOString()];
     Object.assign(record, updateRecordDto);
 
-    return this.recordRepository.save(record);
+    return this.recordRepository.updateRecord(record);
   }
 }
