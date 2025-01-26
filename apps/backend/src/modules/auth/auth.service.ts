@@ -1,10 +1,11 @@
-import { Response } from 'express';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
 import { UserService } from '~modules/user/user.service';
-import { IUser, IUserWithoutPassword } from '~modules/user/entity/user.entity';
+import { IUserWithoutPassword } from '~modules/user/entity/user.entity';
+
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -18,10 +19,7 @@ export class AuthService {
     username: string,
     pass: string
   ): Promise<IUserWithoutPassword | null> {
-    const user = (await this.userService.findByUsername(
-      username,
-      true
-    )) as IUser;
+    const user = await this.userService.findByUsername(username);
     if (user && (await bcrypt.compare(pass, user.password))) {
       // eslint-disable-next-line
       const { password, ...rest } = user;

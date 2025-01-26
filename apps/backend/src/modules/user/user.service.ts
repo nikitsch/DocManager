@@ -22,8 +22,8 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<IUserWithoutPassword> {
     const { username, password, organization_name } = createUserDto;
 
-    const existingUser = await this.findByUsername(username);
-    if (existingUser) {
+    const isUsernameExist = await this.userRepository.doesUsernameExist(username);   
+    if (isUsernameExist) {
       throw new BadRequestException(ERROR_MESSAGES.USERNAME_TAKEN);
     }
 
@@ -52,19 +52,9 @@ export class UserService {
   }
 
   /**
-   * Be careful, this function may reveal the user's password!
+   * Be careful, this function reveals the user's password!
    */
-  async findByUsername(
-    username: string,
-    withPassword = false
-  ): Promise<IUser | IUserWithoutPassword | undefined> {
-    //TODO: ref IUser | IUserWithoutPassword
-    const user = await this.userRepository.findByUsername(username);
-    if (withPassword) {
-      return user;
-    }
-
-    const [res] = this.passwordExtractor([user]); //TODO: ref
-    return res;
+  async findByUsername(username: string): Promise<IUser | undefined> {
+    return this.userRepository.findByUsername(username);
   }
 }
