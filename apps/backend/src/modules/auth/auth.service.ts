@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { JwtUserData } from '~common/types';
 import { UserService } from '~modules/user/user.service';
 import { IUserWithoutPassword } from '~modules/user/entity/user.entity';
 
@@ -29,12 +30,12 @@ export class AuthService {
     return null;
   }
 
-  async login(user: IUserWithoutPassword, response: Response) {
-    const payload = {
-      userid: user.user_id,
-      username: user.username,
-      role: user.role,
-    };
+  async login(
+    user: IUserWithoutPassword,
+    response: Response
+  ): Promise<JwtUserData> {
+    const { user_id: userid, username, role } = user;
+    const payload = { userid, username, role };
     const token = this.jwtService.sign(payload);
     response.cookie('jwt', token, {
       httpOnly: true,
@@ -42,7 +43,7 @@ export class AuthService {
       maxAge: this.configService.get<number>('JWT_MAX_AGE_IN_COOKIE'), //* in milliseconds
     });
 
-    return { message: 'Login successful' };
+    return payload;
   }
 
   async logout(response: Response) {

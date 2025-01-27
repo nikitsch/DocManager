@@ -4,7 +4,7 @@ import { ILike } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
 import { RecordStatus, UserRole } from '~common/enums';
-import { IJwtStrategyValidate } from '~common/types';
+import { JwtUserData } from '~common/types';
 import { MinioService } from '~minio/minio.service';
 import { UserService } from '~modules/user/user.service';
 import { RecordRepository } from '~repositories/record.repository';
@@ -28,7 +28,7 @@ export class RecordService {
     req: Request,
     query: IGetRecordsDto
   ): Promise<{ data: IRecord[]; total: number }> {
-    const { user_id, role } = req?.user as IJwtStrategyValidate;
+    const { userid, role } = req?.user as JwtUserData;
     const { search, filters, sort, order, page, pageSize } = query;
 
     const where: Record<string, string | number | object> = {};
@@ -40,11 +40,11 @@ export class RecordService {
 
     //* Filtration
     if (role !== UserRole.ADMIN) {
-      where.user_id = user_id;
+      where.user_id = userid;
     }
 
     if (filters) {
-      if (role !== UserRole.ADMIN && filters.user_id !== user_id) {
+      if (role !== UserRole.ADMIN && filters.user_id !== userid) {
         throw new BadRequestException(
           ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR
         );
@@ -143,8 +143,8 @@ export class RecordService {
     createRecordDto: ICreateRecordDto,
     files: Express.Multer.File[]
   ): Promise<IRecord> {
-    const { user_id } = req?.user as IJwtStrategyValidate;
-    const user = await this.userService.getUserById(user_id);
+    const { userid } = req?.user as JwtUserData;
+    const user = await this.userService.getUserById(userid);
     const { organization_name } = user;
 
     const { tax_period, record_type, record_subtype, record_comment } =
@@ -155,7 +155,7 @@ export class RecordService {
     const recordCount = await this.recordRepository.getCount();
     const today = new Date();
     const record_number = generateRecordNumber([
-      user_id,
+      userid,
       today.getDate(),
       today.getMonth() + 1,
       recordCount + 1,
@@ -164,7 +164,7 @@ export class RecordService {
     const record_files = await this.uploadFiles(files);
 
     return this.recordRepository.createRecord({
-      user_id,
+      user_id: userid,
       tax_period,
       record_type,
       record_subtype,

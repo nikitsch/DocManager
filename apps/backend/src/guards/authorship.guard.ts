@@ -26,7 +26,7 @@ export class AuthorshipGuard implements CanActivate {
       return true;
     }
 
-    if (record.user_id !== request?.user?.user_id) {
+    if (record.user_id !== request?.user?.userid) {
       throw new ForbiddenException(ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR);
     }
 

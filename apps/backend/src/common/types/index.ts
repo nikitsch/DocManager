@@ -1,14 +1,7 @@
-import { JwtPayload } from 'jsonwebtoken';
-import { UserRole } from '../enums';
 import { IRecord } from '~modules/record/entities/records.entity';
+import { UserRole } from '../enums';
 
-export interface IJwtStrategyValidate {
-  user_id: number;
-  username: string;
-  role: UserRole;
-}
-
-export interface CustomJwtPayload extends JwtPayload {
+export interface JwtUserData {
   userid: number;
   username: string;
   role: UserRole;

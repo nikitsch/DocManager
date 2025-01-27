@@ -22,7 +22,9 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<IUserWithoutPassword> {
     const { username, password, organization_name } = createUserDto;
 
-    const isUsernameExist = await this.userRepository.doesUsernameExist(username);   
+    const isUsernameExist = await this.userRepository.doesUsernameExist(
+      username
+    );
     if (isUsernameExist) {
       throw new BadRequestException(ERROR_MESSAGES.USERNAME_TAKEN);
     }

@@ -46,7 +46,7 @@ export class RecordRepository {
 
   async findById(id: number): Promise<IRecord | undefined> {
     const record = await this.recordRepository.findOne({
-      where: { user_id: id },
+      where: { record_id: id },
     });
 
     if (!record) {
