@@ -11,12 +11,14 @@ import {
   ParseIntPipe,
   Req,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { UserRole } from '~common/enums';
 import { Roles } from '~decorators/roles.decorator';
 import { AuthorshipGuard } from '~guards/authorship.guard';
+import { RecordChangeGuard } from '~guards/record-change.guard';
 import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { GetRecordsDto } from './dto/get-all-record.dto';
@@ -56,12 +58,18 @@ export class RecordController {
     return this.recordService.getRecordByIdWithUrls(id);
   }
 
-  @UseGuards(AuthorshipGuard)
+  @UseGuards(AuthorshipGuard, RecordChangeGuard)
   @Patch(':id')
   async updateRecord(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateRecordDto: UpdateRecordDto
   ): Promise<IRecordResponse> {
     return this.recordService.updateRecord(id, updateRecordDto);
+  }
+
+  @UseGuards(AuthorshipGuard, RecordChangeGuard)
+  @Delete(':id')
+  async deleteRecord(@Param('id', ParseIntPipe) id: number) {
+    return this.recordService.deleteRecord(id);
   }
 }

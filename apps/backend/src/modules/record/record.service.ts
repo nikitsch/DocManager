@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { ILike } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
-import { RecordStatus, UserRole } from '~common/enums';
+import { UserRole } from '~common/enums';
 import { JwtUserData } from '~common/types';
 import { MinioService } from '~minio/minio.service';
 import { UserService } from '~modules/user/user.service';
@@ -117,25 +117,23 @@ export class RecordService {
       throw new BadRequestException('files should not be empty');
     }
 
-    const fileData = await Promise.all(
-      files.map(async ({ buffer, mimetype, originalname }) => {
-        const fileId = uuidv4();
-        const fileExtension =
-          mime.extension(mimetype) || UNRECOGNIZED_FILE_EXTESION;
-        const objectName = `${fileId}.${fileExtension}`;
+    const fileData = files.map(async ({ buffer, mimetype, originalname }) => {
+      const fileId = uuidv4();
+      const fileExtension =
+        mime.extension(mimetype) || UNRECOGNIZED_FILE_EXTESION;
+      const objectName = `${fileId}.${fileExtension}`;
 
-        // Загрузка файла в MinIO //TODO: https://docs.nestjs.com/techniques/file-upload#file-validation
-        await this.minioService.uploadFile(objectName, buffer, mimetype);
+      // Загрузка файла в MinIO //TODO: https://docs.nestjs.com/techniques/file-upload#file-validation
+      await this.minioService.uploadFile(objectName, buffer, mimetype);
 
-        return {
-          id: fileId,
-          name: originalname,
-          extension: fileExtension,
-        };
-      })
-    );
+      return {
+        id: fileId,
+        name: originalname,
+        extension: fileExtension,
+      };
+    });
 
-    return fileData;
+    return Promise.all(fileData);
   }
 
   async createRecord(
@@ -181,10 +179,6 @@ export class RecordService {
   ): Promise<IRecord> {
     const record = await this.getRecordById(id);
 
-    if (record.record_status !== RecordStatus.NEW) {
-      throw new BadRequestException(ERROR_MESSAGES.STATUS_DOESNT_ALLOW_CHANGES);
-    }
-
     if (
       Object.keys(updateRecordDto).every(
         (key) => updateRecordDto[key] === record[key]
@@ -200,5 +194,21 @@ export class RecordService {
     Object.assign(record, updateRecordDto);
 
     return this.recordRepository.updateRecord(record);
+  }
+
+  async deleteRecord(id: number) {
+    const record = await this.getRecordById(id);
+
+    const fileDeletionPromises = record.record_files.map(
+      ({ id, extension }) => {
+        const objectName = `${id}.${extension}`;
+        return this.minioService.deleteFile(objectName);
+      }
+    );
+    await Promise.all(fileDeletionPromises);
+
+    await this.recordRepository.deleteRecord(id);
+
+    return { message: 'Record and associated files successfully deleted' };
   }
 }

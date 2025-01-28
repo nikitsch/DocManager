@@ -16,14 +16,16 @@ export class MinioService {
     });
   }
 
+  private getBucketName() {
+    return this.configService.get<string>('MINIO_FILES_BUCKET_NAME');
+  }
+
   async uploadFile(
     objectName: string,
     fileBuffer: Buffer,
     mimeType: string
   ): Promise<string> {
-    const bucketName = this.configService.get<string>(
-      'MINIO_FILES_BUCKET_NAME'
-    );
+    const bucketName = this.getBucketName();
     const fileSize = fileBuffer.length;
 
     await this.minioClient.putObject(
@@ -43,9 +45,7 @@ export class MinioService {
     objectName: string,
     originalName: string
   ): Promise<string> {
-    const bucketName = this.configService.get<string>(
-      'MINIO_FILES_BUCKET_NAME'
-    );
+    const bucketName = this.getBucketName();
     const expires = this.configService.get<number>('MINIO_URL_LIFESPAN');
 
     return this.minioClient.presignedUrl(
@@ -57,5 +57,10 @@ export class MinioService {
         'response-content-disposition': `attachment; filename="${originalName}"`,
       }
     );
+  }
+
+  async deleteFile(objectName: string): Promise<void> {
+    const bucketName = this.getBucketName();
+    await this.minioClient.removeObject(bucketName, objectName);
   }
 }

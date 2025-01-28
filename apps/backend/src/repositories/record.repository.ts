@@ -59,4 +59,12 @@ export class RecordRepository {
   async getCount(): Promise<number> {
     return this.recordRepository.count();
   }
+
+  async deleteRecord(id: number): Promise<void> {
+    const result = await this.recordRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Record with ID ${id} not found`);
+    }
+  }
 }
