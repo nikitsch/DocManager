@@ -17,8 +17,11 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "types": ["vite/client"],
+    "baseUrl": ".",
     "paths": {
-      // "~app/*": ["./src/app/*"],
+      "~pages/*": ["./src/pages/*"],
+      "~shared/*": ["./src/shared/*"],
+      "~widgets/*": ["./src/widgets/*"]
     }
-  },
+  }
 }

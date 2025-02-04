@@ -1,13 +1,6 @@
-// Uncomment this line to use CSS modules
-// import styles from './app.module.css';
+import { FC } from 'react';
+import RouterProvider from './providers/RouterProvider';
 
-
-export function App() {
-  return (
-    <div>
-      Hello
-    </div>
-  );
-}
+const App: FC = () => <RouterProvider />;
 
 export default App;
