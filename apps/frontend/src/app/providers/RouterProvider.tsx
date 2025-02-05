@@ -1,9 +1,10 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import ArchivePage from '~pages/ArchivePage';
 import LoginPage from '~pages/LoginPage';
 import RequestPage from '~pages/RequestPage';
 import { RoutesPaths } from '~shared/enum/Routes';
+import PageLoader from '~shared/ui/page-loader/PageLoader';
 import AuthLayout from '~widgets/AuthLayout/ui';
 import WindowLayout from '~widgets/WindowLayout/ui';
 
@@ -17,7 +18,7 @@ export default function RouterProvider() {
       <Routes>
         <Route
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<PageLoader />}>
               <AuthLayout />
             </Suspense>
           }
@@ -25,7 +26,7 @@ export default function RouterProvider() {
           <Route
             path={RoutesPaths.LOGIN}
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<PageLoader />}>
                 <LoginPage />
               </Suspense>
             }
@@ -33,7 +34,7 @@ export default function RouterProvider() {
           <Route
             path={RoutesPaths.REGISTER}
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<PageLoader />}>
                 <RegisterPage />
               </Suspense>
             }
@@ -41,9 +42,14 @@ export default function RouterProvider() {
         </Route>
 
         <Route
+          path={RoutesPaths.DEFAULT_PATH}
+          element={<Navigate to={RoutesPaths.ARCHIVE} replace />}
+        />
+
+        <Route
           path={RoutesPaths.ARCHIVE}
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<PageLoader />}>
               <WindowLayout />
             </Suspense>
           }
@@ -51,15 +57,15 @@ export default function RouterProvider() {
           <Route
             index
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<PageLoader />}>
                 <ArchivePage />
               </Suspense>
             }
           />
           <Route
-            path=":id" //TODO: RoutesPaths
+            path={RoutesPaths.ID}
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<PageLoader />}>
                 <RequestPage />
               </Suspense>
             }
@@ -67,7 +73,7 @@ export default function RouterProvider() {
           <Route
             path={RoutesPaths.CREATE}
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<PageLoader />}>
                 <CreateRequestPage />
               </Suspense>
             }
@@ -77,7 +83,7 @@ export default function RouterProvider() {
         <Route
           path={RoutesPaths.ALL}
           element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<PageLoader />}>
               <NotFound />
             </Suspense>
           }
