@@ -1,17 +1,17 @@
-import type { FC } from 'react';
-import Paper from '@mui/material/Paper';
 import { Outlet } from 'react-router';
+import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+
+import type { FC } from 'react';
 
 const AuthLayout: FC = () => (
   <Stack
     alignItems="center"
     justifyContent="center"
-    height="100vh"
-    sx={{ backgroundColor: '#bbd8f4' }}
+    sx={{ backgroundColor: '#bbd8f4', minHeight: '100vh' }}
   >
-    <Paper elevation={3} sx={{ width: '35vw' }}>
-      <Stack p={3} spacing={2}>
+    <Paper elevation={3} sx={{ width: '35vw', maxWidth: '500px' }}>
+      <Stack p={3} spacing={3}>
         <Outlet />
       </Stack>
     </Paper>
