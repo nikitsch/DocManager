@@ -6,8 +6,8 @@ import SkeletonRegisterPage from '~pages/register/ui/SkeletonRegisterPage';
 import RequestPage from '~pages/RequestPage';
 import { RoutesPaths } from '~shared/enum/Routes';
 import PageLoader from '~shared/ui/page-loader';
-import AuthLayout from '~widgets/auth-layout/ui';
-import WindowLayout from '~widgets/window-layout/ui';
+import AuthLayout from '~widgets/auth-layout';
+import WindowLayout from '~widgets/window-layout';
 
 const RegisterPage = lazy(() => import('~pages/register'));
 const CreateRequestPage = lazy(() => import('~pages/CreateRequestPage'));

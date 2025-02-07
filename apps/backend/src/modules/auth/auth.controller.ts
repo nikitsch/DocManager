@@ -24,4 +24,6 @@ export class AuthController {
   async logout(@Res({ passthrough: true }) res: Response) {
     return this.authService.logout(res);
   }
+
+  //TODO: checkAuthentication
 }
