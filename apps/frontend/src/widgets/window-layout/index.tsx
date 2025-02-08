@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 const WindowLayout: FC = () => (
   <>
     <Navigation />
-    <Stack margin='20px 40px'>
+    <Stack margin="20px 40px">
       <Outlet />
     </Stack>
   </>

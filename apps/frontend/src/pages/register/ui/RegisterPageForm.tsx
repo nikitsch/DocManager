@@ -11,7 +11,12 @@ const RegisterPageForm: FC = () => {
   return (
     <Form form={form} onSubmit={onSubmit}>
       <Stack direction="column" spacing={2}>
-        <FormTextField name="username" label="Username" minLength={5} required />
+        <FormTextField
+          name="username"
+          label="Username"
+          minLength={5}
+          required
+        />
         <FormTextField
           name="password"
           label="Password"
