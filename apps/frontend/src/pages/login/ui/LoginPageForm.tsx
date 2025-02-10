@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 const LoginPageForm: FC = () => {
-  const { form, isLoading, onSubmit } = useLoginForm();
+  const { form, isPending, onSubmit } = useLoginForm();
 
   return (
     <Form form={form} onSubmit={onSubmit}>
@@ -23,7 +23,7 @@ const LoginPageForm: FC = () => {
           type="submit"
           variant="contained"
           size="large"
-          loading={isLoading}
+          loading={isPending}
         >
           Login
         </Button>

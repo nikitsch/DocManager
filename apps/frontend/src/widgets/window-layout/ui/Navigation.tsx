@@ -13,7 +13,7 @@ const Navigation: FC = () => (
     justifyContent="space-between"
     top="0"
     width="100%"
-    height="56px"
+    height="68px"
     padding="8px 40px"
     sx={{ backgroundColor: 'rgba(230, 230, 230, 0.92)' }}
   >

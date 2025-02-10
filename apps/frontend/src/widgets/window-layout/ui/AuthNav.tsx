@@ -1,18 +1,19 @@
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import { RoutesPaths } from '~shared/enum/Routes';
 import adminImg from '~shared/assets/png/admin.png';
 // import userImg from '~shared/assets/png/user.png';
 
 import type { FC } from 'react';
+import { Button } from '@mui/material';
+import { useLogout } from '../model/useLogout';
 
 const AuthNav: FC = () => {
   // const avatar =  ? adminImg : userImg
+  const { mutate: logout, isPending } = useLogout();
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center" height={40}>
+    <Stack direction="row" spacing={1} alignItems="center" height={52}>
       <Avatar
         alt="Auth"
         src={adminImg}
@@ -25,15 +26,14 @@ const AuthNav: FC = () => {
           @my-login
         </Typography>
 
-        <Link
-          href={RoutesPaths.LOGIN}
-          variant="body2"
-          fontWeight="bold"
-          underline="hover"
+        <Button
+          size="small"
+          loading={isPending}
+          onClick={() => logout()}
           sx={{ color: (theme) => theme.palette.secondary.main }}
         >
           Logout
-        </Link>
+        </Button>
       </Stack>
     </Stack>
   );
