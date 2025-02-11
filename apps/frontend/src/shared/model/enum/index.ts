@@ -7,3 +7,8 @@ export enum RoutesPaths {
   LOGIN = 'login',
   REGISTER = 'register',
 }
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}

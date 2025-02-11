@@ -4,7 +4,7 @@ import ArchivePage from '~pages/ArchivePage';
 import LoginPage from '~pages/login';
 import SkeletonRegisterPage from '~pages/register/ui/SkeletonRegisterPage';
 import RequestPage from '~pages/RequestPage';
-import { RoutesPaths } from '~shared/enum/Routes';
+import { RoutesPaths } from '~shared/model/enum';
 import PageLoader from '~shared/ui/page-loader';
 import AuthLayout from '~widgets/auth-layout';
 import WindowLayout from '~widgets/window-layout';

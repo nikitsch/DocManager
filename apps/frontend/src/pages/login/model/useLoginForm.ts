@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import { RoutesPaths } from '~shared/enum/Routes';
+import { RoutesPaths } from '~shared/model/enum';
+import { useUserAuthStore } from '~entities/user-auth/model/useUserAuthStore';
 import { loginPost } from '../api/loginPost';
 
 export interface ILoginForm {
@@ -11,13 +12,14 @@ export interface ILoginForm {
 type FormType = ILoginForm;
 
 export const useLoginForm = () => {
-  const form = useForm<FormType>();
   const navigate = useNavigate();
+  const form = useForm<FormType>();
+  const setUser = useUserAuthStore((state) => state.setUser);
 
   const { isPending, mutate } = useMutation({
     mutationFn: loginPost,
     onSuccess: (data) => {
-      console.log({ data });
+      setUser(data);
       navigate(`/${RoutesPaths.ARCHIVE}`, { replace: true });
     },
     onError: (error: { statusCode: number; message: string }) => {

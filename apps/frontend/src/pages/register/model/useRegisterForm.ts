@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import { RoutesPaths } from '~shared/enum/Routes';
+import { RoutesPaths } from '~shared/model/enum';
 import { registerPost } from '../api/registerPost';
 
 export interface IRegisterForm {

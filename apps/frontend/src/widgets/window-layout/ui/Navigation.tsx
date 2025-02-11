@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
-import { RoutesPaths } from '~shared/enum/Routes';
+import { RoutesPaths } from '~shared/model/enum';
 
 import type { FC } from 'react';
 import AuthNav from './AuthNav';

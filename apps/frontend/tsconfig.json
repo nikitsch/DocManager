@@ -21,7 +21,8 @@
     "paths": {
       "~pages/*": ["./src/pages/*"],
       "~shared/*": ["./src/shared/*"],
-      "~widgets/*": ["./src/widgets/*"]
+      "~widgets/*": ["./src/widgets/*"],
+      "~entities/*": ["./src/entities/*"]
     }
   }
 }

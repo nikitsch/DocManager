@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
-import { RoutesPaths } from '~shared/enum/Routes';
+import { RoutesPaths } from '~shared/model/enum';
 import RegisterPageForm from './ui/RegisterPageForm';
 
 const RegisterPage: FC = () => {
