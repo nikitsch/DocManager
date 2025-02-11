@@ -1,6 +1,6 @@
 import { ILoginForm } from '../model/useLoginForm';
 
-export const authenticationPost = async (loginData: ILoginForm) => {
+export const loginPost = async (loginData: ILoginForm) => {
   const res = await fetch('api/auth/login', {
     method: 'POST',
     body: JSON.stringify(loginData),
@@ -9,9 +9,8 @@ export const authenticationPost = async (loginData: ILoginForm) => {
 
   if (!res.ok) {
     const errorData = await res.json();
-    console.log({errorData});
-    
-    throw new Error(errorData.message || 'Ошибка авторизации');
+    // eslint-disable-next-line
+    throw { statusCode: errorData.statusCode, message: errorData.message };
   }
 
   return res.json();

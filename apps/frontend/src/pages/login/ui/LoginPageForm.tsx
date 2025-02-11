@@ -16,7 +16,6 @@ const LoginPageForm: FC = () => {
           type="password"
           name="password"
           label="Password"
-          minLength={5}
           required
         />
         <Button
