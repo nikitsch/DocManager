@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { LocalAuthGuard } from '~guards/local-auth.guard';
 import { Public } from '~decorators/public.decorator';
@@ -25,5 +25,8 @@ export class AuthController {
     return this.authService.logout(res);
   }
 
-  //TODO: checkAuthentication
+  @Get('check')
+  async checkAuth() {
+    return true; //* If the user is not authorized, JwtAuthGuard sends an authorization error. Otherwise, return true
+  }
 }

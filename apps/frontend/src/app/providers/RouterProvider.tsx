@@ -7,6 +7,7 @@ import RequestPage from '~pages/RequestPage';
 import { RoutesPaths } from '~shared/model/enum';
 import PageLoader from '~shared/ui/page-loader';
 import AuthLayout from '~widgets/auth-layout';
+import RequireAuth from '~widgets/require-auth';
 import WindowLayout from '~widgets/window-layout';
 
 const RegisterPage = lazy(() => import('~pages/register'));
@@ -34,24 +35,26 @@ export default function RouterProvider() {
           element={<Navigate to={RoutesPaths.ARCHIVE} replace />}
         />
 
-        <Route path={RoutesPaths.ARCHIVE} element={<WindowLayout />}>
-          <Route index element={<ArchivePage />} />
-          <Route
-            path={RoutesPaths.ID}
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <RequestPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path={RoutesPaths.CREATE}
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <CreateRequestPage />
-              </Suspense>
-            }
-          />
+        <Route element={<RequireAuth />}>
+          <Route path={RoutesPaths.ARCHIVE} element={<WindowLayout />}>
+            <Route index element={<ArchivePage />} />
+            <Route
+              path={RoutesPaths.ID}
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <RequestPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesPaths.CREATE}
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <CreateRequestPage />
+                </Suspense>
+              }
+            />
+          </Route>
         </Route>
 
         <Route
