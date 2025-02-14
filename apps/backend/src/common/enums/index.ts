@@ -25,8 +25,8 @@ export enum RecordStatus {
 }
 
 export enum Order {
-  ASC = 'ASC',
-  DESC = 'DESC',
+  ASC = 'asc',
+  DESC = 'desc',
 } //TODO: move out to global
 
 export enum FieldsForSortRecords {

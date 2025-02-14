@@ -28,12 +28,12 @@ export class GetRecordsDto implements IGetRecordsDto {
 
   @IsOptional()
   @IsEnum(Order)
-  order: Order = Order.ASC;
+  order: Order = Order.DESC;
 
   @IsOptional()
   @Transform(({ value }) => Number(value))
   @IsNumber()
-  page = 1;
+  page = 0;
 
   @IsOptional()
   @Transform(({ value }) => Number(value))

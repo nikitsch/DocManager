@@ -6,5 +6,6 @@ export const useRequireAuth = () => {
     queryFn: checkAuth,
     queryKey: ['checkAuth'],
     retry: () => false,
+    // refetchInterval: 60000,
   });
 };

@@ -82,7 +82,7 @@ export class RecordService {
     const [data, total] = await this.recordRepository.findForTable({
       where,
       order: { [sort]: order }, //TODO: custom order for record_status
-      skip: (page - 1) * pageSize,
+      skip: page * pageSize,
       take: pageSize,
     });
 

@@ -1,14 +1,14 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
-import ArchivePage from '~pages/ArchivePage';
+import ArchivePage from '~pages/archive';
 import LoginPage from '~pages/login';
 import SkeletonRegisterPage from '~pages/register/ui/SkeletonRegisterPage';
 import RequestPage from '~pages/RequestPage';
-import { RoutesPaths } from '~shared/model/enum';
-import PageLoader from '~shared/ui/page-loader';
 import AuthLayout from '~widgets/auth-layout';
 import RequireAuth from '~widgets/require-auth';
 import WindowLayout from '~widgets/window-layout';
+import { RoutesPaths } from '~shared/model/enum';
+import PageLoader from '~shared/ui/page-loader';
 
 const RegisterPage = lazy(() => import('~pages/register'));
 const CreateRequestPage = lazy(() => import('~pages/CreateRequestPage'));

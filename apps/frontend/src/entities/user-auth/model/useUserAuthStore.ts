@@ -22,7 +22,7 @@ export const useUserAuthStore = create(
       user: null,
       setUser: (user) => set({ user }),
       clearUser: () => {
-        set({ user: null })
+        set({ user: null });
         localStorage.removeItem(LS_USER_AUTH_KEY);
       },
     }),
