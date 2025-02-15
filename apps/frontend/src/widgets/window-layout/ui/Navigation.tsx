@@ -15,7 +15,8 @@ const Navigation: FC = () => (
     width="100%"
     height="68px"
     padding="8px 40px"
-    sx={{ backgroundColor: 'rgba(230, 230, 230, 0.92)' }}
+    zIndex={1}
+    sx={{ backgroundColor: 'rgba(230, 230, 230, 0.95)' }}
   >
     <Link
       href={RoutesPaths.ARCHIVE}

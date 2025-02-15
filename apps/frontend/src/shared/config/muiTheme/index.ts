@@ -1,4 +1,7 @@
 import { createTheme } from '@mui/material/styles';
+import { gridClasses } from '@mui/x-data-grid';
+
+import type {} from '@mui/x-data-grid/themeAugmentation';
 
 const theme = createTheme({
   palette: {
@@ -7,6 +10,40 @@ const theme = createTheme({
     },
     secondary: {
       main: '#F29047',
+    },
+  },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+
+          '--DataGrid-containerBackground': '#DDECF4',
+
+          [`& .${gridClasses.columnHeaderTitle}`]: {
+            color: 'black',
+            fontWeight: 'bold',
+          },
+          [`& .${gridClasses.row}`]: {
+            cursor: 'pointer',
+          },
+
+          '& .MuiTablePagination-root': {
+            color: theme.palette.primary.main,
+          },
+          '& .MuiDataGrid-row:hover': {
+            backgroundColor: '#EFF4FC',
+            // border: `1px solid ${theme.palette.primary.main}`,
+          },
+          '& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within': {
+            outline: 'none',
+          },
+          '& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within':
+            {
+              outline: 'none',
+            },
+        }),
+      },
     },
   },
   // typography: {
