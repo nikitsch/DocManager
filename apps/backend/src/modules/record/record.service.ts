@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { ILike } from 'typeorm';
+import { Between, ILike, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
 import { UserRole } from '~common/enums';
@@ -67,14 +67,16 @@ export class RecordService {
       // }
 
       if (filters.from || filters.to) {
-        where.created_at = {};
+        const { from, to } = filters;
+        const fromDate = from ? new Date(from) : undefined;
+        const toDate = to ? new Date(to) : undefined;
 
-        if (filters.from) {
-          where.created_at['$gte'] = filters.from;
-        }
-
-        if (filters.to) {
-          where.created_at['$lte'] = filters.to;
+        if (fromDate && toDate) {
+          where.created_at = Between(fromDate, toDate);
+        } else if (fromDate) {
+          where.created_at = MoreThanOrEqual(fromDate);
+        } else if (toDate) {
+          where.created_at = LessThanOrEqual(toDate);
         }
       }
     }
