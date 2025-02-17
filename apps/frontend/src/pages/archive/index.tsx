@@ -1,51 +1,34 @@
-import type { FC } from 'react';
-import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
-import { useRecords } from './model/useRecords';
-import { useTableControls } from './model/useTableControls';
+import Stack from '@mui/material/Stack';
+import FilterBar from './ui/FilterBar';
+import FilterControlPanel from './ui/FilterControlPanel';
+import SearchPanel from './ui/SearchPanel';
+import TableRecords from './ui/TableRecords';
+import { useFilterBarPosition } from './model/useFilterBarPosition';
 
-const columns: GridColDef[] = [
-  { field: 'created_at', headerName: 'Date', width: 200 },
-  { field: 'record_status', headerName: 'Status', width: 100 },
-  { field: 'record_number', headerName: 'Record Number', width: 150 },
-  { field: 'record_type', headerName: 'Record Type', width: 150 },
-  {
-    field: 'organization_name',
-    headerName: 'Organization Name',
-    width: 180,
-    sortable: false,
-  },
-  { field: 'tax_period', headerName: 'Tax Period', width: 200 },
-];
+import type { FC } from 'react';
 
 const ArchivePage: FC = () => {
-  const { paginationModel, handlePagination, handleSort } = useTableControls();
-  const { data, isLoading } = useRecords();
+  const { filterBarPosition, isFBPOpen, setfilterBarPosition } =
+    useFilterBarPosition();
 
   return (
-    <DataGrid
-      rows={data?.data || []}
-      columns={columns}
-      loading={isLoading}
-      getRowId={(row) => row.record_id}
-      rowCount={data?.total || 0}
-      pageSizeOptions={[10, 15, 25, 50, 100]}
-      paginationMode="server"
-      paginationModel={paginationModel}
-      onPaginationModelChange={handlePagination}
-      sortingMode="server"
-      onSortModelChange={handleSort}
-      onRowClick={
-        ({ id }: GridRowParams) => console.log('onRowClick:', id)
-        // handleOpenTdocDescription(id as string)
-      }
-      disableRowSelectionOnClick
-      disableColumnMenu
-      slotProps={{
-        pagination: {
-          labelRowsPerPage: 'Records per page',
-        },
-      }}
-    />
+    <Stack gap={3}>
+      <Stack>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <FilterControlPanel
+            filterBarPosition={filterBarPosition}
+            setfilterBarPosition={setfilterBarPosition}
+          />
+          <SearchPanel />
+        </Stack>
+        <FilterBar isFBPOpen={isFBPOpen} />
+      </Stack>
+      <TableRecords />
+    </Stack>
   );
 };
 

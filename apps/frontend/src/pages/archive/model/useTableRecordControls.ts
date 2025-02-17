@@ -4,8 +4,7 @@ import { useSearchParams } from 'react-router';
 
 const TABLE_CONTROLS = {
   SEARCH: 'search',
-  // FILTER_BY: 'filterBy',
-  // FILTER_BY_VALUE: 'filterByValue',
+  FILTER: 'filter',
   SORT: 'sort',
   ORDER: 'order',
   PAGE: 'page',
@@ -15,14 +14,18 @@ const TABLE_CONTROLS = {
 const DEFAULT_PAGE = '0';
 const DEFAULT_PAGE_SIZE = '10';
 
-export function useTableControls() {
+export function useTableRecordControls() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSearch = useCallback(
     (search: string) => {
       setSearchParams(
         (prev) => {
-          prev.set(TABLE_CONTROLS.SEARCH, search);
+          if (search) {
+            prev.set(TABLE_CONTROLS.SEARCH, search);
+          } else {
+            prev.delete(TABLE_CONTROLS.SEARCH);
+          }
 
           return prev;
         },
@@ -53,8 +56,13 @@ export function useTableControls() {
 
       setSearchParams(
         (prev) => {
-          prev.set(TABLE_CONTROLS.SORT, sort?.field || '');
-          prev.set(TABLE_CONTROLS.ORDER, sort?.sort || '');
+          if (sort) {
+            prev.set(TABLE_CONTROLS.SORT, sort?.field || '');
+            prev.set(TABLE_CONTROLS.ORDER, sort?.sort || '');
+          } else {
+            prev.delete(TABLE_CONTROLS.SORT);
+            prev.delete(TABLE_CONTROLS.ORDER);
+          }
 
           return prev;
         },
@@ -63,6 +71,17 @@ export function useTableControls() {
     },
     [setSearchParams]
   );
+
+  const handleClearFilter = useCallback(() => {
+    setSearchParams(
+      (prev) => {
+        prev.delete(TABLE_CONTROLS.FILTER);
+
+        return prev;
+      },
+      { replace: true }
+    );
+  }, [setSearchParams]);
 
   const page = parseInt(searchParams.get(TABLE_CONTROLS.PAGE) || DEFAULT_PAGE);
   const pageSize = parseInt(
@@ -73,6 +92,7 @@ export function useTableControls() {
     handlePagination,
     handleSearch,
     handleSort,
+    handleClearFilter,
     paginationModel: {
       page,
       pageSize,
