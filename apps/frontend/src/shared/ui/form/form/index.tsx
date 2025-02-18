@@ -1,7 +1,8 @@
 import { FormProvider } from 'react-hook-form';
 
-import type { FormEventHandler, PropsWithChildren } from 'react';
+import type { ChangeEvent, FormEventHandler, PropsWithChildren } from 'react';
 import type {
+  ChangeHandler,
   FieldValues,
   SubmitErrorHandler,
   SubmitHandler,
@@ -15,6 +16,7 @@ export interface FormProps<TFormValues extends FieldValues>
   onSubmit: SubmitHandler<TFormValues>;
   onError?: SubmitErrorHandler<TFormValues>;
   onReset?: FormEventHandler<HTMLFormElement>;
+  // onChange?: (event: ChangeEvent<HTMLFormElement>) => void;
 }
 
 export default function Form<TFormValues extends FieldValues = FieldValues>(

@@ -6,6 +6,8 @@ import type {} from '@mui/x-data-grid/themeAugmentation';
 const theme = createTheme({
   palette: {
     primary: {
+      // light: '?#f4d5f6',
+      // dark: '?#3255fg',
       main: '#4A5577',
     },
     secondary: {

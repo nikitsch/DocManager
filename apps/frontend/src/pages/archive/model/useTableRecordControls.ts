@@ -72,6 +72,24 @@ export function useTableRecordControls() {
     [setSearchParams]
   );
 
+  const handleFilter = useCallback(
+    (filter: Record<string, string> | undefined) => {
+      setSearchParams(
+        (prev) => {
+          if (filter) {
+            prev.set(TABLE_CONTROLS.FILTER, JSON.stringify(filter));
+          } else {
+            prev.delete(TABLE_CONTROLS.FILTER);
+          }
+
+          return prev;
+        },
+        { replace: true }
+      );
+    },
+    [setSearchParams]
+  );
+
   const handleClearFilter = useCallback(() => {
     setSearchParams(
       (prev) => {
@@ -92,6 +110,7 @@ export function useTableRecordControls() {
     handlePagination,
     handleSearch,
     handleSort,
+    handleFilter,
     handleClearFilter,
     paginationModel: {
       page,

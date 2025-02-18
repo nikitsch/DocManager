@@ -8,8 +8,8 @@ export const ArrowUpIcon = createSvgIcon(
 
 export const SearchIcon = createSvgIcon(
   <path
-    fill-rule="evenodd"
-    clip-rule="evenodd"
+    fillRule="evenodd"
+    clipRule="evenodd"
     d="M4 11C4 7.13401 7.13401 4 11 4C14.866 4 18 7.13401 18 11C18 14.866 14.866 18 11 18C7.13401 18 4 14.866 4 11ZM11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C13.125 20 15.078 19.2635 16.6177 18.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L18.0319 16.6177C19.2635 15.078 20 13.125 20 11C20 6.02944 15.9706 2 11 2Z"
   />,
   'Search'
@@ -18,13 +18,13 @@ export const SearchIcon = createSvgIcon(
 export const CrossIcon = createSvgIcon(
   <>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M5.46967 5.46967C5.76256 5.17678 6.23744 5.17678 6.53033 5.46967L18.5303 17.4697C18.8232 17.7626 18.8232 18.2374 18.5303 18.5303C18.2374 18.8232 17.7626 18.8232 17.4697 18.5303L5.46967 6.53033C5.17678 6.23744 5.17678 5.76256 5.46967 5.46967Z"
     ></path>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M18.5303 5.46967C18.8232 5.76256 18.8232 6.23744 18.5303 6.53033L6.53035 18.5303C6.23745 18.8232 5.76258 18.8232 5.46969 18.5303C5.17679 18.2374 5.17679 17.7626 5.46968 17.4697L17.4697 5.46967C17.7626 5.17678 18.2374 5.17678 18.5303 5.46967Z"
     ></path>
   </>,
@@ -86,9 +86,9 @@ export const RejectedStatusIcon = createSvgIcon(
     <path
       d="M19 5L5 19M5.00001 5L19 19"
       stroke={theme.palette.error.main}
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>,
   'RejectedStatus'
@@ -105,12 +105,12 @@ export const FinishedStatusIcon = createSvgIcon(
     <path
       d="M16.5163 8.93451L11.0597 14.7023L8.0959 11.8984"
       stroke={theme.palette.primary.main}
-      stroke-width="2"
+      strokeWidth="2"
     />
     <path
       d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
       stroke={theme.palette.primary.main}
-      stroke-width="2"
+      strokeWidth="2"
     />
   </svg>,
   'FinishedStatus'

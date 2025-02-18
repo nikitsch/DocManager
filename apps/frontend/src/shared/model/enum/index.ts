@@ -16,8 +16,8 @@ export enum UserRole {
 export enum RecordStatus {
   NEW = 'NEW',
   IN_PROCESS = 'IN_PROCESS',
-  FINISHED = 'FINISHED',
   REJECTED = 'REJECTED',
+  FINISHED = 'FINISHED',
 }
 
 export enum TaxPeriod {
