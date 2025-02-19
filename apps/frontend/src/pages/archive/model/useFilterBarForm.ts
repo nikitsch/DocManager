@@ -22,27 +22,21 @@ const getClearedObject = (obj: Record<string, string>) => {
 export const useFilterBarForm = () => {
   const form = useForm<FormType>();
 
-  const { handleFilter } = useTableRecordControls();
-
-  const handleSubmit = (filterData: FormType) => console.log(filterData);
+  const { handleFilters } = useTableRecordControls();
 
   useEffect(() => {
     const subscription = form.watch((values, { name }) => {
       if (name) {
         console.log(`Изменилось поле: ${name}`, values[name]);
       }
-      handleFilter(getClearedObject(values));
+      handleFilters(getClearedObject(values));
     });
 
     return () => subscription.unsubscribe();
-  }, [form, handleFilter]);
+  }, [form, handleFilters]);
 
-  // const handleChange = (event: ChangeEvent<HTMLFormElement>) => {
-  //   const fieldName = event.target.name;
-  //   // console.log(`Изменилось поле: ${fieldName}`);
-  //   const values = form.getValues();
-  //   handleFilter(JSON.stringify(values));
-  // };
+  // eslint-disable-next-line
+  const handleSubmit = () => {};
 
   return { form, onSubmit: handleSubmit };
 };

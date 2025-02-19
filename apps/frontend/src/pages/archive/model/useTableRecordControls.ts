@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router';
 
 const TABLE_CONTROLS = {
   SEARCH: 'search',
-  FILTER: 'filter',
+  FILTERS: 'filters',
   SORT: 'sort',
   ORDER: 'order',
   PAGE: 'page',
@@ -72,14 +72,14 @@ export function useTableRecordControls() {
     [setSearchParams]
   );
 
-  const handleFilter = useCallback(
+  const handleFilters = useCallback(
     (filter: Record<string, string> | undefined) => {
       setSearchParams(
         (prev) => {
           if (filter) {
-            prev.set(TABLE_CONTROLS.FILTER, JSON.stringify(filter));
+            prev.set(TABLE_CONTROLS.FILTERS, JSON.stringify(filter));
           } else {
-            prev.delete(TABLE_CONTROLS.FILTER);
+            prev.delete(TABLE_CONTROLS.FILTERS);
           }
 
           return prev;
@@ -90,10 +90,10 @@ export function useTableRecordControls() {
     [setSearchParams]
   );
 
-  const handleClearFilter = useCallback(() => {
+  const handleClearFilters = useCallback(() => {
     setSearchParams(
       (prev) => {
-        prev.delete(TABLE_CONTROLS.FILTER);
+        prev.delete(TABLE_CONTROLS.FILTERS);
 
         return prev;
       },
@@ -110,8 +110,8 @@ export function useTableRecordControls() {
     handlePagination,
     handleSearch,
     handleSort,
-    handleFilter,
-    handleClearFilter,
+    handleFilters,
+    handleClearFilters,
     paginationModel: {
       page,
       pageSize,

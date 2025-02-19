@@ -5,7 +5,7 @@ import {
   InputAdornment,
   outlinedInputClasses,
 } from '@mui/material';
-import { CrossIcon, SearchIcon } from '~shared/ui/CustomIcons';
+import { CrossIcon, SearchIcon } from '~shared/ui/custom-icons';
 
 import type { FC } from 'react';
 import type { TextFieldProps } from '@mui/material/TextField';

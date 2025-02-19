@@ -4,7 +4,7 @@ import {
   InProcessStatusIcon,
   RejectedStatusIcon,
   FinishedStatusIcon,
-} from '~shared/ui/CustomIcons';
+} from '~shared/ui/custom-icons';
 
 export const RecordStatusIconMapper = {
   [RecordStatus.NEW]: <NewStatusIcon />,

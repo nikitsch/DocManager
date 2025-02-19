@@ -1,8 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import CustomFormControl from '~shared/ui/form/custom-form-control';
 
 import type { FC } from 'react';
 import type { TextFieldProps } from '@mui/material/TextField';
@@ -48,21 +46,18 @@ const FormTextField: FC<IFormTextFieldProps> = (props) => {
   };
 
   return (
-    <FormControl>
-      <Stack display="flex" flexDirection="column" gap={1}>
-        <FormLabel required={required}>{label}</FormLabel>
-        <TextField
-          {...textFieldProps}
-          id={name}
-          error={!!error}
-          helperText={error ? String(error.message) : ''}
-          required={required}
-          fullWidth={fullWidth}
-          size={size}
-          {...register(name, validationRules)}
-        />
-      </Stack>
-    </FormControl>
+    <CustomFormControl label={label} required={required}>
+      <TextField
+        {...textFieldProps}
+        id={name}
+        error={!!error}
+        helperText={error ? String(error.message) : ''}
+        required={required}
+        fullWidth={fullWidth}
+        size={size}
+        {...register(name, validationRules)}
+      />
+    </CustomFormControl>
   );
 };
 

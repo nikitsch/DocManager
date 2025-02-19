@@ -1,8 +1,7 @@
 import { FormProvider } from 'react-hook-form';
 
-import type { ChangeEvent, FormEventHandler, PropsWithChildren } from 'react';
+import type { FormEventHandler, PropsWithChildren } from 'react';
 import type {
-  ChangeHandler,
   FieldValues,
   SubmitErrorHandler,
   SubmitHandler,
