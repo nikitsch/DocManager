@@ -3,19 +3,17 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import { ArrowUpIcon } from '~shared/ui/custom-icons';
 import { FilterBarPosition } from '../model/useFilterBarPosition';
-import { useTableRecordControls } from '../model/useTableRecordControls';
 
 import type { FC } from 'react';
 
 type FilterControlPanelProps = {
   filterBarPosition: FilterBarPosition;
   setfilterBarPosition: (position: FilterBarPosition) => void;
+  onResetFilters: () => void;
 };
 
 const FilterControlPanel: FC<FilterControlPanelProps> = (props) => {
-  const { filterBarPosition, setfilterBarPosition } = props;
-
-  const { handleClearFilters } = useTableRecordControls();
+  const { filterBarPosition, setfilterBarPosition, onResetFilters } = props;
 
   const isOpen = filterBarPosition === FilterBarPosition.OPEN;
 
@@ -42,7 +40,7 @@ const FilterControlPanel: FC<FilterControlPanelProps> = (props) => {
         variant="outlined"
         size="medium"
         color="secondary"
-        onClick={handleClearFilters}
+        onClick={onResetFilters}
       >
         Clear
       </Button>

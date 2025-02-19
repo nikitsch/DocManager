@@ -90,17 +90,6 @@ export function useTableRecordControls() {
     [setSearchParams]
   );
 
-  const handleClearFilters = useCallback(() => {
-    setSearchParams(
-      (prev) => {
-        prev.delete(TABLE_CONTROLS.FILTERS);
-
-        return prev;
-      },
-      { replace: true }
-    );
-  }, [setSearchParams]);
-
   const page = parseInt(searchParams.get(TABLE_CONTROLS.PAGE) || DEFAULT_PAGE);
   const pageSize = parseInt(
     searchParams.get(TABLE_CONTROLS.PAGE_SIZE) || DEFAULT_PAGE_SIZE
@@ -111,7 +100,6 @@ export function useTableRecordControls() {
     handleSearch,
     handleSort,
     handleFilters,
-    handleClearFilters,
     paginationModel: {
       page,
       pageSize,

@@ -1,12 +1,11 @@
 import Collapse from '@mui/material/Collapse';
 import Stack from '@mui/material/Stack';
-import Form from '~shared/ui/form/form';
+import FormSelect from '~shared/ui/form/select';
 import FormToggleButtonGroup from '~shared/ui/form/toggle-button-group';
+import { taxPeriodOptions } from '~shared/model/constant';
 import { filterBarStatusOptions } from '../config/filterBarStatusOptions';
-import { useFilterBarForm } from '../model/useFilterBarForm';
 
 import type { FC } from 'react';
-import FormTextField from '~shared/ui/form/text-field';
 
 type FilterBarProps = {
   isFBPOpen: boolean;
@@ -15,20 +14,22 @@ type FilterBarProps = {
 const FilterBar: FC<FilterBarProps> = (props) => {
   const { isFBPOpen } = props;
 
-  const { form, onSubmit } = useFilterBarForm();
-
   return (
     <Collapse in={isFBPOpen}>
-      <Form form={form} onSubmit={onSubmit}>
-        <Stack direction="row" flexWrap="wrap" mt={3}>
-          <FormToggleButtonGroup
-            name="record_status"
-            label="Recording status"
-            options={filterBarStatusOptions}
-          />
-          <FormTextField name="user_id" />
-        </Stack>
-      </Form>
+      <Stack direction="row" flexWrap="wrap" mt={3} gap={5}>
+        <FormToggleButtonGroup
+          name="record_status"
+          label="Recording status"
+          options={filterBarStatusOptions}
+        />
+        <FormSelect
+          name="tax_period"
+          label="Tax period"
+          options={taxPeriodOptions}
+          fullWidth={false}
+          blankOptionItem
+        />
+      </Stack>
     </Collapse>
   );
 };

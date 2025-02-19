@@ -49,13 +49,13 @@ const FormTextField: FC<IFormTextFieldProps> = (props) => {
     <CustomFormControl label={label} required={required}>
       <TextField
         {...textFieldProps}
+        {...register(name, validationRules)}
         id={name}
         error={!!error}
         helperText={error ? String(error.message) : ''}
         required={required}
         fullWidth={fullWidth}
         size={size}
-        {...register(name, validationRules)}
       />
     </CustomFormControl>
   );

@@ -12,7 +12,7 @@ export interface FormProps<TFormValues extends FieldValues>
   extends PropsWithChildren {
   form: UseFormReturn<TFormValues>;
   formId?: string;
-  onSubmit: SubmitHandler<TFormValues>;
+  onSubmit?: SubmitHandler<TFormValues>;
   onError?: SubmitErrorHandler<TFormValues>;
   onReset?: FormEventHandler<HTMLFormElement>;
   // onChange?: (event: ChangeEvent<HTMLFormElement>) => void;
@@ -21,7 +21,15 @@ export interface FormProps<TFormValues extends FieldValues>
 export default function Form<TFormValues extends FieldValues = FieldValues>(
   props: FormProps<TFormValues>
 ) {
-  const { form, formId, onSubmit, onError, onReset, children } = props;
+  const {
+    form,
+    formId,
+    // eslint-disable-next-line
+    onSubmit = () => {},
+    onError,
+    onReset,
+    children,
+  } = props;
 
   return (
     <FormProvider {...form}>

@@ -24,7 +24,7 @@ const FormToggleButtonGroup: FC<IFormToggleButtonGroupProps> = (props) => {
     ...toggleButtonGroupProps
   } = props;
 
-  const { control, trigger } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <Controller
@@ -40,10 +40,7 @@ const FormToggleButtonGroup: FC<IFormToggleButtonGroupProps> = (props) => {
             size={size}
             color={color}
             value={field.value}
-            onChange={(_, newValue) => {
-              field.onChange(newValue);
-              trigger(name);
-            }}
+            onChange={(_, newValue) => field.onChange(newValue)}
           >
             {options.map(({ value, ...props }) => (
               <FormToggleButton key={value} value={value} {...props} />
