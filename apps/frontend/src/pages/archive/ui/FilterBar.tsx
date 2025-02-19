@@ -20,7 +20,7 @@ const FilterBar: FC<FilterBarProps> = (props) => {
   return (
     <Collapse in={isFBPOpen}>
       <Form form={form} onSubmit={onSubmit}>
-        <Stack direction="row" mt={3}>
+        <Stack direction="row" flexWrap="wrap" mt={3}>
           <FormToggleButtonGroup
             name="record_status"
             label="Recording status"

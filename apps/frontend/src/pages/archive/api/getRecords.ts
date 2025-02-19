@@ -5,7 +5,8 @@ export const getRecords = async (params: string) => {
 
   if (!res.ok) {
     const errorData = await res.json();
-    throw new Error(errorData.message || 'Error loading data');
+    // eslint-disable-next-line
+    throw { statusCode: errorData.statusCode, message: errorData.message };
   }
 
   return res.json() as Promise<{ data: IRecord[]; total: number }>;
