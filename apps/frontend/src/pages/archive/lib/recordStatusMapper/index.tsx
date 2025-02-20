@@ -1,4 +1,6 @@
+import { RecordStatusLabelMapper } from '~shared/model/constant';
 import { RecordStatus } from '~shared/model/enum';
+import { getSelectOptions } from '~shared/model/helper/getSelectOptions';
 import {
   NewStatusIcon,
   InProcessStatusIcon,
@@ -12,3 +14,12 @@ export const RecordStatusIconMapper = {
   [RecordStatus.REJECTED]: <RejectedStatusIcon />,
   [RecordStatus.FINISHED]: <FinishedStatusIcon />,
 };
+
+export const recordStatusOptions = getSelectOptions(
+  RecordStatusLabelMapper,
+  true
+).map(({ value, ...rest }) => ({
+  ...rest,
+  value,
+  icon: RecordStatusIconMapper[value as keyof typeof RecordStatusIconMapper],
+}));

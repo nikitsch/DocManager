@@ -1,4 +1,16 @@
-import { RecordDirection, RecordStatus, TaxPeriod } from '~shared/model/enum';
+import {
+  RecordDirection,
+  RecordStatus,
+  TaxPeriod,
+  UserRole,
+} from '~shared/model/enum';
+
+export interface IUser {
+  user_id: number;
+  username: string;
+  role: UserRole;
+  organization_name: string;
+}
 
 export interface IRecord {
   record_id: number;

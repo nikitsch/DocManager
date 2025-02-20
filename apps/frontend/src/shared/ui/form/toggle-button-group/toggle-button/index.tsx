@@ -5,9 +5,7 @@ import Typography from '@mui/material/Typography';
 import type { FC } from 'react';
 import type { ToggleButtonProps } from '@mui/material/ToggleButton';
 
-export interface IFormToggleButtonProps
-  extends Omit<ToggleButtonProps, 'value'> {
-  value: string;
+export interface IFormToggleButtonProps extends ToggleButtonProps {
   label: string;
   icon?: JSX.Element;
 }

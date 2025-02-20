@@ -2,15 +2,15 @@ import { Controller, useFormContext } from 'react-hook-form';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import CustomFormControl from '~shared/ui/form/custom-form-control';
+import { SelectOption } from '~shared/model/type';
 
 import type { FC } from 'react';
 import type { SelectProps } from '@mui/material/Select';
-import type { MenuItemProps } from '@mui/material/MenuItem';
 
 interface IFormSelectProps extends Omit<SelectProps, 'name'> {
   name: string;
   blankOptionItem?: boolean;
-  options: Array<MenuItemProps & { label: string }>;
+  options: SelectOption[];
 }
 
 const FormSelect: FC<IFormSelectProps> = (props) => {

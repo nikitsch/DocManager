@@ -1,4 +1,8 @@
-import { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
+import {
+  GridPaginationModel,
+  GridSortItem,
+  GridSortModel,
+} from '@mui/x-data-grid';
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 
@@ -90,6 +94,8 @@ export function useTableRecordControls() {
     [setSearchParams]
   );
 
+  const sort = searchParams.get(TABLE_CONTROLS.SORT);
+  const order = searchParams.get(TABLE_CONTROLS.ORDER);
   const page = parseInt(searchParams.get(TABLE_CONTROLS.PAGE) || DEFAULT_PAGE);
   const pageSize = parseInt(
     searchParams.get(TABLE_CONTROLS.PAGE_SIZE) || DEFAULT_PAGE_SIZE
@@ -103,12 +109,12 @@ export function useTableRecordControls() {
     paginationModel: {
       page,
       pageSize,
-    },
-    // sortModel: [
-    //   {
-    //     field: sortBy,
-    //     sort: sortType,
-    //   } as GridSortItem,
-    // ],
+    } as GridPaginationModel,
+    sortModel: [
+      {
+        field: sort,
+        sort: order,
+      } as GridSortItem,
+    ],
   };
 }

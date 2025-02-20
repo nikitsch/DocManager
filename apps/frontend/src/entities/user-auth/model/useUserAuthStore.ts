@@ -1,11 +1,9 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { UserRole } from '~shared/model/enum';
+import { IUser } from '~shared/model/interface';
 
-interface IUserAuthData {
+interface IUserAuthData extends Omit<IUser, 'user_id' | 'organization_name'> {
   userid: number;
-  username: string;
-  role: UserRole;
 }
 
 interface IUserAuthState {

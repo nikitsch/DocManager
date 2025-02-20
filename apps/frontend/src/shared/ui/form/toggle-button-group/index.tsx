@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import FormToggleButton, { IFormToggleButtonProps } from './toggle-button';
+import { SelectOption } from '~shared/model/type';
+import FormToggleButton from './toggle-button';
 import CustomFormControl from '../custom-form-control';
 
 import type { FC } from 'react';
@@ -10,7 +11,7 @@ interface IFormToggleButtonGroupProps
   extends Omit<ToggleButtonGroupProps, 'name'> {
   name: string;
   label: string;
-  options: Array<IFormToggleButtonProps>;
+  options: SelectOption[];
 }
 
 const FormToggleButtonGroup: FC<IFormToggleButtonGroupProps> = (props) => {
@@ -42,8 +43,12 @@ const FormToggleButtonGroup: FC<IFormToggleButtonGroupProps> = (props) => {
             value={field.value}
             onChange={(_, newValue) => field.onChange(newValue)}
           >
-            {options.map(({ value, ...props }) => (
-              <FormToggleButton key={value} value={value} {...props} />
+            {options.map(({ value: itemValue, ...props }) => (
+              <FormToggleButton
+                key={String(itemValue)}
+                value={String(itemValue)}
+                {...props}
+              />
             ))}
           </ToggleButtonGroup>
         </CustomFormControl>

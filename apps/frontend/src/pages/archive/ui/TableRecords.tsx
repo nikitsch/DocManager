@@ -6,7 +6,7 @@ import { recordTableColumns } from '../config/recordTableColumns';
 import type { FC } from 'react';
 
 const TableRecords: FC = () => {
-  const { paginationModel, handlePagination, handleSort } =
+  const { paginationModel, sortModel, handlePagination, handleSort } =
     useTableRecordControls();
   const { data, isLoading } = useRecords();
 
@@ -22,6 +22,7 @@ const TableRecords: FC = () => {
       paginationModel={paginationModel}
       onPaginationModelChange={handlePagination}
       sortingMode="server"
+      sortModel={sortModel}
       onSortModelChange={handleSort}
       onRowClick={
         ({ id }: GridRowParams) => console.log('onRowClick:', id)

@@ -4,7 +4,7 @@ import { RecordStatus, TaxPeriod } from '~shared/model/enum';
 import { useTableRecordControls } from './useTableRecordControls';
 
 export interface IFilterBarForm {
-  // user_id?: string;
+  user_id?: string;
   record_status?: RecordStatus | null;
   tax_period?: TaxPeriod | '';
   // from?: string;
@@ -21,7 +21,7 @@ const getClearedObject = (obj: Record<string, string | null | undefined>) => {
 
 export const useFilterBarForm = () => {
   const form = useForm<FormType>({
-    defaultValues: { record_status: null, tax_period: '' },
+    defaultValues: { user_id: '', record_status: null, tax_period: '' },
   });
 
   const { handleFilters } = useTableRecordControls();
