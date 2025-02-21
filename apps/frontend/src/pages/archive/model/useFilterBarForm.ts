@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { RecordStatus, TaxPeriod } from '~shared/model/enum';
+import { RecordStatus, TaxPeriod, TimeBreakpoints } from '~shared/model/enum';
 import { useTableRecordControls } from './useTableRecordControls';
 
 export interface IFilterBarForm {
+  time_breakpoints?: TimeBreakpoints | null;
   user_id?: string;
   record_status?: RecordStatus | null;
   tax_period?: TaxPeriod | '';
@@ -21,7 +22,7 @@ const getClearedObject = (obj: Record<string, string | null | undefined>) => {
 
 export const useFilterBarForm = () => {
   const form = useForm<FormType>({
-    defaultValues: { user_id: '', record_status: null, tax_period: '' },
+    defaultValues: { time_breakpoints: null, user_id: '', record_status: null, tax_period: '' },
   });
 
   const { handleFilters } = useTableRecordControls();

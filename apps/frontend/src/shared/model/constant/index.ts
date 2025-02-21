@@ -1,4 +1,4 @@
-import { RecordStatus, TaxPeriod } from '~shared/model/enum';
+import { RecordStatus, TaxPeriod, TimeBreakpoints } from '~shared/model/enum';
 
 export const RecordStatusLabelMapper = {
   [RecordStatus.NEW]: 'New',
@@ -14,4 +14,10 @@ export const TaxPeriodLabelMapper = {
   [TaxPeriod.PERIOD_Q3]: '3 quarter',
   [TaxPeriod.PERIOD_Q4]: '4 quarter',
   [TaxPeriod.PERIOD_YEAR]: 'Year',
+};
+
+export const TimeBreakpointsLabelMapper = {
+  [TimeBreakpoints.TODAY]: 'Today',
+  [TimeBreakpoints.WEEK]: 'Week',
+  [TimeBreakpoints.MONTH]: 'Month',
 };

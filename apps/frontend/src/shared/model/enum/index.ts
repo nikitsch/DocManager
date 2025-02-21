@@ -33,3 +33,9 @@ export enum RecordDirection {
   IN = 'IN',
   OUT = 'OUT',
 }
+
+export enum TimeBreakpoints {
+  TODAY = 'TODAY',
+  WEEK = 'WEEK',
+  MONTH = 'MONTH',
+}
