@@ -3,8 +3,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { RecordDirection, RecordStatus, TaxPeriod } from '~common/enums';
+import { IRecordTypes, RecordType } from './record_types.entity';
 
 export interface IRecord {
   record_id: number;
@@ -14,7 +17,7 @@ export interface IRecord {
   record_number: string;
   record_direction: RecordDirection;
   record_status: RecordStatus;
-  record_type: string;
+  record_type_entity: IRecordTypes;
   record_subtype: string | null;
   record_comment: string;
   reason_for_rejection: string | null;
@@ -73,8 +76,9 @@ export class Record implements IRecord {
   })
   record_status: RecordStatus;
 
-  @Column()
-  record_type: string;
+  @ManyToOne(() => RecordType, { cascade: true })
+  @JoinColumn({ name: 'record_type_id' })
+  record_type_entity: RecordType;
 
   @Column({ nullable: true })
   record_subtype: string | null;

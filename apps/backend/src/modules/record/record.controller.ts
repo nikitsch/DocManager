@@ -20,12 +20,14 @@ import { Roles } from '~decorators/roles.decorator';
 import { AuthorshipGuard } from '~guards/authorship.guard';
 import { RecordChangeGuard } from '~guards/record-change.guard';
 import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
+import { IRecordTypes } from './entities/record_types.entity';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { GetRecordsDto } from './dto/get-all-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
 import { RecordService } from './record.service';
 
 type IRecordResponse = IRecord;
+type IRecordTypesResponse = IRecordTypes;
 
 @Controller('records')
 export class RecordController {
@@ -47,6 +49,11 @@ export class RecordController {
     @Query() query: GetRecordsDto
   ): Promise<{ data: IRecordResponse[]; total: number }> {
     return this.recordService.getAllRecords(req, query);
+  }
+
+  @Get('types')
+  async getAllRecordTypes(): Promise<IRecordTypesResponse[]> {
+    return this.recordService.getAllRecordTypes();
   }
 
   @UseGuards(AuthorshipGuard)

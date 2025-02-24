@@ -19,7 +19,7 @@ export class RecordRepository {
       IRecord,
       | 'user_id'
       | 'tax_period'
-      | 'record_type'
+      | 'record_type_entity'
       | 'record_subtype'
       | 'record_comment'
       | 'record_number'

@@ -8,10 +8,12 @@ import { JwtUserData } from '~common/types';
 import { MinioService } from '~minio/minio.service';
 import { UserService } from '~modules/user/user.service';
 import { RecordRepository } from '~repositories/record.repository';
+import { RecordTypeRepository } from '~repositories/record-type.repository';
 import { ICreateRecordDto } from './dto/create-record.dto';
 import { IGetRecordsDto } from './dto/get-all-record.dto';
 import { IUpdateRecordDto } from './dto/update-record.dto';
 import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
+import { IRecordTypes } from './entities/record_types.entity';
 
 import * as mime from 'mime-types';
 import 'multer';
@@ -20,6 +22,7 @@ import 'multer';
 export class RecordService {
   constructor(
     private readonly recordRepository: RecordRepository,
+    private readonly recordTypeRepository: RecordTypeRepository,
     private readonly userService: UserService,
     private readonly minioService: MinioService
   ) {}
@@ -150,6 +153,10 @@ export class RecordService {
     const { tax_period, record_type, record_subtype, record_comment } =
       createRecordDto;
 
+    const record_type_entity = await this.recordTypeRepository.findOrCreate(
+      record_type
+    );
+
     const generateRecordNumber = (arr: number[]) =>
       arr.map((el) => String(el).padStart(2, '0')).join('');
     const recordCount = await this.recordRepository.getCount();
@@ -166,7 +173,7 @@ export class RecordService {
     return this.recordRepository.createRecord({
       user_id: userid,
       tax_period,
-      record_type,
+      record_type_entity,
       record_subtype,
       record_comment,
       record_number,
@@ -212,5 +219,9 @@ export class RecordService {
     await this.recordRepository.deleteRecord(id);
 
     return { message: 'Record and associated files successfully deleted' };
+  }
+
+  async getAllRecordTypes(): Promise<IRecordTypes[]> {
+    return this.recordTypeRepository.findAll();
   }
 }

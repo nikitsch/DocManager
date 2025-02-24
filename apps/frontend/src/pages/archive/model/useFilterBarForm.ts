@@ -22,7 +22,12 @@ const getClearedObject = (obj: Record<string, string | null | undefined>) => {
 
 export const useFilterBarForm = () => {
   const form = useForm<FormType>({
-    defaultValues: { time_breakpoints: null, user_id: '', record_status: null, tax_period: '' },
+    defaultValues: {
+      time_breakpoints: null,
+      user_id: '',
+      record_status: null,
+      tax_period: '',
+    },
   });
 
   const { handleFilters } = useTableRecordControls();
