@@ -33,6 +33,7 @@ export enum FieldsForSortRecords {
   created_at = 'created_at',
   record_number = 'record_number',
   //TODO: record_type = 'record_type',
+  record_type_entity = 'record_type_entity',
   tax_period = 'tax_period',
   record_status = 'record_status',
 }

@@ -33,66 +33,59 @@ export class RecordService {
   ): Promise<{ data: IRecord[]; total: number }> {
     const { userid, role } = req?.user as JwtUserData;
     const { search, filters, sort, order, page, pageSize } = query;
-
-    const where: Record<string, string | number | object> = {};
-
-    //* Search
+  
+    const queryBuilder = await this.recordRepository.createBaseQueryBuilder();
+  
     if (search) {
-      where.record_number = ILike(`%${search}%`);
+      queryBuilder.andWhere('record.record_number ILIKE :search', { search: `%${search}%` });
     }
-
-    //* Filtration
+  
     if (role !== UserRole.ADMIN) {
-      where.user_id = userid;
+      queryBuilder.andWhere('record.user_id = :userId', { userId: userid });
     }
-
+  
     if (filters) {
       if (role !== UserRole.ADMIN && filters.user_id !== userid) {
-        throw new BadRequestException(
-          ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR
-        );
+        throw new BadRequestException(ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR);
       }
-
+  
       if (filters.user_id && role === UserRole.ADMIN) {
-        where.user_id = filters.user_id;
+        queryBuilder.andWhere('record.user_id = :userId', { userId: filters.user_id });
       }
-
+  
       if (filters.tax_period) {
-        where.tax_period = filters.tax_period;
+        queryBuilder.andWhere('record.tax_period = :taxPeriod', { taxPeriod: filters.tax_period });
       }
-
+  
       if (filters.record_status) {
-        where.record_status = filters.record_status;
+        queryBuilder.andWhere('record.record_status = :recordStatus', { recordStatus: filters.record_status });
       }
-
-      // if (filters.record_type) {
-      //   where.record_type = filters.record_type;
-      // }
-
+  
       if (filters.from || filters.to) {
         const { from, to } = filters;
-        const fromDate = from ? new Date(from) : undefined;
-        const toDate = to ? new Date(to) : undefined;
-
-        if (fromDate && toDate) {
-          where.created_at = Between(fromDate, toDate);
-        } else if (fromDate) {
-          where.created_at = MoreThanOrEqual(fromDate);
-        } else if (toDate) {
-          where.created_at = LessThanOrEqual(toDate);
+        if (from && to) {
+          queryBuilder.andWhere('record.created_at BETWEEN :from AND :to', { from, to });
+        } else if (from) {
+          queryBuilder.andWhere('record.created_at >= :from', { from });
+        } else if (to) {
+          queryBuilder.andWhere('record.created_at <= :to', { to });
         }
       }
     }
-
-    const [data, total] = await this.recordRepository.findForTable({
-      where,
-      order: { [sort]: order }, //TODO: custom order for record_status
-      skip: page * pageSize,
-      take: pageSize,
-    });
-
+  
+    
+    if (sort === 'record_type_entity') {
+      queryBuilder.orderBy('recordType.type', order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC');
+    } else {
+      queryBuilder.orderBy(`record.${sort}`, order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC');
+    }
+  
+    queryBuilder.skip(page * pageSize).take(pageSize);
+  
+    const [data, total] = await queryBuilder.getManyAndCount();
     return { data, total };
   }
+  
 
   async getRecordByIdWithUrls(id: number): Promise<IRecordWithFileUrlResponse> {
     const record = await this.getRecordById(id);

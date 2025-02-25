@@ -47,6 +47,12 @@ export class RecordRepository {
     });
   }
 
+  async createBaseQueryBuilder() {
+  // createBaseQueryBuilder(): SelectQueryBuilder<IRecord> {
+    return this.recordRepository.createQueryBuilder('record')
+      .leftJoinAndSelect('record.record_type_entity', 'recordType'); // Добавляем JOIN
+  }
+
   async findById(id: number): Promise<IRecord | undefined> {
     const record = await this.recordRepository.findOne({
       where: { record_id: id },
