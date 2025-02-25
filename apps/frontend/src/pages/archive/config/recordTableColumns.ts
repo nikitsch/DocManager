@@ -12,7 +12,13 @@ export const recordTableColumns: GridColDef[] = [
     renderCell: RecordStatusCell,
   },
   { field: 'record_number', headerName: 'Record number', flex: 1.5 },
-  { field: 'record_type', headerName: 'Record type', flex: 1.5 },
+  {
+    field: 'record_type_entity',
+    headerName: 'Record type',
+    flex: 1.5,
+    sortable: false,
+    valueGetter: (_, row) => row.record_type_entity.type,
+  },
   {
     field: 'organization_name',
     headerName: 'Organization name',

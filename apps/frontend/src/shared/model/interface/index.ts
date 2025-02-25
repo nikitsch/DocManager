@@ -20,7 +20,7 @@ export interface IRecord {
   record_number: string;
   record_direction: RecordDirection;
   record_status: RecordStatus;
-  record_type: string;
+  record_type_entity: IRecordTypeEntity;
   record_subtype: string | null;
   record_comment: string;
   reason_for_rejection: string | null;
@@ -34,4 +34,9 @@ export interface IRecord {
     name: string;
     extension: string;
   }[];
+}
+
+export interface IRecordTypeEntity {
+  id: number;
+  type: string;
 }

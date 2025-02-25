@@ -41,7 +41,10 @@ export class RecordRepository {
     skip: number;
     take: number;
   }): Promise<[data: IRecord[], total: number]> {
-    return this.recordRepository.findAndCount(query);
+    return this.recordRepository.findAndCount({
+      ...query,
+      relations: ['record_type_entity'], // Make a JOIN from the `record_types` Entity to place the `record_type_entity` field in the response
+    });
   }
 
   async findById(id: number): Promise<IRecord | undefined> {
