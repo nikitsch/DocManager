@@ -1,7 +1,8 @@
 import CssBaseline from '@mui/material/CssBaseline';
+import LocalizationProvider from './providers/LocalizationProvider';
+import QueryClientProvider from './providers/QueryClientProvider';
 import RouterProvider from './providers/RouterProvider';
 import ThemeProvider from './providers/ThemeProvider';
-import QueryClientProvider from './providers/QueryClientProvider';
 
 import type { FC } from 'react';
 
@@ -9,8 +10,10 @@ const App: FC = () => {
   return (
     <ThemeProvider>
       <QueryClientProvider>
-        <CssBaseline />
-        <RouterProvider />
+        <LocalizationProvider>
+          <CssBaseline />
+          <RouterProvider />
+        </LocalizationProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );

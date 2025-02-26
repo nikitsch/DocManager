@@ -8,8 +8,8 @@ export interface IFilterBarForm {
   user_id?: string;
   record_status?: RecordStatus | null;
   tax_period?: TaxPeriod | '';
-  // from?: string;
-  // to?: string;
+  from?: string | null;
+  to?: string | null;
 }
 type FormType = IFilterBarForm;
 
@@ -27,6 +27,8 @@ export const useFilterBarForm = () => {
       user_id: '',
       record_status: null,
       tax_period: '',
+      from: null,
+      to: null,
     },
   });
 

@@ -12,6 +12,7 @@ import { recordStatusOptions } from '../lib/recordStatusMapper';
 import { useUsersOptions } from '../model/useUsersOptions';
 
 import type { FC } from 'react';
+import FormDatePicker from '~shared/ui/form/date-picker';
 
 type FilterBarProps = {
   isFBPOpen: boolean;
@@ -31,6 +32,8 @@ const FilterBar: FC<FilterBarProps> = (props) => {
   return (
     <Collapse in={isFBPOpen}>
       <Stack direction="row" flexWrap="wrap" mt={3} rowGap={2} columnGap={5}>
+        <FormDatePicker name='from' label="Period" />
+        <FormDatePicker name='to' label="Period" />
         <FormToggleButtonGroup
           name="time_breakpoints"
           label="Quick jump"
