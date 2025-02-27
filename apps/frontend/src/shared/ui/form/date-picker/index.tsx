@@ -1,25 +1,31 @@
-import { Controller, useController, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
+import { endOfDay } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import CustomFormControl from '~shared/ui/form/custom-form-control';
+import {
+  DEFAULT_DATE_FORMAT,
+  DEFAULT_MAX_DATE,
+  DEFAULT_MIN_DATE,
+} from '~shared/model/constant';
+import {
+  convertDateToISOString,
+  convertISOStringToDate,
+} from '~shared/model/dates';
 
-import { useState, type FC } from 'react';
+import type { FC } from 'react';
 import type { DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import type { PickerValidDate } from '@mui/x-date-pickers/models';
-import { convertDateToISOString, convertISOStringToDate } from '~shared/model/dates';
-
-const DEFAULT_MIN_DATE = new Date(2024, 0, 1);
-const DEFAULT_MAX_DATE = new Date(2099, 0, 1);
 
 interface IFormDatePickerProps<TDate extends PickerValidDate>
   extends DatePickerProps<TDate> {
   name: string;
-  // rules?: RegisterOptions<TFieldValues>;
-  // variant?: TextFieldVariants;
+  convertByEndOfDay?: boolean;
 }
 
 const FormDatePicker: FC<IFormDatePickerProps<PickerValidDate>> = (props) => {
   const {
     name,
+    convertByEndOfDay = false,
     label,
     defaultValue,
     maxDate: externalMaxDate,
@@ -28,28 +34,15 @@ const FormDatePicker: FC<IFormDatePickerProps<PickerValidDate>> = (props) => {
   } = props;
 
   const { control } = useFormContext();
-  const {
-    field: { value, onChange, ...restField },
-    // fieldState: { invalid },
-    // formState: { errors },
-  } = useController({
-    control,
-    name,
-    // rules: { ...transformedRules, ...baseValidation },
-  });
 
   const maxDate = externalMaxDate ?? DEFAULT_MAX_DATE;
   const minDate = externalMinDate ?? DEFAULT_MIN_DATE;
-
-  const [dateValue, setDateValue] = useState<Date | null>(() =>
-    convertISOStringToDate(value),
-  );
 
   return (
     <Controller
       name={name}
       control={control}
-      render={() => (
+      render={({ field }) => (
         <CustomFormControl
           label={label}
           sx={{
@@ -58,24 +51,22 @@ const FormDatePicker: FC<IFormDatePickerProps<PickerValidDate>> = (props) => {
         >
           <DatePicker
             {...datePickerProps}
-            {...restField}
             name={name}
+            format={DEFAULT_DATE_FORMAT}
             slotProps={{
               textField: {
                 size: 'small',
-                // helperText: invalid && <ErrorMessage name={name} errors={errors} />,
-                // error: invalid,
               },
+              field: { clearable: true, onClear: () => field.onChange(null) },
             }}
-            value={dateValue ?? defaultValue}
+            value={convertISOStringToDate(field.value ?? defaultValue)}
             onChange={(date) => {
-              if (!date) {
-                onChange(null);
-                return;
-              }
+              if (!date) return field.onChange(null);
 
-              onChange(convertDateToISOString(date));
-              setDateValue(date);
+              const newDate = convertDateToISOString(
+                convertByEndOfDay ? endOfDay(date) : date
+              );
+              field.onChange(newDate);
             }}
             minDate={minDate}
             maxDate={maxDate}

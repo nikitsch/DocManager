@@ -12,9 +12,7 @@ export function getTimezoneOffset(date: Date) {
 export function convertDateToISOString(date?: Date) {
   if (!date || !isDateValid(date)) return null;
 
-  return new Date(
-    date.getTime() - getTimezoneOffset(date),
-  ).toISOString();
+  return new Date(date.getTime() - getTimezoneOffset(date)).toISOString();
 }
 
 export const convertISOStringToDate = (date: string | null) => {

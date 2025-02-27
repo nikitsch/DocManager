@@ -1,21 +1,31 @@
+import { format } from 'date-fns';
 import { GridColDef } from '@mui/x-data-grid';
-import { TaxPeriodLabelMapper } from '~shared/model/constant';
+import {
+  DEFAULT_DATE_FORMAT,
+  TaxPeriodLabelMapper,
+} from '~shared/model/constant';
 import { TaxPeriod } from '~shared/model/enum';
 import RecordStatusCell from '../ui/RecordStatusCell';
 
 export const recordTableColumns: GridColDef[] = [
-  { field: 'created_at', headerName: 'Date', flex: 1.5 },
+  {
+    field: 'created_at',
+    headerName: 'Date',
+    flex: 1,
+    valueGetter: (_, row) =>
+      format(new Date(row.created_at), DEFAULT_DATE_FORMAT),
+  },
   {
     field: 'record_status',
     headerName: 'Status',
-    flex: 1,
+    flex: 0.7,
     renderCell: RecordStatusCell,
   },
-  { field: 'record_number', headerName: 'Record number', flex: 1.5 },
+  { field: 'record_number', headerName: 'Record number', flex: 1 },
   {
     field: 'record_type_entity',
     headerName: 'Record type',
-    flex: 1.5,
+    flex: 2,
     sortable: false,
     valueGetter: (_, row) => row.record_type_entity.type,
   },
