@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import { ArrowUpIcon } from '~shared/ui/custom-icons';
 import { FilterBarPosition } from '../model/useFilterBarPosition';
+import { useTableRecordControls } from '../model/useTableRecordControls';
 
 import type { FC } from 'react';
 
@@ -15,6 +16,8 @@ type FilterControlPanelProps = {
 const FilterControlPanel: FC<FilterControlPanelProps> = (props) => {
   const { filterBarPosition, setfilterBarPosition, onResetFilters } = props;
 
+  const { tableSearchParams } = useTableRecordControls();
+
   const isOpen = filterBarPosition === FilterBarPosition.OPEN;
 
   return (
@@ -25,7 +28,7 @@ const FilterControlPanel: FC<FilterControlPanelProps> = (props) => {
         color="secondary"
         sx={{
           p: 0.5,
-          transform: `rotate(${isOpen ? '0deg' : '180deg'})`,
+          transform: `rotate(${isOpen ? '180deg' : '0deg'})`,
           transition: 'transform 0.3s ease-in-out',
         }}
         onClick={() =>
@@ -36,14 +39,16 @@ const FilterControlPanel: FC<FilterControlPanelProps> = (props) => {
       >
         <ArrowUpIcon />
       </IconButton>
-      <Button
-        variant="outlined"
-        size="medium"
-        color="secondary"
-        onClick={onResetFilters}
-      >
-        Clear
-      </Button>
+      {!!tableSearchParams?.filters && (
+        <Button
+          variant="outlined"
+          size="medium"
+          color="secondary"
+          onClick={onResetFilters}
+        >
+          Clear
+        </Button>
+      )}
     </Stack>
   );
 };

@@ -100,6 +100,8 @@ export function useTableRecordControls() {
   const pageSize = parseInt(
     searchParams.get(TABLE_CONTROLS.PAGE_SIZE) || DEFAULT_PAGE_SIZE
   );
+  const filters = searchParams.get(TABLE_CONTROLS.FILTERS) || '';
+  const search = searchParams.get(TABLE_CONTROLS.SEARCH) || '';
 
   return {
     handlePagination,
@@ -116,5 +118,9 @@ export function useTableRecordControls() {
         sort: order,
       } as GridSortItem,
     ],
+    tableSearchParams: {
+      filters,
+      search,
+    },
   };
 }

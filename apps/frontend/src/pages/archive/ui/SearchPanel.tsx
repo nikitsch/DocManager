@@ -10,8 +10,9 @@ export type FormType = {
 };
 
 const SearchPanel: FC = () => {
-  const { handleSearch } = useTableRecordControls();
-  const form = useForm<FormType>();
+  const { tableSearchParams, handleSearch } = useTableRecordControls();
+  const { search } = tableSearchParams;
+  const form = useForm<FormType>({ defaultValues: { search } });
 
   const handleSubmit = (values: FormType) => handleSearch(values.search);
   const handleClear = () => handleSearch('');
