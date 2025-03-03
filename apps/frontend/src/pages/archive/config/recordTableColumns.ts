@@ -6,6 +6,7 @@ import {
 } from '~shared/model/constant';
 import { TaxPeriod } from '~shared/model/enum';
 import RecordStatusCell from '../ui/RecordStatusCell';
+import RefreshTableHeaderCell from '../ui/RefreshTableHeaderCell';
 
 export const recordTableColumns: GridColDef[] = [
   {
@@ -40,5 +41,14 @@ export const recordTableColumns: GridColDef[] = [
     headerName: 'Tax period',
     flex: 1,
     valueGetter: (_, row) => TaxPeriodLabelMapper[row.tax_period as TaxPeriod],
+  },
+  {
+    field: 'refresh', //* This field doesn't exist in the Record object.
+    headerName: 'Refresh',
+    headerAlign: 'center',
+    flex: 1,
+    sortable: false,
+    resizable: false,
+    renderHeader: RefreshTableHeaderCell,
   },
 ];

@@ -6,15 +6,6 @@ export const ArrowUpIcon = createSvgIcon(
   'ArrowUp'
 );
 
-export const SearchIcon = createSvgIcon(
-  <path
-    fillRule="evenodd"
-    clipRule="evenodd"
-    d="M4 11C4 7.13401 7.13401 4 11 4C14.866 4 18 7.13401 18 11C18 14.866 14.866 18 11 18C7.13401 18 4 14.866 4 11ZM11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C13.125 20 15.078 19.2635 16.6177 18.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L18.0319 16.6177C19.2635 15.078 20 13.125 20 11C20 6.02944 15.9706 2 11 2Z"
-  />,
-  'Search'
-);
-
 export const CrossIcon = createSvgIcon(
   <>
     <path
@@ -36,6 +27,23 @@ export const DownloadFileIcon = createSvgIcon(
   'DownloadFile'
 );
 
+export const RefreshIcon = createSvgIcon(
+  <g data-name="refresh">
+    <rect width="24" height="24" opacity="0" />
+    <path d="M20.3 13.43a1 1 0 0 0-1.25.65A7.14 7.14 0 0 1 12.18 19 7.1 7.1 0 0 1 5 12a7.1 7.1 0 0 1 7.18-7 7.26 7.26 0 0 1 4.65 1.67l-2.17-.36a1 1 0 0 0-1.15.83 1 1 0 0 0 .83 1.15l4.24.7h.17a1 1 0 0 0 .34-.06.33.33 0 0 0 .1-.06.78.78 0 0 0 .2-.11l.09-.11c0-.05.09-.09.13-.15s0-.1.05-.14a1.34 1.34 0 0 0 .07-.18l.75-4a1 1 0 0 0-2-.38l-.27 1.45A9.21 9.21 0 0 0 12.18 3 9.1 9.1 0 0 0 3 12a9.1 9.1 0 0 0 9.18 9A9.12 9.12 0 0 0 21 14.68a1 1 0 0 0-.7-1.25z" />
+  </g>,
+  'Refresh'
+);
+
+export const SearchIcon = createSvgIcon(
+  <path
+    fillRule="evenodd"
+    clipRule="evenodd"
+    d="M4 11C4 7.13401 7.13401 4 11 4C14.866 4 18 7.13401 18 11C18 14.866 14.866 18 11 18C7.13401 18 4 14.866 4 11ZM11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C13.125 20 15.078 19.2635 16.6177 18.0319L20.2929 21.7071C20.6834 22.0976 21.3166 22.0976 21.7071 21.7071C22.0976 21.3166 22.0976 20.6834 21.7071 20.2929L18.0319 16.6177C19.2635 15.078 20 13.125 20 11C20 6.02944 15.9706 2 11 2Z"
+  />,
+  'Search'
+);
+
 //* Status Icons
 export const NewStatusIcon = createSvgIcon(
   <svg
@@ -44,7 +52,7 @@ export const NewStatusIcon = createSvgIcon(
     viewBox="0 0 48 48"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g id="Layer_2" data-name="Layer 2">
+    <g id="NewStatus" data-name="NewStatus">
       <g id="invisible_box" data-name="invisible box">
         <rect width="48" height="48" fill="none" />
       </g>
