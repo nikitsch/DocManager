@@ -1,5 +1,9 @@
 import { useWatch } from 'react-hook-form';
 import { Divider, FormLabel, Stack } from '@mui/material';
+import {
+  DateValidationError,
+  PickerChangeHandlerContext,
+} from '@mui/x-date-pickers/models';
 import theme from '~shared/config/muiTheme';
 import { convertISOStringToDate } from '~shared/model/dates';
 import FormDatePicker from '../date-picker';
@@ -10,10 +14,16 @@ interface IFormDateRangePickerProps {
   nameFrom: string;
   nameTo: string;
   label: string;
+  onChange:
+    | ((
+        value: Date | null,
+        context: PickerChangeHandlerContext<DateValidationError>
+      ) => void)
+    | undefined;
 }
 
 const FormDateRangePicker: FC<IFormDateRangePickerProps> = (props) => {
-  const { nameFrom, nameTo, label } = props;
+  const { nameFrom, nameTo, label, onChange } = props;
 
   const [from, to] = useWatch({ name: [nameFrom, nameTo] });
   const maxDate = convertISOStringToDate(to) || undefined;
@@ -24,7 +34,7 @@ const FormDateRangePicker: FC<IFormDateRangePickerProps> = (props) => {
       <FormLabel>{label}</FormLabel>
 
       <Stack display="flex" flexDirection="row" gap={1} alignItems="center">
-        <FormDatePicker name={nameFrom} maxDate={maxDate} />
+        <FormDatePicker name={nameFrom} maxDate={maxDate} onChange={onChange} />
         <Divider
           sx={{
             height: '1px',
@@ -32,7 +42,12 @@ const FormDateRangePicker: FC<IFormDateRangePickerProps> = (props) => {
             backgroundColor: theme.palette.primary.main,
           }}
         />
-        <FormDatePicker name={nameTo} minDate={minDate} convertByEndOfDay />
+        <FormDatePicker
+          name={nameTo}
+          minDate={minDate}
+          onChange={onChange}
+          convertByEndOfDay
+        />
       </Stack>
     </Stack>
   );

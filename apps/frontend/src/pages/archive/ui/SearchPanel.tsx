@@ -19,11 +19,7 @@ const SearchPanel: FC = () => {
 
   return (
     <Form<FormType> form={form} onSubmit={handleSubmit}>
-      <FormSearchField
-        // defaultValue={tableSearchParams.search}
-        placeholder="Search"
-        onClickClear={handleClear}
-      />
+      <FormSearchField placeholder="Search" onClickClear={handleClear} />
     </Form>
   );
 };

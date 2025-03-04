@@ -77,10 +77,10 @@ export function useTableRecordControls() {
   );
 
   const handleFilters = useCallback(
-    (filter: Record<string, string> | undefined) => {
+    (filter: { [key: string]: number | string }) => {
       setSearchParams(
         (prev) => {
-          if (filter) {
+          if (Object.keys(filter).length) {
             prev.set(TABLE_CONTROLS.FILTERS, JSON.stringify(filter));
           } else {
             prev.delete(TABLE_CONTROLS.FILTERS);

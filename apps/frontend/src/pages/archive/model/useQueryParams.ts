@@ -9,7 +9,6 @@ export function useQueryParams(): {
   const queryKeys = Array.from(searchParams.entries())
     .filter(([, value]) => value)
     .map(([key, value]) => `${key}=${value}`);
-  // console.log({ queryKeys, queryString: queryKeys.join('&') });
 
   return {
     queryKeys,

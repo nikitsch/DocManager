@@ -1,5 +1,6 @@
 import Collapse from '@mui/material/Collapse';
 import Stack from '@mui/material/Stack';
+import { UseFormSetValue } from 'react-hook-form';
 import FormSelect from '~shared/ui/form/select';
 import FormToggleButtonGroup from '~shared/ui/form/toggle-button-group';
 import { useIsAdmin } from '~shared/model/helper/useIsAdmin';
@@ -11,15 +12,17 @@ import {
 import FormDateRangePicker from '~shared/ui/form/date-range-picker';
 import { recordStatusOptions } from '../lib/recordStatusMapper';
 import { useUsersOptions } from '../model/useUsersOptions';
+import { IFilterBarForm } from '../model/useFilterBarForm';
 
 import type { FC } from 'react';
 
 type FilterBarProps = {
   isFBPOpen: boolean;
+  onSetValue: UseFormSetValue<IFilterBarForm>;
 };
 
 const FilterBar: FC<FilterBarProps> = (props) => {
-  const { isFBPOpen } = props;
+  const { isFBPOpen, onSetValue } = props;
 
   const timeBreakpointsOptions = getSelectOptions(
     TimeBreakpointsLabelMapper,
@@ -32,11 +35,22 @@ const FilterBar: FC<FilterBarProps> = (props) => {
   return (
     <Collapse in={isFBPOpen}>
       <Stack direction="row" flexWrap="wrap" mt={3} rowGap={2} columnGap={5}>
-        <FormDateRangePicker nameFrom="from" nameTo="to" label="Period" />
+        <FormDateRangePicker
+          nameFrom="from"
+          nameTo="to"
+          label="Period"
+          onChange={() => {
+            onSetValue('time_breakpoint', null);
+          }}
+        />
         <FormToggleButtonGroup
-          name="time_breakpoints"
+          name="time_breakpoint"
           label="Quick jump"
           options={timeBreakpointsOptions}
+          onChange={() => {
+            onSetValue('from', '');
+            onSetValue('to', '');
+          }}
         />
         <FormToggleButtonGroup
           name="record_status"

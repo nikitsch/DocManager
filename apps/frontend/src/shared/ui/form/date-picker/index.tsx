@@ -30,6 +30,7 @@ const FormDatePicker: FC<IFormDatePickerProps<PickerValidDate>> = (props) => {
     defaultValue,
     maxDate: externalMaxDate,
     minDate: externalMinDate,
+    onChange,
     ...datePickerProps
   } = props;
 
@@ -60,12 +61,17 @@ const FormDatePicker: FC<IFormDatePickerProps<PickerValidDate>> = (props) => {
               field: { clearable: true, onClear: () => field.onChange(null) },
             }}
             value={convertISOStringToDate(field.value ?? defaultValue)}
-            onChange={(date) => {
+            onChange={(date, context) => {
               if (!date) return field.onChange(null);
 
               const newDate = convertDateToISOString(
                 convertByEndOfDay ? endOfDay(date) : date
               );
+
+              if (onChange) {
+                onChange(date, context);
+              }
+
               field.onChange(newDate);
             }}
             minDate={minDate}

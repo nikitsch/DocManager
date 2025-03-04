@@ -22,6 +22,7 @@ const FormToggleButtonGroup: FC<IFormToggleButtonGroupProps> = (props) => {
     exclusive = true,
     size = 'small',
     color = 'primary',
+    onChange,
     ...toggleButtonGroupProps
   } = props;
 
@@ -41,7 +42,13 @@ const FormToggleButtonGroup: FC<IFormToggleButtonGroupProps> = (props) => {
             size={size}
             color={color}
             value={field.value}
-            onChange={(_, newValue) => field.onChange(newValue)}
+            onChange={(event, newValue) => {
+              if (onChange) {
+                onChange(event, newValue);
+              }
+
+              field.onChange(newValue);
+            }}
           >
             {options.map(({ value: itemValue, ...props }) => (
               <FormToggleButton

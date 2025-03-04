@@ -12,7 +12,7 @@ import type { FC } from 'react';
 const ArchivePage: FC = () => {
   const { filterBarPosition, isFBPOpen, setfilterBarPosition } =
     useFilterBarPosition();
-  const { form, onReset } = useFilterBarForm();
+  const { form, onSetValue, onReset } = useFilterBarForm();
 
   return (
     <Stack gap={3}>
@@ -30,7 +30,7 @@ const ArchivePage: FC = () => {
           <SearchPanel />
         </Stack>
         <Form form={form}>
-          <FilterBar isFBPOpen={isFBPOpen} />
+          <FilterBar isFBPOpen={isFBPOpen} onSetValue={onSetValue} />
         </Form>
       </Stack>
       <TableRecords />
