@@ -41,36 +41,40 @@ export class RecordService {
       where.record_number = ILike(`%${search}%`);
     }
 
-    //* Filtration
+    //! We give the User (not the Admin) only our records by default
     if (role !== UserRole.ADMIN) {
       where.user_id = userid;
     }
 
-    if (filters) {
-      if (role !== UserRole.ADMIN && filters.user_id !== userid) {
-        throw new BadRequestException(
-          ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR
-        );
+    //* Filtration
+    if (filters && Object.keys(filters)?.length) {
+      const { user_id, tax_period, record_status, from, to } = filters;
+
+      if (user_id) {
+        if (role !== UserRole.ADMIN && user_id !== userid) {
+          throw new BadRequestException(
+            ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR
+          );
+        }
+
+        if (role === UserRole.ADMIN) {
+          where.user_id = user_id;
+        }
       }
 
-      if (filters.user_id && role === UserRole.ADMIN) {
-        where.user_id = filters.user_id;
+      if (tax_period) {
+        where.tax_period = tax_period;
       }
 
-      if (filters.tax_period) {
-        where.tax_period = filters.tax_period;
+      if (record_status) {
+        where.record_status = record_status;
       }
 
-      if (filters.record_status) {
-        where.record_status = filters.record_status;
-      }
-
-      // if (filters.record_type) {
-      //   where.record_type = filters.record_type;
+      // if (record_type) {
+      //   where.record_type = record_type;
       // }
 
-      if (filters.from || filters.to) {
-        const { from, to } = filters;
+      if (from || to) {
         const fromDate = from ? new Date(from) : undefined;
         const toDate = to ? new Date(to) : undefined;
 

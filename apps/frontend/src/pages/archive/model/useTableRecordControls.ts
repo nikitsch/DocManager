@@ -97,8 +97,7 @@ export function useTableRecordControls() {
   );
 
   const sort = searchParams.get(TABLE_CONTROLS.SORT) || DEFAULT_SORT;
-  const order =
-    searchParams.get(TABLE_CONTROLS.ORDER) || DEFAULT_ORDER;
+  const order = searchParams.get(TABLE_CONTROLS.ORDER) || DEFAULT_ORDER;
   const page = parseInt(searchParams.get(TABLE_CONTROLS.PAGE) || DEFAULT_PAGE);
   const pageSize = parseInt(
     searchParams.get(TABLE_CONTROLS.PAGE_SIZE) || DEFAULT_PAGE_SIZE
