@@ -15,6 +15,8 @@ const TABLE_CONTROLS = {
   PAGE_SIZE: 'pageSize',
 };
 
+const DEFAULT_SORT = '';
+const DEFAULT_ORDER = 'desc';
 const DEFAULT_PAGE = '0';
 const DEFAULT_PAGE_SIZE = '10';
 
@@ -94,8 +96,9 @@ export function useTableRecordControls() {
     [setSearchParams]
   );
 
-  const sort = searchParams.get(TABLE_CONTROLS.SORT);
-  const order = searchParams.get(TABLE_CONTROLS.ORDER);
+  const sort = searchParams.get(TABLE_CONTROLS.SORT) || DEFAULT_SORT;
+  const order =
+    searchParams.get(TABLE_CONTROLS.ORDER) || DEFAULT_ORDER;
   const page = parseInt(searchParams.get(TABLE_CONTROLS.PAGE) || DEFAULT_PAGE);
   const pageSize = parseInt(
     searchParams.get(TABLE_CONTROLS.PAGE_SIZE) || DEFAULT_PAGE_SIZE
