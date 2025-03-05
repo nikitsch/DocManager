@@ -33,6 +33,14 @@ const TableRecords: FC = () => {
       slotProps={{
         pagination: {
           labelRowsPerPage: 'Records per page',
+          sx: {
+            display: 'flex',
+            justifyContent: "flex-start",
+
+            '& .MuiToolbar-root': {
+              paddingLeft: '10px',
+            },
+          },
         },
       }}
     />
