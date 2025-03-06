@@ -46,7 +46,7 @@ const FormTextField: FC<IFormTextFieldProps> = (props) => {
   };
 
   return (
-    <CustomFormControl label={label} required={required}>
+    <CustomFormControl label={label} required={required} fullWidth={fullWidth}>
       <TextField
         {...textFieldProps}
         {...register(name, validationRules)}

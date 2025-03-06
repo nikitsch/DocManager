@@ -48,6 +48,7 @@ export class RecordController {
     @Req() req: Request,
     @Query() query: GetRecordsDto
   ): Promise<{ data: IRecordResponse[]; total: number }> {
+    //TODO: remove repeat request on focus from tanstack query
     return this.recordService.getAllRecords(req, query);
   }
 

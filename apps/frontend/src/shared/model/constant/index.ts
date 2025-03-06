@@ -25,3 +25,5 @@ export const TimeBreakpointsLabelMapper = {
 export const DEFAULT_DATE_FORMAT = 'dd.MM.yyyy';
 export const DEFAULT_MIN_DATE = new Date(2024, 0, 1);
 export const DEFAULT_MAX_DATE = new Date(2099, 0, 1);
+
+export const DEFAULT_FIELD_WIDTH = '200px';

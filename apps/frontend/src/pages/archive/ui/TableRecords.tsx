@@ -35,7 +35,7 @@ const TableRecords: FC = () => {
           labelRowsPerPage: 'Records per page',
           sx: {
             display: 'flex',
-            justifyContent: "flex-start",
+            justifyContent: 'flex-start',
 
             '& .MuiToolbar-root': {
               paddingLeft: '10px',

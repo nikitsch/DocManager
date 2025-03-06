@@ -2,6 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import CustomFormControl from '~shared/ui/form/custom-form-control';
+import { DEFAULT_FIELD_WIDTH } from '~shared/model/constant';
 import { SelectOption } from '~shared/model/type';
 
 import type { FC } from 'react';
@@ -45,7 +46,7 @@ const FormSelect: FC<IFormSelectProps> = (props) => {
             required={required}
             size={size}
             sx={{
-              width: '200px',
+              width: fullWidth ? '100%' : DEFAULT_FIELD_WIDTH,
               ...sx,
             }}
           >

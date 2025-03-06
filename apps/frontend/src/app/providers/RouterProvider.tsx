@@ -11,7 +11,7 @@ import { RoutesPaths } from '~shared/model/enum';
 import PageLoader from '~shared/ui/page-loader';
 
 const RegisterPage = lazy(() => import('~pages/register'));
-const CreateRequestPage = lazy(() => import('~pages/CreateRequestPage'));
+const CreateRecordPage = lazy(() => import('~pages/create'));
 const NotFound = lazy(() => import('~pages/NotFound'));
 
 export default function RouterProvider() {
@@ -50,7 +50,7 @@ export default function RouterProvider() {
               path={RoutesPaths.CREATE}
               element={
                 <Suspense fallback={<PageLoader />}>
-                  <CreateRequestPage />
+                  <CreateRecordPage />
                 </Suspense>
               }
             />
