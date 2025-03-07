@@ -1,47 +1,35 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid2';
-import { useForm } from 'react-hook-form';
 import Form from '~shared/ui/form/form';
 import FormSelect from '~shared/ui/form/select';
 import FormTextField from '~shared/ui/form/text-field';
 import FormAutocomplete from '~shared/ui/form/autocomplete';
 import { TaxPeriodLabelMapper } from '~shared/model/constant';
-import { TaxPeriod } from '~shared/model/enum';
-import { SelectOption } from '~shared/model/type';
 import { getSelectOptions } from '~shared/model/helper/getSelectOptions';
+import { useCreateRecordForm } from '../model/useCreateRecordForm';
 import { useRecordTypeOptions } from '../model/useRecordTypeOptions';
 
 import type { FC } from 'react';
+import { Stack } from '@mui/material';
 
-export interface ICreateForm {
-  tax_period: TaxPeriod | '';
-  record_type: string | SelectOption | null;
-  record_subtype?: string;
-  record_comment: string;
-  // files: string;
-}
-type FormType = ICreateForm;
-
-const defaultValues: FormType = {
-  tax_period: '',
-  record_type: null,
-  record_subtype: '',
-  record_comment: '',
-  // files: string;
-};
+const ROW_SPACING = 2;
 
 const CreateRecordPageForm: FC = () => {
-  const form = useForm<FormType>({ defaultValues });
-  const watch = form.watch();
-  console.log({ watch });
+  const { form, isPending, onSubmit } = useCreateRecordForm();
 
   const taxPeriodOptions = getSelectOptions(TaxPeriodLabelMapper, true);
   const [recordTypeOptions] = useRecordTypeOptions();
 
   return (
-    <Form form={form}>
-      <Grid container columnSpacing={8} rowSpacing={2}>
-        <Grid container size={{ xs: 12, sm: 6 }} rowSpacing={2} direction='column' justifyContent='space-between'>
+    <Form form={form} onSubmit={onSubmit}>
+      <Grid container rowSpacing={ROW_SPACING} columnSpacing={6}>
+        <Grid
+          container
+          direction="column"
+          justifyContent="space-between"
+          rowSpacing={ROW_SPACING}
+          size={{ xs: 12, sm: 6 }}
+        >
           <FormSelect
             name="tax_period"
             label="Tax period"
@@ -55,14 +43,14 @@ const CreateRecordPageForm: FC = () => {
             required
             freeSolo
             disableClearable
-            //TODO: minLength={5}
-            //TODO: maxLength={255}
+            minLength={3}
+            maxLength={50}
           />
           <FormTextField
             name="record_subtype"
             label="Record subtype"
-            //TODO: minLength={5}
-            //TODO: maxLength={255}
+            minLength={3}
+            maxLength={50}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
@@ -77,14 +65,17 @@ const CreateRecordPageForm: FC = () => {
           />
         </Grid>
       </Grid>
-      <Button
-        type="submit"
-        variant="contained"
-        size="large"
-        // loading={isPending}
-      >
-        Create
-      </Button>
+      <Stack mt={5} alignItems="flex-end">
+        <Button
+          type="submit"
+          variant="contained"
+          size="large"
+          loading={isPending}
+          sx={{ width: 150 }}
+        >
+          Create
+        </Button>
+      </Stack>
     </Form>
   );
 };

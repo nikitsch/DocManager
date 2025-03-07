@@ -4,6 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import CustomFormControl from '~shared/ui/form/custom-form-control';
 import { SelectOption } from '~shared/model/type';
 import { DEFAULT_FIELD_WIDTH } from '~shared/model/constant';
+import { validationRules } from '~shared/model/validation/validationRules';
 
 import type { FC } from 'react';
 import type { AutocompleteProps } from '@mui/material/Autocomplete';
@@ -17,6 +18,8 @@ interface IFormAutocompleteProps
   label: string;
   options: SelectOption[];
   required?: boolean;
+  minLength?: number;
+  maxLength?: number;
 }
 
 const FormAutocomplete: FC<IFormAutocompleteProps> = (props) => {
@@ -26,22 +29,30 @@ const FormAutocomplete: FC<IFormAutocompleteProps> = (props) => {
     label,
     required = false,
     freeSolo = false,
+    minLength,
+    maxLength,
     fullWidth = true,
     size = 'small',
     sx,
     ...autocompleteProps
   } = props;
 
-  const { control } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+  const error = errors[name];
 
   return (
     <Controller
       name={name}
       control={control}
+      rules={validationRules(required, minLength, maxLength)}
       render={({ field }) => (
         <CustomFormControl
           label={label}
           required={required}
+          validationError={error}
           fullWidth={fullWidth}
         >
           <Autocomplete
@@ -65,7 +76,12 @@ const FormAutocomplete: FC<IFormAutocompleteProps> = (props) => {
             freeSolo={freeSolo}
             size={size}
             renderInput={(params) => (
-              <TextField {...params} inputRef={field.ref} required={required} />
+              <TextField
+                {...params}
+                inputRef={field.ref}
+                required={required}
+                error={!!error}
+              />
             )}
             sx={{ width: fullWidth ? '100%' : DEFAULT_FIELD_WIDTH, ...sx }}
           />

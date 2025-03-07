@@ -4,22 +4,23 @@ import CustomFormControl from '~shared/ui/form/custom-form-control';
 
 import type { FC } from 'react';
 import type { TextFieldProps } from '@mui/material/TextField';
+import { validationRules } from '~shared/model/validation/validationRules';
 
 interface IFormTextFieldProps extends Omit<TextFieldProps, 'name'> {
   name: string;
-  maxLength?: number;
   minLength?: number;
+  maxLength?: number;
 }
 
 const FormTextField: FC<IFormTextFieldProps> = (props) => {
   const {
     name,
+    label,
     required,
-    maxLength,
     minLength,
+    maxLength,
     fullWidth = true,
     size = 'small',
-    label,
     ...textFieldProps
   } = props;
 
@@ -27,32 +28,23 @@ const FormTextField: FC<IFormTextFieldProps> = (props) => {
     register,
     formState: { errors },
   } = useFormContext();
-
   const error = errors[name];
-  const validationRules = {
-    required: required ? 'Field is required' : undefined,
-    maxLength: maxLength
-      ? {
-          value: maxLength,
-          message: `Field must be no more than ${maxLength} characters long`,
-        }
-      : undefined,
-    minLength: minLength
-      ? {
-          value: minLength,
-          message: `Field must be at least ${minLength} characters long`,
-        }
-      : undefined,
-  };
+
+  const rules = validationRules(required, minLength, maxLength);
 
   return (
-    <CustomFormControl label={label} required={required} fullWidth={fullWidth}>
+    <CustomFormControl
+      label={label}
+      required={required}
+      fullWidth={fullWidth}
+      validationError={error}
+    >
       <TextField
         {...textFieldProps}
-        {...register(name, validationRules)}
+        {...register(name, rules)}
         id={name}
         error={!!error}
-        helperText={error ? String(error.message) : ''}
+        // helperText={error ? String(error.message) : ''} // move to CustomFormControl
         required={required}
         fullWidth={fullWidth}
         size={size}
