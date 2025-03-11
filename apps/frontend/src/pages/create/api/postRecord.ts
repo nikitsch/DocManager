@@ -4,13 +4,24 @@ import { ICreateForm } from '../model/useCreateRecordForm';
 interface IPostRecord extends Omit<ICreateForm, 'tax_period' | 'record_type'> {
   tax_period: TaxPeriod;
   record_type: string;
+  files: File[];
 }
 
 export const postRecord = async (recordData: IPostRecord) => {
+  const formData = new FormData();
+
+  Object.entries(recordData).forEach(([key, value]) => {
+    if (key === 'files') {
+      value.forEach((file: File) => formData.append('files', file));
+      return;
+    }
+
+    formData.append(key, value ?? '');
+  });
+
   const res = await fetch('api/records', {
     method: 'POST',
-    body: JSON.stringify(recordData),
-    headers: { 'Content-Type': 'application/json' },
+    body: formData,
   });
 
   if (!res.ok) {

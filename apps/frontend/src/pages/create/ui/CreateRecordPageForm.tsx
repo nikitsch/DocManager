@@ -1,16 +1,19 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid2';
+import Stack from '@mui/material/Stack';
 import Form from '~shared/ui/form/form';
 import FormSelect from '~shared/ui/form/select';
 import FormTextField from '~shared/ui/form/text-field';
 import FormAutocomplete from '~shared/ui/form/autocomplete';
+import FormFileUploadField from '~shared/ui/form/file-upload-field';
 import { TaxPeriodLabelMapper } from '~shared/model/constant';
 import { getSelectOptions } from '~shared/model/helper/getSelectOptions';
 import { useCreateRecordForm } from '../model/useCreateRecordForm';
 import { useRecordTypeOptions } from '../model/useRecordTypeOptions';
 
 import type { FC } from 'react';
-import { Stack } from '@mui/material';
+import FilePanel from '~shared/ui/file-panel';
+import FilesShowcase from '~shared/ui/files-showcase';
 
 const ROW_SPACING = 2;
 
@@ -63,6 +66,14 @@ const CreateRecordPageForm: FC = () => {
             required
             multiline
           />
+        </Grid>
+        <Grid size={12}>
+          <FilePanel field="files">
+            <FormFileUploadField name="files" required />
+          </FilePanel>
+        </Grid>
+        <Grid size={12}>
+          <FilesShowcase field="files" />
         </Grid>
       </Grid>
       <Stack mt={5} alignItems="flex-end">

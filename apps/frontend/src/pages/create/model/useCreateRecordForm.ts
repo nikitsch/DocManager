@@ -9,7 +9,7 @@ export interface ICreateForm {
   record_type: string | SelectOption | null;
   record_subtype?: string;
   record_comment: string;
-  // files: string;
+  files: File[] | null;
 }
 type FormType = ICreateForm;
 
@@ -18,42 +18,45 @@ const defaultValues: FormType = {
   record_type: null,
   record_subtype: '',
   record_comment: '',
-  // files: string;
+  files: null,
 };
 
-export const useCreateRecordForm = () => {
-  const form = useForm<FormType>({ defaultValues });
-  const watch = form.watch();
-  console.log({ watch });
+export const useCreateRecordForm = () =>
+  // files: { file: File; preview: string | null }[]
+  {
+    const form = useForm<FormType>({ defaultValues });
+    const watch = form.watch();
+    console.log({ watch });
 
-  const { isPending, mutate } = useMutation({
-    mutationFn: postRecord,
-    // onSuccess: (data) => {
-    //   setUser(data);
-    //   navigate(`/${RoutesPaths.ARCHIVE}`, { replace: true });
-    // },
-    // onError: (error: { statusCode: number; message: string }) => {
-    //   if (error?.statusCode === 404) {
-    //     form.setError('username', { type: 'server', message: error.message });
-    //   }
-    //   if (error?.statusCode === 401) {
-    //     form.setError('password', { type: 'server', message: error.message });
-    //   }
-    // },
-  });
-
-  const handleSubmit = (recordData: ICreateForm) => {
-    const { tax_period, record_type, ...restData } = recordData;
-
-    return mutate({
-      ...restData,
-      tax_period: tax_period as TaxPeriod,
-      record_type:
-        typeof record_type === 'string'
-          ? record_type
-          : (record_type?.label as string),
+    const { isPending, mutate } = useMutation({
+      mutationFn: postRecord,
+      // onSuccess: (data) => {
+      //   setUser(data);
+      //   navigate(`/${RoutesPaths.ARCHIVE}`, { replace: true });
+      // },
+      // onError: (error: { statusCode: number; message: string }) => {
+      //   if (error?.statusCode === 404) {
+      //     form.setError('username', { type: 'server', message: error.message });
+      //   }
+      //   if (error?.statusCode === 401) {
+      //     form.setError('password', { type: 'server', message: error.message });
+      //   }
+      // },
     });
-  };
 
-  return { form, isPending, onSubmit: handleSubmit };
-};
+    const handleSubmit = (recordData: ICreateForm) => {
+      const { tax_period, record_type, files, ...restData } = recordData;
+
+      return mutate({
+        ...restData,
+        tax_period: tax_period as TaxPeriod,
+        record_type:
+        typeof record_type === 'string'
+        ? record_type
+        : (record_type?.label as string),
+        files: files as File[],
+      });
+    };
+
+    return { form, isPending, onSubmit: handleSubmit };
+  };
