@@ -73,7 +73,7 @@ const CreateRecordPageForm: FC = () => {
           </FilePanel>
         </Grid>
         <Grid size={12}>
-          <FilesShowcase field="files" />
+          <FilesShowcase field="files" canDelete />
         </Grid>
       </Grid>
       <Stack mt={5} alignItems="flex-end">

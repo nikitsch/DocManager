@@ -138,12 +138,12 @@ export const DownloadFilesIcon = createSvgIcon(
 
 export const PreviewIcon = createSvgIcon(
   <svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="800px"
-  height="800px"
-  viewBox="0 0 52 52"
-  enable-background="new 0 0 52 52"
-  fill={theme.palette.primary.main}
+    xmlns="http://www.w3.org/2000/svg"
+    width="800px"
+    height="800px"
+    viewBox="0 0 52 52"
+    enable-background="new 0 0 52 52"
+    fill={theme.palette.primary.main}
   >
     <g>
       <path

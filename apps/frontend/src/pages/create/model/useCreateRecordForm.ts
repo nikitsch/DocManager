@@ -51,9 +51,9 @@ export const useCreateRecordForm = () =>
         ...restData,
         tax_period: tax_period as TaxPeriod,
         record_type:
-        typeof record_type === 'string'
-        ? record_type
-        : (record_type?.label as string),
+          typeof record_type === 'string'
+            ? record_type
+            : (record_type?.label as string),
         files: files as File[],
       });
     };

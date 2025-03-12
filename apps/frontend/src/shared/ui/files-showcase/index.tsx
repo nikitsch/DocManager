@@ -1,81 +1,103 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { useFormContext } from 'react-hook-form';
-import { DeleteFileIcon } from '../custom-icons';
+import FileExtension from './file-extension';
+import ShowcaseActionButton from './showcase-action-button';
+import {
+  CustomShowcaseBox,
+  CustomShowcaseCard,
+  CustomShowcaseCardContentFileExtension,
+  CustomShowcaseCardContentText,
+} from './styles';
+import { getFileExtension } from './helper/getFileExtension';
+import { handlePreviewImage } from './helper/handlePreviewImage';
+import { handleDownloadImage } from './helper/handleDownloadImage';
+import { DeleteFileIcon, DownloadFileIcon, PreviewIcon } from '../custom-icons';
 
 import type { FC } from 'react';
 import type { CardProps } from '@mui/material/Card';
 
 interface IFilesShowcaseProps extends CardProps {
   field: string;
+  canDelete: boolean;
 }
 
+const SHOWCASE_BOX_CLASS_NAME = 'SHOWCASE_BOX_CLASS_NAME';
+
+//TODO: Вынести логику наверх и оставить чисто UI компоненты
 const FilesShowcase: FC<IFilesShowcaseProps> = (props) => {
-  const { field } = props;
+  const { field, canDelete, ...restCardProps } = props;
 
   const { getValues, setValue } = useFormContext();
 
   const files: File[] = getValues(field) || [];
-  // const color = theme.palette[error ? 'error' : 'primary'].main;
 
-  // const handleRemoveFile = (index: number) => {
-  //   setFiles((prev) => prev.filter((_, i) => i !== index));
-  // };
   const handleRemoveFile = (index: number) => {
     const value = files.filter((_, i) => i !== index);
     setValue(field, value);
   };
 
-  const getFileExtension = (fileName: string) =>
-    fileName.split('.').pop()?.toUpperCase();
-
   return (
-    <Stack direction="row" gap={2} overflow='auto'>
+    <Stack direction="row" gap={1} overflow="auto">
       {files.map((file, index) => {
         const preview = file.type.startsWith('image/')
           ? URL.createObjectURL(file)
           : null;
+        const extension = getFileExtension(file.name);
+        const isImage = file.type.startsWith('image/');
 
         return (
-          <Card key={index} sx={{ width: 120, position: 'relative', flexShrink: 0 }}>
+          <CustomShowcaseCard
+            {...restCardProps}
+            key={index}
+            overlayClass={SHOWCASE_BOX_CLASS_NAME}
+          >
             {preview ? (
               <CardMedia
                 component="img"
-                height="100"
+                height="120"
                 image={preview}
                 alt={file.name}
+                sx={{ padding: '8px 16px' }}
               />
             ) : (
-              <CardContent
-                sx={{
-                  textAlign: 'center',
-                  background: '#f0f0f0',
-                  height: 100,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+              <CustomShowcaseCardContentFileExtension>
+                <FileExtension extension={extension} />
+              </CustomShowcaseCardContentFileExtension>
+            )}
+            <CustomShowcaseCardContentText
+              style={{ paddingBottom: '8px' }} //* Interrupting the style of the mui CardContent component
+            >
+              {file.name}
+            </CustomShowcaseCardContentText>
+
+            <CustomShowcaseBox className={SHOWCASE_BOX_CLASS_NAME}>
+              {isImage && (
+                <ShowcaseActionButton
+                  title="Preview"
+                  onClick={() => handlePreviewImage(file)}
+                >
+                  <PreviewIcon />
+                </ShowcaseActionButton>
+              )}
+              <ShowcaseActionButton
+                title={canDelete ? 'Delete' : 'Download'}
+                onClick={() => {
+                  if (canDelete) {
+                    handleRemoveFile(index);
+                  } else {
+                    handleDownloadImage(file);
+                  }
                 }}
               >
-                <Typography variant="subtitle2">
-                  {getFileExtension(file.name)}
-                </Typography>
-              </CardContent>
-            )}
-            <IconButton
-              onClick={() => handleRemoveFile(index)}
-              sx={{
-                position: 'absolute',
-                top: 5,
-                right: 5,
-              }}
-            >
-              <DeleteFileIcon />
-            </IconButton>
-          </Card>
+                {canDelete ? (
+                  <DeleteFileIcon />
+                ) : (
+                  <DownloadFileIcon color="primary" />
+                )}
+              </ShowcaseActionButton>
+            </CustomShowcaseBox>
+          </CustomShowcaseCard>
         );
       })}
     </Stack>
