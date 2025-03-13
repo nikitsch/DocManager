@@ -1,4 +1,4 @@
-import { getFileExtensionColor } from '~shared/model/helper/getFileExtensionColor';
+import { getFileExtensionColor } from '~shared/model/helper/fileExtension';
 
 import type { FC } from 'react';
 

@@ -1,6 +1,7 @@
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { Controller, useFormContext } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import { UploadFileIcon } from '~shared/ui/custom-icons';
 import { validationRules } from '~shared/model/validation/validationRules';
 
@@ -13,7 +14,7 @@ interface IFormFileUploadFieldProps extends Pick<IconButtonOwnProps, 'size'> {
   multiple?: boolean;
 }
 
-const FILE_INPUT_ID = 'file-input';
+const FILE_INPUT_ID = 'FILE_INPUT_ID';
 
 const FormFileUploadField: FC<IFormFileUploadFieldProps> = (props) => {
   const { name, required = false, multiple = true, size = 'large' } = props;
@@ -37,7 +38,14 @@ const FormFileUploadField: FC<IFormFileUploadFieldProps> = (props) => {
             multiple={multiple}
             onChange={(event) => {
               const prevValue = field.value || [];
-              const files = Array.from(event.target.files || []);
+              const files = Array.from(event.target.files || []).map((file) => {
+                const id = uuidv4();
+                const preview = file.type.startsWith('image/')
+                  ? URL.createObjectURL(file)
+                  : null;
+
+                return { id, file, preview };
+              });
               field.onChange([...prevValue, ...files]);
             }}
             style={{ display: 'none' }}

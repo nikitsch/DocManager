@@ -142,7 +142,7 @@ export const PreviewIcon = createSvgIcon(
     width="800px"
     height="800px"
     viewBox="0 0 52 52"
-    enable-background="new 0 0 52 52"
+    enableBackground="new 0 0 52 52"
     fill={theme.palette.primary.main}
   >
     <g>

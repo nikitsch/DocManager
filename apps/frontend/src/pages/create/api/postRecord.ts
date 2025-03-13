@@ -1,10 +1,12 @@
 import { TaxPeriod } from '~shared/model/enum';
-import { ICreateForm } from '../model/useCreateRecordForm';
+import { FileForm } from '~shared/model/type';
 
-interface IPostRecord extends Omit<ICreateForm, 'tax_period' | 'record_type'> {
+export interface IPostRecord {
   tax_period: TaxPeriod;
   record_type: string;
-  files: File[];
+  record_subtype?: string;
+  record_comment: string;
+  files: FileForm[];
 }
 
 export const postRecord = async (recordData: IPostRecord) => {
@@ -12,11 +14,10 @@ export const postRecord = async (recordData: IPostRecord) => {
 
   Object.entries(recordData).forEach(([key, value]) => {
     if (key === 'files') {
-      value.forEach((file: File) => formData.append('files', file));
-      return;
+      value.forEach(({ file }: FileForm) => formData.append('files', file));
+    } else {
+      formData.append(key, value ?? '');
     }
-
-    formData.append(key, value ?? '');
   });
 
   const res = await fetch('api/records', {

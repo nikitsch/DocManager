@@ -5,3 +5,9 @@ export type SelectOption = {
   label: string;
   icon?: JSX.Element;
 };
+
+export type FileForm = {
+  id: string;
+  file: File;
+  preview: string | null;
+};

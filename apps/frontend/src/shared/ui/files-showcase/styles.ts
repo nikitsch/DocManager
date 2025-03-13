@@ -3,14 +3,14 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles';
 
-export const CustomShowcaseCard = styled(Card)<{ overlayClass: string }>(
-  ({ overlayClass }) => ({
+export const CustomShowcaseCard = styled(Card)<{ overlayclass: string }>(
+  ({ overlayclass }) => ({
     width: 120,
     position: 'relative',
     flexShrink: 0,
     overflow: 'hidden',
     '&:hover': {
-      [`.${overlayClass}`]: {
+      [`.${overlayclass}`]: {
         opacity: 1,
       },
     },

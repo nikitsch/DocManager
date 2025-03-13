@@ -1,5 +1,12 @@
+const DEFAULT_EXTENSION_PLACEHOLDER = '?¿';
+const DEFAULT_EXTENSION_COLOR = '#00A850';
+
+export function getFileExtension(fileName: string) {
+  return fileName.split('.').pop() ?? DEFAULT_EXTENSION_PLACEHOLDER;
+}
+
 export function getFileExtensionColor(extension: string) {
-  return fileExtensionColors[extension] ?? '#00A850';
+  return fileExtensionColors[extension] ?? DEFAULT_EXTENSION_COLOR;
 }
 
 const fileExtensionColors: Record<string, string> = {

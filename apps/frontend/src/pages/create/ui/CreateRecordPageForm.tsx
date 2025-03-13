@@ -18,7 +18,15 @@ import FilesShowcase from '~shared/ui/files-showcase';
 const ROW_SPACING = 2;
 
 const CreateRecordPageForm: FC = () => {
-  const { form, isPending, onSubmit } = useCreateRecordForm();
+  const {
+    form,
+    isPending,
+    isDisabled,
+    files,
+    filesError,
+    onRemoveFile,
+    onSubmit,
+  } = useCreateRecordForm();
 
   const taxPeriodOptions = getSelectOptions(TaxPeriodLabelMapper, true);
   const [recordTypeOptions] = useRecordTypeOptions();
@@ -68,21 +76,22 @@ const CreateRecordPageForm: FC = () => {
           />
         </Grid>
         <Grid size={12}>
-          <FilePanel field="files">
+          <FilePanel count={files?.length || 0} error={filesError}>
             <FormFileUploadField name="files" required />
           </FilePanel>
         </Grid>
         <Grid size={12}>
-          <FilesShowcase field="files" canDelete />
+          <FilesShowcase files={files} onRemoveFile={onRemoveFile} />
         </Grid>
       </Grid>
-      <Stack mt={5} alignItems="flex-end">
+      <Stack mt={3} alignItems="flex-end">
         <Button
           type="submit"
           variant="contained"
           size="large"
           loading={isPending}
           sx={{ width: 150 }}
+          disabled={isDisabled}
         >
           Create
         </Button>
