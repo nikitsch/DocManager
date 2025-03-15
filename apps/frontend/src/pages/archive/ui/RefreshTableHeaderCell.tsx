@@ -2,9 +2,11 @@ import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
 import { RefreshIcon } from '~shared/ui/custom-icons';
 import { useRecords } from '../model/useRecords';
+import { useUsers } from '../model/useUsers';
 
 const RefreshTableHeaderCell = () => {
-  const { refetch } = useRecords();
+  const { refetch: refetchRecords } = useRecords();
+  const { refetch: refetchUsers } = useUsers();
 
   return (
     <Link
@@ -13,7 +15,10 @@ const RefreshTableHeaderCell = () => {
       fontWeight="bold"
       color="secondary"
       underline="none"
-      onClick={() => refetch()}
+      onClick={() => {
+        refetchRecords();
+        refetchUsers();
+      }}
     >
       <Stack direction="row" alignItems="center" gap={1}>
         <RefreshIcon />

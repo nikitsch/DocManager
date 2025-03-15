@@ -1,6 +1,9 @@
-import { ApiError } from "~shared/api/ApiError";
+import { ApiError } from '~shared/api/ApiError';
 
-export const fetchWithHandling = async <T>(url: string, options?: RequestInit): Promise<T> => {
+export const fetchWithHandling = async <T>(
+  url: string,
+  options?: RequestInit
+): Promise<T> => {
   try {
     const response = await fetch(url, options);
     const data = await response.json();
@@ -12,7 +15,11 @@ export const fetchWithHandling = async <T>(url: string, options?: RequestInit): 
     return data;
   } catch (err) {
     if (err instanceof ApiError) {
-      console.error(`Error API: ${err.message}, Code: ${err.statusCode}, Type: ${err.error ?? 'unknown'}`);
+      console.error(
+        `Error API: ${err.message}, Code: ${err.statusCode}, Type: ${
+          err.error ?? 'unknown'
+        }`
+      );
     } else {
       console.error('Error', err);
     }

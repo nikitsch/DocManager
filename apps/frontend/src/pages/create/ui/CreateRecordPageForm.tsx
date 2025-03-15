@@ -29,7 +29,10 @@ const CreateRecordPageForm: FC = () => {
   } = useCreateRecordForm();
 
   const taxPeriodOptions = getSelectOptions(TaxPeriodLabelMapper, true);
-  const [recordTypeOptions] = useRecordTypeOptions();
+  const [recordTypeOptions] = useRecordTypeOptions({
+    refetchOnWindowFocus: true,
+    refetchInterval: 60 * 1000, //* milliseconds
+  });
 
   return (
     <Form form={form} onSubmit={onSubmit}>

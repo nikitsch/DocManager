@@ -2,8 +2,13 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { RoutesPaths, TaxPeriod } from '~shared/model/enum';
-import { FileForm, SelectOption } from '~shared/model/type';
+import {
+  FileForm,
+  MutationOptionsType,
+  SelectOption,
+} from '~shared/model/type';
 import { IPostRecord, postRecord } from '../api/postRecord';
+import { IRecord } from '~shared/model/interface';
 
 export interface ICreateForm {
   tax_period: TaxPeriod | '';
@@ -22,12 +27,15 @@ const defaultValues: FormType = {
   files: null,
 };
 
-export const useCreateRecordForm = () => {
+export const useCreateRecordForm = (
+  mutationOptions: MutationOptionsType<IRecord, IPostRecord> = {}
+) => {
   const navigate = useNavigate();
   const form = useForm<FormType>({ defaultValues });
   const { files } = form.watch();
 
   const { isPending, mutate } = useMutation({
+    ...mutationOptions,
     mutationFn: postRecord,
     onSuccess: () => {
       navigate(`/${RoutesPaths.ARCHIVE}`);

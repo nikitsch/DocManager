@@ -2,14 +2,17 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { RoutesPaths } from '~shared/model/enum';
+import { IRecordTable } from '~shared/model/interface';
+import { QueryOptionsType } from '~shared/model/type';
 import { useQueryParams } from './useQueryParams';
 import { getRecords } from '../api/getRecords';
 
-export function useRecords() {
+export function useRecords(queryOptions: QueryOptionsType<IRecordTable> = {}) {
   const navigate = useNavigate();
   const { queryKeys, queryString } = useQueryParams();
 
   const query = useQuery({
+    ...queryOptions,
     queryKey: ['records', ...queryKeys],
     queryFn: () => getRecords(queryString),
     placeholderData: (previousData) => previousData, //TODO: How did it help?

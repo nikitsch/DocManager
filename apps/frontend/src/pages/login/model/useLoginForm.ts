@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { RoutesPaths } from '~shared/model/enum';
 import { useUserAuthStore } from '~entities/user-auth/model/useUserAuthStore';
+import { ApiError } from '~shared/api/ApiError';
+import { IUserAuthResponse } from '~shared/model/interface';
+import { MutationOptionsType } from '~shared/model/type';
 import { postLogin } from '../api/postLogin';
 
 export interface ILoginForm {
@@ -11,23 +14,30 @@ export interface ILoginForm {
 }
 type FormType = ILoginForm;
 
-export const useLoginForm = () => {
+export const useLoginForm = (
+  mutationOptions: MutationOptionsType<IUserAuthResponse, ILoginForm> = {}
+) => {
   const navigate = useNavigate();
   const form = useForm<FormType>();
   const setUser = useUserAuthStore((state) => state.setUser);
 
   const { isPending, mutate } = useMutation({
+    ...mutationOptions,
     mutationFn: postLogin,
     onSuccess: (data) => {
       setUser(data);
       navigate(`/${RoutesPaths.ARCHIVE}`, { replace: true });
     },
-    onError: (error: { statusCode: number; message: string }) => {
-      if (error?.statusCode === 404) {
-        form.setError('username', { type: 'server', message: error.message });
+    onError: (error: ApiError) => {
+      const { statusCode, message } = error;
+      const type = 'server';
+
+      if (statusCode === 404) {
+        form.setError('username', { type, message });
       }
-      if (error?.statusCode === 401) {
-        form.setError('password', { type: 'server', message: error.message });
+
+      if (statusCode === 401) {
+        form.setError('password', { type, message });
       }
     },
   });
