@@ -1,14 +1,10 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { IUser } from '~shared/model/interface';
-
-interface IUserAuthData extends Omit<IUser, 'user_id' | 'organization_name'> {
-  userid: number;
-}
+import { IUserAuthResponse } from '~shared/model/interface';
 
 interface IUserAuthState {
-  user: IUserAuthData | null;
-  setUser: (user: IUserAuthData) => void;
+  user: IUserAuthResponse | null;
+  setUser: (user: IUserAuthResponse) => void;
   clearUser: () => void;
 }
 

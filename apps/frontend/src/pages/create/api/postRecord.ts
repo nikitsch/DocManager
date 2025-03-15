@@ -1,4 +1,6 @@
+import { fetchWithHandling } from '~shared/api/fetchWithHandling';
 import { TaxPeriod } from '~shared/model/enum';
+import { IRecord } from '~shared/model/interface';
 import { FileForm } from '~shared/model/type';
 
 export interface IPostRecord {
@@ -20,17 +22,8 @@ export const postRecord = async (recordData: IPostRecord) => {
     }
   });
 
-  const res = await fetch('api/records', {
+  return fetchWithHandling<IRecord>('api/records', {
     method: 'POST',
     body: formData,
   });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    // // eslint-disable-next-line
-    // throw { statusCode: errorData.statusCode, message: errorData.message };
-    throw new Error(errorData.message || 'Request error');
-  }
-
-  return res.json();
 };

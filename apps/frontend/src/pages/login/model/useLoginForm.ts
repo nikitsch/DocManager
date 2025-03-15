@@ -1,9 +1,9 @@
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
 import { RoutesPaths } from '~shared/model/enum';
 import { useUserAuthStore } from '~entities/user-auth/model/useUserAuthStore';
-import { loginPost } from '../api/loginPost';
+import { postLogin } from '../api/postLogin';
 
 export interface ILoginForm {
   username: string;
@@ -17,7 +17,7 @@ export const useLoginForm = () => {
   const setUser = useUserAuthStore((state) => state.setUser);
 
   const { isPending, mutate } = useMutation({
-    mutationFn: loginPost,
+    mutationFn: postLogin,
     onSuccess: (data) => {
       setUser(data);
       navigate(`/${RoutesPaths.ARCHIVE}`, { replace: true });

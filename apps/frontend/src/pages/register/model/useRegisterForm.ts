@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { RoutesPaths } from '~shared/model/enum';
-import { registerPost } from '../api/registerPost';
+import { postRegister } from '../api/postRegister';
 
 export interface IRegisterForm {
   username: string;
@@ -17,7 +17,7 @@ export const useRegisterForm = () => {
   const navigate = useNavigate();
 
   const { isPending, mutate } = useMutation({
-    mutationFn: registerPost,
+    mutationFn: postRegister,
     onSuccess: () => {
       //TODO: in response receive a new user without a password
       navigate(`/${RoutesPaths.LOGIN}`, { replace: true });

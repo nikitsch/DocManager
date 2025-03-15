@@ -12,6 +12,12 @@ export interface IUser {
   organization_name: string;
 }
 
+export interface IUserAuthResponse {
+  userid: number;
+  username: string;
+  role: UserRole;
+}
+
 export interface IRecord {
   record_id: number;
   user_id: number;
@@ -39,4 +45,9 @@ export interface IRecord {
 export interface IRecordTypeEntity {
   id: number;
   type: string;
+}
+
+export interface IRecordTable {
+  data: IRecord[];
+  total: number;
 }
