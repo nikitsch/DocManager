@@ -1,11 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
+import { useApiErrorHandler } from '~shared/api/useApiErrorHandler';
+import { QueryOptionsType } from '~shared/model/type';
 import { checkAuth } from '../api/checkAuth';
 
-export const useRequireAuth = () => {
-  return useQuery({
-    queryFn: checkAuth,
+export function useRequireAuth(queryOptions: QueryOptionsType<boolean> = {}) {
+  const query = useQuery({
+    ...queryOptions,
     queryKey: ['checkAuth'],
-    retry: () => false,
-    // refetchInterval: 60000,
+    queryFn: checkAuth,
+    retry: false,
   });
-};
+
+  useApiErrorHandler(query.error); //TODO: переделать
+
+  return query;
+}

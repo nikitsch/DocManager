@@ -1,14 +1,15 @@
-import type { FC } from 'react';
-import { Navigate, Outlet } from 'react-router';
-import { RoutesPaths } from '~shared/model/enum';
+import { Outlet } from 'react-router';
 import { useRequireAuth } from './model/useRequireAuth';
 
+import type { FC } from 'react';
+
 const RequireAuth: FC = () => {
-  const { isLoading, error } = useRequireAuth();
+  const { isError, isLoading, isFetching } = useRequireAuth();
+  
+  if (isLoading || isFetching) return null;
+  if (isError) return null;
 
-  if (isLoading) return null;
-
-  return error ? <Navigate to={RoutesPaths.LOGIN} replace /> : <Outlet />;
+  return <Outlet />;
 };
 
 export default RequireAuth;

@@ -5,7 +5,18 @@ import {
 
 import type { PropsWithChildren } from 'react';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+    // mutations: {
+    //   onError: (error, variables, context) => {
+    //   },
+    // },
+  },
+});
 
 export default function QueryClientProvider({ children }: PropsWithChildren) {
   return (

@@ -28,7 +28,7 @@ export class AuthController {
   }
 
   @Get('check')
-  async checkAuth() {
+  async checkAuth(): Promise<boolean> {
     return true; //* If the user is not authorized, JwtAuthGuard sends an authorization error. Otherwise, return true
   }
 }

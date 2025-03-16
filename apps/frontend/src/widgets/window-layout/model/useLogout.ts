@@ -1,23 +1,21 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { useUserAuthStore } from '~entities/user-auth/model/useUserAuthStore';
 import { RoutesPaths } from '~shared/model/enum';
 import { MutationOptionsType } from '~shared/model/type';
+import { useClearAppState } from '~shared/model/helper/useClearAppState';
 import { postLogout } from '../api/postLogout';
 
 export const useLogout = (
   mutationOptions: MutationOptionsType<unknown, { message: string }> = {}
 ) => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const clearUser = useUserAuthStore((state) => state.clearUser);
+  const { clearAll } = useClearAppState();
 
   return useMutation({
     ...mutationOptions,
     mutationFn: postLogout,
     onSuccess: () => {
-      queryClient.clear();
-      clearUser();
+      clearAll();
       navigate(`/${RoutesPaths.LOGIN}`, { replace: true });
     },
   });
