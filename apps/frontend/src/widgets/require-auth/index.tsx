@@ -5,7 +5,7 @@ import type { FC } from 'react';
 
 const RequireAuth: FC = () => {
   const { isError, isLoading, isFetching } = useRequireAuth();
-  
+
   if (isLoading || isFetching) return null;
   if (isError) return null;
 

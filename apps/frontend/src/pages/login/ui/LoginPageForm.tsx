@@ -6,7 +6,11 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 const LoginPageForm: FC = () => {
-  const { form, isPending, onSubmit } = useLoginForm();
+  const {
+    form,
+    mutation: { isPending },
+    onSubmit,
+  } = useLoginForm();
 
   return (
     <Form form={form} onSubmit={onSubmit}>

@@ -6,7 +6,11 @@ import Stack from '@mui/material/Stack';
 import { useRegisterForm } from '../model/useRegisterForm';
 
 const RegisterPageForm: FC = () => {
-  const { form, isPending, onSubmit } = useRegisterForm();
+  const {
+    form,
+    mutation: { isPending },
+    onSubmit,
+  } = useRegisterForm();
 
   return (
     <Form form={form} onSubmit={onSubmit}>

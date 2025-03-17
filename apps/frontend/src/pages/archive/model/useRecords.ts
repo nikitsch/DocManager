@@ -1,21 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import { useApiErrorHandler } from '~shared/api/useApiErrorHandler';
+import { useQueryHandler } from '~features/api/model/useQueryHandler';
 import { IRecordTable } from '~shared/model/interface';
 import { QueryOptionsType } from '~shared/model/type';
 import { useQueryParams } from './useQueryParams';
 import { getRecords } from '../api/getRecords';
 
-export function useRecords(queryOptions: QueryOptionsType<IRecordTable> = {}) {
+type TData = IRecordTable;
+
+export function useRecords(queryOptions: QueryOptionsType<TData> = {}) {
   const { queryKeys, queryString } = useQueryParams();
 
-  const query = useQuery({
+  return useQueryHandler<TData>({
     ...queryOptions,
     queryKey: ['records', ...queryKeys],
     queryFn: () => getRecords(queryString),
     placeholderData: (previousData) => previousData, //TODO: How did it help?
   });
-
-  useApiErrorHandler(query.error); //TODO: переделать
-
-  return query;
 }

@@ -1,21 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import { useApiErrorHandler } from '~shared/api/useApiErrorHandler';
+import { useQueryHandler } from '~features/api/model/useQueryHandler';
 import { useIsAdmin } from '~shared/model/helper/useIsAdmin';
 import { IUser } from '~shared/model/interface';
 import { QueryOptionsType } from '~shared/model/type';
 import { getUsers } from '../api/getUsers';
 
-export function useUsers(queryOptions: QueryOptionsType<IUser[]> = {}) {
+type TData = IUser[];
+
+export function useUsers(queryOptions: QueryOptionsType<TData> = {}) {
   const isAdmin = useIsAdmin();
 
-  const query = useQuery({
+  return useQueryHandler<TData>({
     ...queryOptions,
     queryKey: ['users'],
     queryFn: () => getUsers(),
     enabled: isAdmin,
   });
-
-  useApiErrorHandler(query.error); //TODO: переделать
-
-  return query;
 }

@@ -1,6 +1,6 @@
-import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
+import { useMutationHandler } from '~features/api/model/useMutationHandler';
 import { RoutesPaths, TaxPeriod } from '~shared/model/enum';
 import {
   FileForm,
@@ -34,20 +34,12 @@ export const useCreateRecordForm = (
   const form = useForm<FormType>({ defaultValues });
   const { files } = form.watch();
 
-  const { isPending, mutate } = useMutation({
+  const { mutate, ...restMutation } = useMutationHandler<IRecord, IPostRecord>({
     ...mutationOptions,
     mutationFn: postRecord,
     onSuccess: () => {
       navigate(`/${RoutesPaths.ARCHIVE}`);
     },
-    // onError: (error: { statusCode: number; message: string }) => {
-    //   if (error?.statusCode === 404) {
-    //     form.setError('username', { type: 'server', message: error.message });
-    //   }
-    //   if (error?.statusCode === 401) {
-    //     form.setError('password', { type: 'server', message: error.message });
-    //   }
-    // },
   });
 
   const { errors } = form.formState;
@@ -75,7 +67,7 @@ export const useCreateRecordForm = (
 
   return {
     form,
-    isPending,
+    mutation: { ...restMutation, mutate },
     isDisabled: !!Object.keys(errors).length,
     files,
     filesError: errors?.files,

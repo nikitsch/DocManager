@@ -6,7 +6,7 @@ import { useClearAppState } from '~shared/model/helper/useClearAppState';
 import { postLogout } from '../api/postLogout';
 
 export const useLogout = (
-  mutationOptions: MutationOptionsType<unknown, { message: string }> = {}
+  mutationOptions: MutationOptionsType<{ message: string }> = {}
 ) => {
   const navigate = useNavigate();
   const { clearAll } = useClearAppState();
@@ -15,8 +15,8 @@ export const useLogout = (
     ...mutationOptions,
     mutationFn: postLogout,
     onSuccess: () => {
-      clearAll();
       navigate(`/${RoutesPaths.LOGIN}`, { replace: true });
+      setTimeout(() => clearAll(), 100);
     },
   });
 };

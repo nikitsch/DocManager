@@ -21,12 +21,12 @@ export const useRegisterForm = (
   const form = useForm<FormType>();
   const navigate = useNavigate();
 
-  const { isPending, mutate } = useMutation({
+  const { mutate, ...restMutation } = useMutation({
     ...mutationOptions,
     mutationFn: postRegister,
     onSuccess: () => {
       //TODO: in response receive a new user without a password
-      navigate(`/${RoutesPaths.LOGIN}`, { replace: true });
+      navigate(`/${RoutesPaths.LOGIN}`);
     },
     onError: ({ message }: ApiError) => {
       form.setError('username', { type: 'server', message });
@@ -35,5 +35,9 @@ export const useRegisterForm = (
 
   const handleSubmit = (registerData: FormType) => mutate(registerData);
 
-  return { form, isPending, onSubmit: handleSubmit };
+  return {
+    form,
+    mutation: { ...restMutation, mutate },
+    onSubmit: handleSubmit,
+  };
 };

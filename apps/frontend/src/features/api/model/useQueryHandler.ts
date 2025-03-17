@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { DEFAULT_REDIRECT_PARAM } from '~shared/model/constant';
 import { RoutesPaths } from '~shared/model/enum';
@@ -5,12 +6,16 @@ import { useClearAppState } from '~shared/model/helper/useClearAppState';
 import { useRedirectPath } from '~shared/model/helper/useRedirectPath';
 import { ApiError } from '~shared/api/ApiError';
 
-export const useApiErrorHandler = (error: ApiError | Error | null) => {
+import type { QueryKey, UseQueryOptions } from '@tanstack/react-query';
+
+export const useQueryHandler = <T>(
+  options: UseQueryOptions<T, Error | ApiError, T, QueryKey>
+) => {
   const navigate = useNavigate();
   const { clearAll } = useClearAppState();
   const redirectPath = useRedirectPath();
 
-  if (!error) return;
+  const { error, ...restQuery } = useQuery(options);
 
   if (
     error instanceof ApiError &&
@@ -24,5 +29,7 @@ export const useApiErrorHandler = (error: ApiError | Error | null) => {
     );
   }
 
-  // console.error(error);
+  // console.error(error); //Notistack
+
+  return { error, ...restQuery };
 };

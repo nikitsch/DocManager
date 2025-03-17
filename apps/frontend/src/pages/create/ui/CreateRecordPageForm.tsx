@@ -20,7 +20,7 @@ const ROW_SPACING = 2;
 const CreateRecordPageForm: FC = () => {
   const {
     form,
-    isPending,
+    mutation: { isPending },
     isDisabled,
     files,
     filesError,

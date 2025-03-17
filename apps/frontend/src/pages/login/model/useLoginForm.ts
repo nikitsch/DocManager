@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useForm } from 'react-hook-form';
-import { RoutesPaths } from '~shared/model/enum';
 import { useUserAuthStore } from '~entities/user-auth/model/useUserAuthStore';
+import { RoutesPaths } from '~shared/model/enum';
 import { ApiError } from '~shared/api/ApiError';
 import { DEFAULT_REDIRECT_PARAM } from '~shared/model/constant';
 import { IUserAuthResponse } from '~shared/model/interface';
@@ -23,23 +23,23 @@ export const useLoginForm = (
   const form = useForm<FormType>();
   const setUser = useUserAuthStore((state) => state.setUser);
 
-  const { isPending, mutate } = useMutation({
+  const { mutate, ...restMutation } = useMutation({
     ...mutationOptions,
     mutationFn: postLogin,
     onSuccess: (data) => {
       setUser(data);
       const redirectPath =
-      searchParams.get(DEFAULT_REDIRECT_PARAM) || `/${RoutesPaths.ARCHIVE}`;
+        searchParams.get(DEFAULT_REDIRECT_PARAM) || `/${RoutesPaths.ARCHIVE}`;
       navigate(redirectPath, { replace: true });
     },
     onError: (error: ApiError) => {
       const { statusCode, message } = error;
       const type = 'server';
-      
+
       if (statusCode === 404) {
         form.setError('username', { type, message });
       }
-      
+
       if (statusCode === 401) {
         form.setError('password', { type, message });
       }
@@ -48,5 +48,9 @@ export const useLoginForm = (
 
   const handleSubmit = (loginData: FormType) => mutate(loginData);
 
-  return { form, isPending, onSubmit: handleSubmit };
+  return {
+    form,
+    mutation: { ...restMutation, mutate },
+    onSubmit: handleSubmit,
+  };
 };

@@ -1,5 +1,5 @@
 import type { MenuItemProps } from '@mui/material/MenuItem';
-import {
+import type {
   QueryKey,
   UseMutationOptions,
   UseQueryOptions,
