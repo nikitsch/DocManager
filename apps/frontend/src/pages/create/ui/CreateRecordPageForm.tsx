@@ -6,14 +6,14 @@ import FormSelect from '~shared/ui/form/select';
 import FormTextField from '~shared/ui/form/text-field';
 import FormAutocomplete from '~shared/ui/form/autocomplete';
 import FormFileUploadField from '~shared/ui/form/file-upload-field';
+import FilePanel from '~shared/ui/file-panel';
+import FilesShowcase from '~shared/ui/files-showcase';
 import { TaxPeriodLabelMapper } from '~shared/model/constant';
 import { getSelectOptions } from '~shared/model/helper/getSelectOptions';
 import { useCreateRecordForm } from '../model/useCreateRecordForm';
 import { useRecordTypeOptions } from '../model/useRecordTypeOptions';
 
 import type { FC } from 'react';
-import FilePanel from '~shared/ui/file-panel';
-import FilesShowcase from '~shared/ui/files-showcase';
 
 const ROW_SPACING = 2;
 

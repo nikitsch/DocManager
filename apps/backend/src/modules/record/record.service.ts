@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { Between, ILike, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,6 +20,7 @@ import { IUpdateRecordDto } from './dto/update-record.dto';
 import { IRecord, IRecordWithFileUrlResponse } from './entities/records.entity';
 import { IRecordTypes } from './entities/record_types.entity';
 
+import * as jwt from 'jsonwebtoken';
 import * as mime from 'mime-types';
 import 'multer';
 
@@ -24,14 +30,15 @@ export class RecordService {
     private readonly recordRepository: RecordRepository,
     private readonly recordTypeRepository: RecordTypeRepository,
     private readonly userService: UserService,
-    private readonly minioService: MinioService
+    private readonly minioService: MinioService,
+    private readonly configService: ConfigService
   ) {}
 
   async getAllRecords(
-    req: Request,
+    request: Request,
     query: IGetRecordsDto
   ): Promise<{ data: IRecord[]; total: number }> {
-    const { userid, role } = req?.user as JwtUserData;
+    const { userid, role } = request?.user as JwtUserData;
     const { search, filters, sort, order, page, pageSize } = query;
 
     const where: Record<string, string | number | object> = {};
@@ -145,37 +152,49 @@ export class RecordService {
     return Promise.all(fileData);
   }
 
+  private checkJwt(request: Request) {
+    const token = request.cookies?.jwt;
+    if (!token) throw new UnauthorizedException();
+
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+    try {
+      return jwt.verify(token, jwtSecret) as jwt.JwtPayload;
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
+
+  private generateRecordNumber(userId: number, count: number): string {
+    const today = new Date();
+    return [userId, today.getDate(), today.getMonth() + 1, count + 1]
+      .map((el) => String(el).padStart(2, '0'))
+      .join('');
+  }
+
   async createRecord(
-    req: Request,
-    createRecordDto: ICreateRecordDto,
+    request: Request,
+    crdto: ICreateRecordDto,
     files: Express.Multer.File[]
   ): Promise<IRecord> {
-    const { userid } = req?.user as JwtUserData;
-    const user = await this.userService.getUserById(userid);
-    const { organization_name } = user;
+    const payload = this.checkJwt(request); //* We check the token manually (read in record.controller.ts @Post())
+    const user_id = payload?.userid;
 
-    const { tax_period, record_type, record_subtype, record_comment } =
-      createRecordDto;
+    const { tax_period, record_type, record_subtype, record_comment } = crdto;
 
     const record_type_entity = await this.recordTypeRepository.findOrCreate(
       record_type
     );
 
-    const generateRecordNumber = (arr: number[]) =>
-      arr.map((el) => String(el).padStart(2, '0')).join('');
     const recordCount = await this.recordRepository.getCount();
-    const today = new Date();
-    const record_number = generateRecordNumber([
-      userid,
-      today.getDate(),
-      today.getMonth() + 1,
-      recordCount + 1,
-    ]);
+    const record_number = this.generateRecordNumber(user_id, recordCount);
+
+    const user = await this.userService.getUserById(user_id);
+    const { organization_name } = user;
 
     const record_files = await this.uploadFiles(files);
 
     return this.recordRepository.createRecord({
-      user_id: userid,
+      user_id,
       tax_period,
       record_type_entity,
       record_subtype,

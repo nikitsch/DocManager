@@ -28,18 +28,15 @@ export const useMutationHandler = <T, V>(
     if (onError) {
       onError(error, variables, context);
     }
-    if (
-      error &&
-      error.statusCode === 401 &&
-      error.message.includes('Unauthorized')
-    ) {
+    if (error.statusCode === 401 && error.message.includes('Unauthorized')) {
       navigate(
         `/${RoutesPaths.LOGIN}?${DEFAULT_REDIRECT_PARAM}=${redirectPath}`,
         { replace: true }
       );
       setTimeout(() => clearAll(), 100);
-      console.log('Error Handler');
+      return;
     }
+    console.log('Error Handler');
   };
 
   return useMutation({

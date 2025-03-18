@@ -16,6 +16,7 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 import { UserRole } from '~common/enums';
+import { Public } from '~decorators/public.decorator';
 import { Roles } from '~decorators/roles.decorator';
 import { AuthorshipGuard } from '~guards/authorship.guard';
 import { RecordChangeGuard } from '~guards/record-change.guard';
@@ -33,23 +34,26 @@ type IRecordTypesResponse = IRecordTypes;
 export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 
+  //* If after the token expires you send a POST request with files (for example, .mp4 or .exe), then instead of the Unauthorized error, the response is interrupted (aborted).
+  //* Using the @Public decorator allows you to bypass JwtStrategy and after that the token is manually checked in the service.
+  @Public()
   @Post()
   @UseInterceptors(FilesInterceptor('files'))
   async createRecord(
-    @Req() req: Request,
+    @Req() request: Request,
     @Body() createRecordDto: CreateRecordDto,
     @UploadedFiles() files: Express.Multer.File[]
   ): Promise<IRecordResponse> {
-    return this.recordService.createRecord(req, createRecordDto, files);
+    return this.recordService.createRecord(request, createRecordDto, files);
   }
 
   @Get()
   async getRecords(
-    @Req() req: Request,
+    @Req() request: Request,
     @Query() query: GetRecordsDto
   ): Promise<{ data: IRecordResponse[]; total: number }> {
     //TODO: remove repeat request on focus from tanstack query
-    return this.recordService.getAllRecords(req, query);
+    return this.recordService.getAllRecords(request, query);
   }
 
   @Get('types')
@@ -77,7 +81,9 @@ export class RecordController {
 
   @UseGuards(AuthorshipGuard, RecordChangeGuard)
   @Delete(':id')
-  async deleteRecord(@Param('id', ParseIntPipe) id: number) {
+  async deleteRecord(
+    @Param('id', ParseIntPipe) id: number
+  ): Promise<{ message: string }> {
     return this.recordService.deleteRecord(id);
   }
 }

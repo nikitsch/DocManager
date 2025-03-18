@@ -14,17 +14,20 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   async login(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response
   ): Promise<JwtUserData> {
-    return this.authService.login(req.user as IUserWithoutPassword, res);
+    return this.authService.login(
+      request.user as IUserWithoutPassword,
+      response
+    );
   }
 
   @Post('logout')
   async logout(
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) response: Response
   ): Promise<{ message: string }> {
-    return this.authService.logout(res);
+    return this.authService.logout(response);
   }
 
   @Get('check')

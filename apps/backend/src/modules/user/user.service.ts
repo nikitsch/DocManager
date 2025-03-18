@@ -38,8 +38,8 @@ export class UserService {
       organization_name,
     });
 
-    const [res] = this.passwordExtractor([newUser]); //TODO: ref
-    return res;
+    const [response] = this.passwordExtractor([newUser]); //TODO: ref
+    return response;
   }
 
   async getAllUsers(): Promise<IUserWithoutPassword[]> {
@@ -49,8 +49,8 @@ export class UserService {
 
   async getUserById(id: number): Promise<IUserWithoutPassword | undefined> {
     const user = await this.userRepository.findById(id);
-    const [res] = this.passwordExtractor([user]); //TODO: ref
-    return res;
+    const [response] = this.passwordExtractor([user]); //TODO: ref
+    return response;
   }
 
   /**
