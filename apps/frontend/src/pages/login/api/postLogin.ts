@@ -1,4 +1,4 @@
-import { fetchWithHandling } from '~shared/api/fetchWithHandling';
+import { fetchWithHandling } from '~features/api/api/fetchWithHandling';
 import { IUserAuthResponse } from '~shared/model/interface';
 import { ILoginForm } from '../model/useLoginForm';
 

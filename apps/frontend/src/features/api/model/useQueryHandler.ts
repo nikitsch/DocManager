@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
+import { ApiError } from '~features/api/model/ApiError';
 import { DEFAULT_REDIRECT_PARAM } from '~shared/model/constant';
 import { RoutesPaths } from '~shared/model/enum';
 import { useClearAppState } from '~shared/model/helper/useClearAppState';
 import { useRedirectPath } from '~shared/model/helper/useRedirectPath';
-import { ApiError } from '~shared/api/ApiError';
 
 import type { QueryKey, UseQueryOptions } from '@tanstack/react-query';
 

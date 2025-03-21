@@ -1,4 +1,4 @@
-import { ApiError } from '~shared/api/ApiError';
+import { ApiError } from '~features/api/model/ApiError';
 
 export const fetchWithHandling = async <T>(
   url: string,

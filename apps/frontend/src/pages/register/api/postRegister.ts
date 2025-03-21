@@ -1,6 +1,6 @@
-import { fetchWithHandling } from '~shared/api/fetchWithHandling';
-import { IRegisterForm } from '../model/useRegisterForm';
+import { fetchWithHandling } from '~features/api/api/fetchWithHandling';
 import { IUser } from '~shared/model/interface';
+import { IRegisterForm } from '../model/useRegisterForm';
 
 export const postRegister = async (registerData: IRegisterForm) => {
   return fetchWithHandling<IUser>('api/users/register', {

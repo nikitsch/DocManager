@@ -1,4 +1,4 @@
-import { fetchWithHandling } from '~shared/api/fetchWithHandling';
+import { fetchWithHandling } from '~features/api/api/fetchWithHandling';
 import { TaxPeriod } from '~shared/model/enum';
 import { IRecord } from '~shared/model/interface';
 import { FileForm } from '~shared/model/type';

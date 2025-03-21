@@ -4,7 +4,7 @@ import type {
   UseMutationOptions,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import { ApiError } from '~shared/api/ApiError';
+import { ApiError } from '~features/api/model/ApiError';
 
 export type SelectOption = {
   value: MenuItemProps['value'];

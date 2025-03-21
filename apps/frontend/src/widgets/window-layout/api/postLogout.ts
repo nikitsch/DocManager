@@ -1,4 +1,4 @@
-import { fetchWithHandling } from '~shared/api/fetchWithHandling';
+import { fetchWithHandling } from '~features/api/api/fetchWithHandling';
 
 export const postLogout = async () => {
   return fetchWithHandling<{ message: string }>('api/auth/logout', {

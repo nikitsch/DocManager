@@ -1,7 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { ApiError } from '~shared/api/ApiError';
+import { ApiError } from '~features/api/model/ApiError';
 import { IUser } from '~shared/model/interface';
 import { MutationOptionsType } from '~shared/model/type';
 import { RoutesPaths } from '~shared/model/enum';
