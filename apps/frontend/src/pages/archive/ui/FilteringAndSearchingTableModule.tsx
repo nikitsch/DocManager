@@ -10,15 +10,14 @@ import type { FC } from 'react';
 
 const FilteringAndSearchingTableModule: FC = () => {
   const { form, onSetValue, onReset } = useFilterBarForm();
-  const { filterBarPosition, isFBPOpen, setfilterBarPosition } =
-    useFilterBarPosition();
+  const { isFilterBarOpen, switchFilterBarPositions } = useFilterBarPosition();
 
   return (
     <Stack>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <FilterControlPanel
-          filterBarPosition={filterBarPosition}
-          setfilterBarPosition={setfilterBarPosition}
+          isFilterBarOpen={isFilterBarOpen}
+          switchFilterBarPositions={switchFilterBarPositions}
           onResetFilters={onReset}
         />
 
@@ -26,7 +25,7 @@ const FilteringAndSearchingTableModule: FC = () => {
       </Stack>
 
       <Form form={form}>
-        <FilterBar isFBPOpen={isFBPOpen} onSetValue={onSetValue} />
+        <FilterBar isFilterBarOpen={isFilterBarOpen} onSetValue={onSetValue} />
       </Form>
     </Stack>
   );

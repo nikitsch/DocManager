@@ -5,14 +5,30 @@ export enum FilterBarPosition {
   CLOSE = 'CLOSE',
 }
 
+const LOCAL_STORAGE_FILTER_BAR_POSITION_KEY =
+  'LOCAL_STORAGE_FILTER_BAR_POSITION_KEY';
+
 export function useFilterBarPosition() {
+  const localStorageValue = localStorage.getItem(
+    LOCAL_STORAGE_FILTER_BAR_POSITION_KEY
+  ) as FilterBarPosition;
+
   const [filterBarPosition, setfilterBarPosition] = useState(
-    FilterBarPosition.OPEN
+    localStorageValue || FilterBarPosition.OPEN
   );
 
   return {
-    filterBarPosition,
-    isFBPOpen: filterBarPosition === FilterBarPosition.OPEN,
-    setfilterBarPosition,
+    isFilterBarOpen: filterBarPosition === FilterBarPosition.OPEN,
+    switchFilterBarPositions: () =>
+      setfilterBarPosition((prev) => {
+        const newValue =
+          prev === FilterBarPosition.OPEN
+            ? FilterBarPosition.CLOSE
+            : FilterBarPosition.OPEN;
+
+        localStorage.setItem(LOCAL_STORAGE_FILTER_BAR_POSITION_KEY, newValue);
+
+        return newValue;
+      }),
   };
 }

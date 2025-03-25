@@ -17,12 +17,12 @@ import { IFilterBarForm } from '../model/useFilterBarForm';
 import type { FC } from 'react';
 
 type FilterBarProps = {
-  isFBPOpen: boolean;
+  isFilterBarOpen: boolean;
   onSetValue: UseFormSetValue<IFilterBarForm>;
 };
 
 const FilterBar: FC<FilterBarProps> = (props) => {
-  const { isFBPOpen, onSetValue } = props;
+  const { isFilterBarOpen, onSetValue } = props;
 
   const timeBreakpointsOptions = getSelectOptions(
     TimeBreakpointsLabelMapper,
@@ -33,7 +33,7 @@ const FilterBar: FC<FilterBarProps> = (props) => {
   const isAdmin = useIsAdmin();
 
   return (
-    <Collapse in={isFBPOpen}>
+    <Collapse in={isFilterBarOpen}>
       <Stack direction="row" flexWrap="wrap" mt={3} rowGap={2} columnGap={5}>
         <FormDateRangePicker
           nameFrom="from"
