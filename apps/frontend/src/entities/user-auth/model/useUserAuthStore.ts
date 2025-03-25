@@ -8,7 +8,7 @@ interface IUserAuthState {
   clearUser: () => void;
 }
 
-const LS_USER_AUTH_KEY = 'LS_USER_AUTH_KEY';
+const LOCAL_STORAGE_USER_AUTH_KEY = 'LOCAL_STORAGE_USER_AUTH_KEY';
 
 export const useUserAuthStore = create(
   persist<IUserAuthState>(
@@ -17,11 +17,11 @@ export const useUserAuthStore = create(
       setUser: (user) => set({ user }),
       clearUser: () => {
         set({ user: null });
-        localStorage.removeItem(LS_USER_AUTH_KEY);
+        localStorage.removeItem(LOCAL_STORAGE_USER_AUTH_KEY);
       },
     }),
     {
-      name: LS_USER_AUTH_KEY,
+      name: LOCAL_STORAGE_USER_AUTH_KEY,
       storage: createJSONStorage(() => localStorage),
     }
   )

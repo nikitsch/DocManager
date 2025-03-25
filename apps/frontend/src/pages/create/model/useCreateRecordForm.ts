@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
+import { useUserAuthStore } from '~entities/user-auth/model/useUserAuthStore';
+import { useFormStore } from '~entities/form/model/useFormStore';
 import { useMutationHandler } from '~features/api/model/useMutationHandler';
+import { useClearAppState } from '~shared/model/helper/useClearAppState';
 import { RoutesPaths, TaxPeriod } from '~shared/model/enum';
 import {
   FileForm,
@@ -30,15 +33,30 @@ const defaultValues: FormType = {
 export const useCreateRecordForm = (
   mutationOptions: MutationOptionsType<IRecord, IPostRecord> = {}
 ) => {
+  const user = useUserAuthStore((state) => state.user);
+  const formCreate = useFormStore((state) => state.formCreate);
+  const setFormCreate = useFormStore((state) => state.setFormCreate);
+
+  const { clearFormCreateState } = useClearAppState();
+
   const navigate = useNavigate();
-  const form = useForm<FormType>({ defaultValues });
+
+  const { auth_user_id, ...restFormCreate } = formCreate || {};
+  const formValues = formCreate ? (restFormCreate as FormType) : defaultValues;
+  const form = useForm<FormType>({ defaultValues: formValues });
   const { files } = form.watch();
 
   const { mutate, ...restMutation } = useMutationHandler<IRecord, IPostRecord>({
     ...mutationOptions,
     mutationFn: postRecord,
     onSuccess: () => {
+      clearFormCreateState();
       navigate(`/${RoutesPaths.ARCHIVE}`);
+    },
+    onError: (error, variables) => {
+      if (error.statusCode === 401 && error.message === 'Unauthorized') {
+        setFormCreate({ ...variables, auth_user_id: user?.userid || null });
+      }
     },
   });
 
