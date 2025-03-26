@@ -16,9 +16,11 @@ export const postRecord = async (recordData: IPostRecord) => {
 
   Object.entries(recordData).forEach(([key, value]) => {
     if (key === 'files') {
-      value.forEach(({ file }: FileForm) => formData.append('files', file));
+      value.forEach(({ file }: FileForm) =>
+        formData.set('files', file, file.name)
+      );
     } else {
-      formData.append(key, value ?? '');
+      formData.set(key, value ?? '');
     }
   });
 
