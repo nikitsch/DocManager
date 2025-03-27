@@ -1,4 +1,5 @@
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -6,7 +7,6 @@ import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
 import type { FC, ReactNode } from 'react';
 import type { FormControlProps } from '@mui/material/FormControl';
-import { Typography } from '@mui/material';
 
 interface ICustomFormControlProps extends FormControlProps {
   label?: ReactNode;

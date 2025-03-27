@@ -89,19 +89,19 @@ export class Record implements IRecord {
   @Column({ nullable: true })
   reason_for_rejection: string | null;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
 
   @Column('text', { array: true, nullable: true })
   updated_at: string[] | null;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   in_process_at: Date | null;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   finished_at: Date | null;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamptz', nullable: true })
   rejected_at: Date | null;
 
   @Column('jsonb')

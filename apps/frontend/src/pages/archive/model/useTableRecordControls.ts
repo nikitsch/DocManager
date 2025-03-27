@@ -6,7 +6,7 @@ import {
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 
-const TABLE_CONTROLS = {
+export const TABLE_CONTROLS = {
   SEARCH: 'search',
   FILTERS: 'filters',
   SORT: 'sort',

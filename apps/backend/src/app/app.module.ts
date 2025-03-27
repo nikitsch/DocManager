@@ -45,6 +45,7 @@ import * as Joi from 'joi'; //TODO: ref
         database: configService.get<string>('PG_DB'),
         autoLoadEntities: true,
         dropSchema: false,
+        timezone: 'UTC',
         // synchronize: true, //* Synchronization of the DB with entities and automatic migration to the DB when the entity changes
         // logging: true
       }),

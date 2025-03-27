@@ -20,6 +20,11 @@ export class AuthorshipGuard implements CanActivate {
     const roles = this.reflector.get<string[]>(ROLES_KEY, context.getHandler());
     const request = context.switchToHttp().getRequest();
     const recordId = Number(request.params.id);
+
+    if (!recordId) {
+      throw new ForbiddenException(ERROR_MESSAGES.MESSAGE_AN_AUTHORSHIP_ERROR);
+    }
+
     const record = await this.recordService.getRecordById(recordId);
 
     if (roles?.includes(request?.user?.role)) {

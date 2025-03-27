@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { Between, ILike, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
+import { Between, ILike, LessThan, MoreThan } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { ERROR_MESSAGES, UNRECOGNIZED_FILE_EXTESION } from '~common/constants';
 import { UserRole } from '~common/enums';
@@ -88,9 +88,9 @@ export class RecordService {
         if (fromDate && toDate) {
           where.created_at = Between(fromDate, toDate);
         } else if (fromDate) {
-          where.created_at = MoreThanOrEqual(fromDate);
+          where.created_at = MoreThan(fromDate);
         } else if (toDate) {
-          where.created_at = LessThanOrEqual(toDate);
+          where.created_at = LessThan(toDate);
         }
       }
     }
