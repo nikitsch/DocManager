@@ -20,7 +20,7 @@ export const postRecord = async (recordData: IPostRecord) => {
         formData.set('files', file, file.name)
       );
     } else {
-      formData.set(key, value ?? '');
+      formData.set(key, value.trim() ?? '');
     }
   });
 

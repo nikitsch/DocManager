@@ -2,8 +2,8 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import ArchivePage from '~pages/archive';
 import LoginPage from '~pages/login';
+import RecordViewPage from '~pages/view';
 import SkeletonRegisterPage from '~pages/register/ui/SkeletonRegisterPage';
-import RequestPage from '~pages/RequestPage';
 import AuthLayout from '~widgets/auth-layout';
 import RequireAuth from '~widgets/require-auth';
 import WindowLayout from '~widgets/window-layout';
@@ -38,14 +38,7 @@ export default function RouterProvider() {
         <Route element={<RequireAuth />}>
           <Route path={RoutesPaths.ARCHIVE} element={<WindowLayout />}>
             <Route index element={<ArchivePage />} />
-            <Route
-              path={RoutesPaths.ID}
-              element={
-                <Suspense fallback={<PageLoader />}>
-                  <RequestPage />
-                </Suspense>
-              }
-            />
+            <Route path={RoutesPaths.ID} element={<RecordViewPage />} />
             <Route
               path={RoutesPaths.CREATE}
               element={

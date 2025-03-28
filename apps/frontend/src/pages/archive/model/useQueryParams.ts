@@ -8,8 +8,12 @@ const convertDateFilterToUTC = (value: string) => {
 
   return JSON.stringify({
     ...filters,
-    from: filters.from ? convertISOStringToDate(filters.from)?.toISOString() : undefined,
-    to: filters.to ? convertISOStringToDate(filters.to)?.toISOString() : undefined,
+    from: filters.from
+      ? convertISOStringToDate(filters.from)?.toISOString()
+      : undefined,
+    to: filters.to
+      ? convertISOStringToDate(filters.to)?.toISOString()
+      : undefined,
   });
 };
 
@@ -20,13 +24,13 @@ export function useQueryParams(): {
   const [searchParams] = useSearchParams();
 
   const queryKeys = Array.from(searchParams.entries())
-  .filter(Boolean)
-  .map(([key, value]) => {
-    if (key === TABLE_CONTROLS.FILTERS) {
-      return `${key}=${convertDateFilterToUTC(value)}`;
-    }
-    return `${key}=${value}`;
-  })
+    .filter(Boolean)
+    .map(([key, value]) => {
+      if (key === TABLE_CONTROLS.FILTERS) {
+        return `${key}=${convertDateFilterToUTC(value)}`;
+      }
+      return `${key}=${value}`;
+    });
 
   return {
     queryKeys,

@@ -1,4 +1,5 @@
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
+import { useNavigate } from 'react-router';
 import { useTableRecordControls } from '../model/useTableRecordControls';
 import { useRecords } from '../model/useRecords';
 import { recordTableColumns } from '../config/recordTableColumns';
@@ -9,6 +10,9 @@ const TableRecords: FC = () => {
   const { paginationModel, sortModel, handlePagination, handleSort } =
     useTableRecordControls();
   const { data, isLoading } = useRecords();
+
+  const navigate = useNavigate();
+  const handleRowClick = ({ id }: GridRowParams) => navigate(String(id));
 
   return (
     <DataGrid
@@ -24,10 +28,7 @@ const TableRecords: FC = () => {
       sortingMode="server"
       sortModel={sortModel}
       onSortModelChange={handleSort}
-      onRowClick={
-        ({ id }: GridRowParams) => console.log('onRowClick:', id)
-        // handleOpenTdocDescription(id as string)
-      }
+      onRowClick={handleRowClick}
       disableRowSelectionOnClick
       disableColumnMenu
       slotProps={{

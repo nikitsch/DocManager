@@ -50,6 +50,7 @@ export class RecordRepository {
   async findById(id: number): Promise<IRecord | undefined> {
     const record = await this.recordRepository.findOne({
       where: { record_id: id },
+      relations: ['record_type_entity'], // Make a JOIN from the `record_types` Entity to place the `record_type_entity` field in the response
     });
 
     if (!record) {

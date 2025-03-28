@@ -30,11 +30,11 @@ export interface IRecord {
   record_subtype: string | null;
   record_comment: string;
   reason_for_rejection: string | null;
-  created_at: Date;
+  created_at: string;
   updated_at: string[] | null;
-  in_process_at: Date | null;
-  finished_at: Date | null;
-  rejected_at: Date | null;
+  in_process_at: string | null;
+  finished_at: string | null;
+  rejected_at: string | null;
   record_files: {
     id: string;
     name: string;
